@@ -57,10 +57,11 @@ public class Module {
 		
 		//Tuer des humains
 		
-		//Température
-		nbHumains = (int)Math.floor(nbHumains* (Math.random()) * Math.abs(1-Math.max(0,(0.0045*Math.pow((temperature-290),2)-3)/10)-Math.random()) );
-		
-		
+		//Température (ça marche pas mal...)
+		if(Math.random()>0.4){
+			float probaDeMourrir = (float)Math.min(Math.max(0,(0.0045*Math.pow((temperature-290),2)-3)/10),1);
+			nbHumains = nbHumains - (int)((nbHumains*probaDeMourrir+1)*Math.random()*Math.random());
+		}
 		/*
 		
 		//Incendie : 2 morts par seconde

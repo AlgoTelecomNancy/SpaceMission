@@ -22,7 +22,7 @@ public class Spaceship {
 	public void update(){
 		
 		//Mise à jour de la position avec la vitesse
-		position.translate(vitesse.multiply(base.Cons.deltaTime));
+		position.translate(vitesse.multiply(base.Cons.universalDeltaTime));
 		
 		//Relativité et horloge
 		tempsRelatif = (float) (1/Math.sqrt(1-Math.pow(vitesse.size()/299792,2)));

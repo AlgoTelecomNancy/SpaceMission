@@ -38,12 +38,16 @@ public class game {
 	private static void initGame(){
 		
 		test = new Canon();
-		
+		((Canon)test).nbHumains = 1000000;
+		((Canon)test).incendie = true;
+
 	}
 	
 	private static void updateGame(){
 		
 		((Canon)test).update();
+		System.out.println(((Canon)test).nbHumains + " " + ((Canon)test).incendieTime);
+
 		
 	}
 	

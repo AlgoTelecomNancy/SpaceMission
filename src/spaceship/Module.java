@@ -18,7 +18,7 @@ public class Module {
 	public int pression = 100; //Pourcentage de la pression normale
 	public float pressionTime =0 ; //Temps depuis lequel la pression est mortelle
 	public boolean incendie = false; //Incendie (si temp>320 et pression>30)
-	private float incendieTime = 0; //temps depuis lequel l'incendie est déclaré
+	public float incendieTime = 0; //temps depuis lequel l'incendie est déclaré
 	public boolean alarme = false; //Alarme
 	public float coeffmortalite = 0; // coeff de mortalite
 	public float coeffsurvie = 0; //coeff de survie
@@ -48,6 +48,7 @@ public class Module {
 		alarme = pression<50 && nbHumains>0; //Si pression basse ou trop élevée et humain alarme
 		alarme = pression<50 && nbHumains>0;
 		
+		/*
 		//Incendie augmente température
 		if(incendie && Math.random()>0.98 && temperature<390){
 			temperature += 1;
@@ -56,6 +57,7 @@ public class Module {
 		if(!incendie && Math.random()>0.78 && temperature!=290){
 			temperature += -(290-temperature)/(290-temperature);
 		}
+		*/
 		
 		
 		
@@ -72,7 +74,7 @@ public class Module {
 		
 		//Incendie
 		if(incendie){
-			incendieTime += (float) base.cons.deltaTime;  // augmente le temps de l'incendie
+			incendieTime += (float)base.cons.deltaTime;  // augmente le temps de l'incendie
 			if (incendieTime>10){
 				coeffmortalite = Math.min(incendieTime/2000,1); //incendie de plus en plus mortel avec le temps
 				coeffsurvie = (float) (coeffsurvie*(1-Math.pow(coeffmortalite,2)));
@@ -93,7 +95,8 @@ public class Module {
 			pressionTime = 0;
 		}
 		
-		nbHumains = Math.max(0, nbHumains*coeffsurvie);
+		
+		nbHumains = (float) Math.max(0, nbHumains*(1-(1-coeffsurvie)*base.cons.deltaTime/0.05));
 		/*
 		//Gérer les flux @TODO
 		if(!ferme){

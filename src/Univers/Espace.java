@@ -26,7 +26,9 @@ public class Espace {
 		
 		//Updater les joueurs
 		for(int i=0;i<joueurs.length;i++){
-			joueurs[i].update();
+			if(joueurs[i]!=null){
+				joueurs[i].update();
+			}
 		}
 		
 	}

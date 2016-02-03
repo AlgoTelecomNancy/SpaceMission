@@ -46,14 +46,19 @@ public class Game {
 		
 		//Ajouter un joueur (id=0)
 		Univers.addPlayer(0);
-		
+		Univers.getPlayer(0).vitesse.set(10, 0, 0);
+		System.out.println(Univers.getPlayer(0).vitesse);
+
 	}
 	
 	//Boucle de jeu, updater l'univers qui va updater son contenu
 	private static void updateGame(){
 		
 		Univers.update();
-		
+
+		System.out.println(Univers.getPlayer(0).vitesse+" - "+Univers.getPlayer(0).masseRelative+" - "+Univers.getPlayer(0).tempsRelatif);
+		Univers.getPlayer(0).vitesse.set(Univers.getPlayer(0).vitesse.x+100, 0, 0);
+
 	}
 	
 }

@@ -34,10 +34,11 @@ public class Vect3D {
 	
 	//Multiplier le vecteur
 	public Vect3D multiply(double k){
-		this.x = k*this.x;
-		this.y = k*this.y;
-		this.z = k*this.z;
-		return this;
+		return new Vect3D(k*this.x,k*this.y,k*this.z);
+	}
+	
+	public double size(){
+		return Math.sqrt(Math.pow(x,2)+Math.pow(y,2)+Math.pow(z,2));
 	}
 	
 	public double[] get(){

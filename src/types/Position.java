@@ -2,67 +2,117 @@ package types;
 
 //Système de position pour très grand nombre
 public class Position {
-	public float x; //Position dans la zone
-	public float y;
-	public float z;
 	
-	public float Mx; //Position de la zone de niveau 1
-	public float My;
-	public float Mz;
+	//L'univers est découpé en zones
+	// la position varie entre -10^6 et + 10^6 km
+	// La sous zone varie entre (int) -10^9 et + 10^9 de 2*10^6 km
+	// La sous zone varie entre (int) -10^6 et + 10^6 de 4*10^15 km
+	// Au total l'univers a une taille de 8*10^21 km (=10^8 al)
+	private Vect3D position = new Vect3D(0,0,0);
+	private Vect3D sousZone = new Vect3D(0,0,0);
+	private Vect3D zone = new Vect3D(0,0,0);
 
-	public float MMx; //Position de la zone de niveau 2
-	public float MMy;
-	public float MMz;
-	
-	public Position(int x,int y,int z, int Mx,int My,int Mz, int MMx,int MMy,int MMz){
-		this.x = x;
-		this.y = y;
-		this.z = z;
-		this.Mx = Mx;
-		this.My = My;
-		this.Mz = Mz;
-		this.MMx = MMx;
-		this.MMy = MMy;
-		this.MMz = MMz;
+	public Position(double x,double y,double z,int szx,int szy,int szz,int zx,int zy,int zz){
+		this.position.set(x, y, z);
+		this.sousZone.set((double)szx, (double)szy, (double)szz);
+		this.zone.set((double)zx, (double)zy, (double)zz);
 	}
 	
-	public Position(int x,int y,int z, int Mx,int My,int Mz){
-		this.empty();
-		this.x = x;
-		this.y = y;
-		this.z = z;
-		this.Mx = Mx;
-		this.My = My;
-		this.Mz = Mz;
-	}
-
-	public Position(int x,int y,int z){
-		this.empty();
-		this.x = x;
-		this.y = y;
-		this.z = z;
+	public Position(Vect3D pos, Vect3D sZone, Vect3D zone){
+		this.position = pos;
+		this.sousZone = sZone.floor(); //S'assurer que c'est entier
+		this.zone = zone.floor();
 	}
 	
-	public Position(){
-		this.empty();
+	public Vect3D getZone(){
+		update();
+		return zone;
+	}
+	public Vect3D getSousZone(){
+		update();
+		return sousZone;
 	}
 	
-	private void empty(){
-		this.x = 0;
-		this.y = 0;
-		this.z = 0;
-		this.Mx = 0;
-		this.My = 0;
-		this.Mz = 0;
-		this.MMx = 0;
-		this.MMy = 0;
-		this.MMz = 0;
+	public Vect3D getPosition(){
+		update();
+		return position;
 	}
 	
-	public float[] getPosition(){
-		float[] R = {x, y, z, Mx, My, Mz, MMx, MMy, MMz};
-		return R;
+	//Replacer les éléments en fonction de leur position avant de les afficher
+	private void update(){
+		
+		//Position et sous zone
+		if(position.x>1000000){
+			position.x = position.x-2000000;
+			sousZone.x += 1;
+		}
+		if(position.x<-1000000){
+			position.x = position.x+2000000;
+			sousZone.x += -1;
+		}
+		if(position.y>1000000){
+			position.y = position.y-2000000;
+			sousZone.y += 1;
+		}
+		if(position.y<-1000000){
+			position.y = position.y+2000000;
+			sousZone.y += -1;
+		}
+		if(position.z>1000000){
+			position.z = position.z-2000000;
+			sousZone.z += 1;
+		}
+		if(position.z<-1000000){
+			position.z = position.z+2000000;
+			sousZone.z += -1;
+		}
+		
+		//Zone
+		if(sousZone.x>1000000000){
+			sousZone.x = sousZone.x-2000000;
+			zone.x += 1;
+		}
+		if(sousZone.x<-1000000000){
+			sousZone.x = sousZone.x+2000000;
+			zone.x += -1;
+		}
+		if(sousZone.y>1000000000){
+			sousZone.y = sousZone.y-2000000;
+			zone.y += 1;
+		}
+		if(sousZone.y<-1000000000){
+			sousZone.y = sousZone.y+2000000;
+			zone.y += -1;
+		}
+		if(sousZone.z>1000000000){
+			sousZone.z = sousZone.z-2000000;
+			zone.z += 1;
+		}
+		if(sousZone.z<-1000000000){
+			sousZone.z = sousZone.z+2000000;
+			zone.z += -1;
+		}
+		
+		//Boucle
+		if(zone.x>1000000000){
+			zone.x = -1000000000;
+		}
+		if(zone.x<-1000000000){
+			zone.x = 1000000000;
+		}
+		if(zone.y>1000000000){
+			zone.y = -1000000000;
+		}
+		if(zone.y<-1000000000){
+			zone.y = 1000000000;
+		}
+		if(zone.z>1000000000){
+			zone.z = -1000000000;
+		}
+		if(zone.z<-1000000000){
+			zone.z = 1000000000;
+		}
+		
 	}
 	
-
 }

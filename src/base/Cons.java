@@ -1,6 +1,6 @@
 package base;
 
-public class cons {
+public class Cons {
 
 	public static double deltaTime = 0.05;
 	

@@ -74,7 +74,7 @@ public class Module {
 		
 		//Incendie
 		if(incendie){
-			incendieTime += (float)base.cons.deltaTime;  // augmente le temps de l'incendie
+			incendieTime += (float)base.Cons.deltaTime;  // augmente le temps de l'incendie
 			if (incendieTime>10){
 				coeffmortalite = Math.min(incendieTime/2000,1); //incendie de plus en plus mortel avec le temps
 				coeffsurvie = (float) (coeffsurvie*(1-Math.pow(coeffmortalite,2)));
@@ -87,7 +87,7 @@ public class Module {
 		
 		//Pression basse
 		if(pression<50){
-			pressionTime += (float) base.cons.deltaTime;
+			pressionTime += (float) base.Cons.deltaTime;
 			if (pressionTime>45){		// après 45 secondes en sous oxygène, tout le monde est mort d'intoxication
 				nbHumains = 0;
 			};
@@ -96,7 +96,7 @@ public class Module {
 		}
 		
 		
-		nbHumains = (float) Math.max(0, nbHumains*(1-(1-coeffsurvie)*base.cons.deltaTime/0.05));
+		nbHumains = (float) Math.max(0, nbHumains*(1-(1-coeffsurvie)*base.Cons.deltaTime/0.05));
 		/*
 		//Gérer les flux @TODO
 		if(!ferme){

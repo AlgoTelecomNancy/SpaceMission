@@ -1,7 +1,7 @@
 import spaceship.*;
 import spaceship.modules.*;
 
-public class game {
+public class Game {
 	
 	public static Module test;
 	
@@ -20,14 +20,14 @@ public class game {
 			
 
 			//Temps final et calcul du deltatime
-			base.cons.deltaTime = (double)((long)System.nanoTime() - timeIn)/ 1000000000.0;
-			if(base.cons.deltaTime<0.001){
+			base.Cons.deltaTime = (double)((long)System.nanoTime() - timeIn)/ 1000000000.0;
+			if(base.Cons.deltaTime<0.001){
 				try {
 				    Thread.sleep(1);
 				} catch(InterruptedException ex) {
 				    Thread.currentThread().interrupt();
 				}
-				base.cons.deltaTime = (double)((long)System.nanoTime() - timeIn)/ 1000000000.0;
+				base.Cons.deltaTime = (double)((long)System.nanoTime() - timeIn)/ 1000000000.0;
 			}
 
 		}

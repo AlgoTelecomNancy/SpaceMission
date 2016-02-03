@@ -1,6 +1,6 @@
 package base;
 
-public class function {
+public class Function {
 	
 	//Return true at a realistic frequency (not regular)
 	//This is for a game whith a 50ms refresh

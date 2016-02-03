@@ -26,7 +26,7 @@ public class Spaceship {
 		
 		//Relativité et horloge
 		tempsRelatif = (float) (1/Math.sqrt(1-Math.pow(vitesse.size()/299792,2)));
-		masseRelative = (float) (1/Math.sqrt(0.97-vitesse.size()/299792)); // @TODO trouver une bonne formule
+		masseRelative = (float) (1/Math.sqrt(0.97-Math.min(Math.pow((vitesse.size())/299792,0.9),0.9699999)));
 		horlogeExterne += base.Cons.deltaTime*tempsRelatif;
 
 		verification();

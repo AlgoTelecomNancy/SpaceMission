@@ -61,7 +61,7 @@ public class Game {
 		
 		Univers.update();
 
-		System.out.println(Univers.getPlayer(0).vitesse+" - "+Univers.getPlayer(0).position+" - "+base.Cons.universalHorloge+" - "+base.Cons.horloge);
+		System.out.println(Univers.getPlayer(0).vitesse+" - "+Univers.getPlayer(0).masseRelative);
 		Univers.getPlayer(0).vitesse.set(Univers.getPlayer(0).vitesse.x+100, 0, 0);
 
 	}

@@ -43,7 +43,7 @@ public class Espace {
 	public void addPlayer(int id){
 		
 		if(id>=0 && id<10){
-			joueurs[id] = new Spaceship();
+			joueurs[id] = new Spaceship(id);
 		}else{
 			System.out.println("ID max du joueur : 10 (entré : "+id+")");
 		}

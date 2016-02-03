@@ -55,6 +55,13 @@ public class Position {
 		update();
 	}
 	
+	public void translate(Vect3D p){
+		this.position.x += p.x;
+		this.position.y += p.y;
+		this.position.z += p.z;
+		update();
+	}
+	
 	//Replacer les éléments en fonction de leur position avant de les afficher
 	private void update(){
 		

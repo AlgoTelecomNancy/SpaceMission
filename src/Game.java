@@ -1,15 +1,18 @@
 import Univers.*;
+import music.Music;
 import spaceship.*;
 import spaceship.modules.*;
 
 public class Game {
 	
 	public static Espace Univers;
-	
+	public static Music Sounds;
+
 	public static void runGame(){
 		
 		//Initialiser le jeu...
 		initGame();
+		Sounds = new Music();
 		
 		//Boucle du jeu
 		while(true){
@@ -19,7 +22,7 @@ public class Game {
 		
 			//On fait un tour de jeu...
 			updateGame();
-			
+			Sounds.update();
 
 			//Temps final et calcul du deltatime (deltaTime mini = 1ms)
 			base.Cons.deltaTime = (double)((long)System.nanoTime() - timeIn)/ 1000000000.0;
@@ -61,8 +64,6 @@ public class Game {
 		
 		Univers.update();
 
-		System.out.println(Univers.getPlayer(0).vitesse+" - "+Univers.getPlayer(0).masseRelative);
-		Univers.getPlayer(0).vitesse.set(Univers.getPlayer(0).vitesse.x+100, 0, 0);
 
 	}
 	

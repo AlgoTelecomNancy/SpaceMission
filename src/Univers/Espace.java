@@ -5,6 +5,11 @@ import spaceship.*;
 ////////
 // Classe conteneur de tous les objets de l'espace
 //
+
+// @TODO Ajouter les listes pour les autres objets
+//       Méthode pour obtenir tous les objets dans une zone (avec temps de calcul réduit)
+//		 Quand classe planete créée, ajouter fonction de création des objets planète en fonction d'un fichier texte
+//
 public class Espace {
 	
 	public Spaceship[] joueurs = new Spaceship[10];

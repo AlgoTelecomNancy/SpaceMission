@@ -1,7 +1,5 @@
 import Univers.*;
 import music.Music;
-import spaceship.*;
-import spaceship.modules.*;
 
 public class Game {
 	

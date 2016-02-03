@@ -1,53 +1,92 @@
 package music;
 
 import java.io.File;
-import javax.swing.*;
 import javax.sound.sampled.*;
 
 public class Audio {
 
-	//Sound me;
-	private double lastStartTime;
-	public boolean state;
+	Clip clip;
+	AudioInputStream me;
+	
+	public long position = 0; // Position en microsecondes
 	
 	public Audio(String path){
 		try{
 			
-		        Clip clip = AudioSystem.getClip();
-		        // getAudioInputStream() also accepts a File or InputStream
-		        AudioInputStream ais = AudioSystem.
-		            getAudioInputStream( new File("assets/"+path) );
-		        clip.open(ais);
-		        clip.loop(Clip.LOOP_CONTINUOUSLY);
-		        SwingUtilities.invokeLater(new Runnable() {
-		            public void run() {
-		                // A GUI element to prevent the Clip's daemon Thread
-		                // from terminating at the end of the main()
-		                JOptionPane.showMessageDialog(null, "Close to exit!");
-		            }
-		        });
+	        clip = AudioSystem.getClip();
+	        // getAudioInputStream() also accepts a File or InputStream
+	        me = AudioSystem.getAudioInputStream( new File("assets/"+path) );
+			clip.open(me);
+
 		}
 		catch(Exception exc){
 		    System.out.println("Failed to play the file."+exc);
 		}
 		
-		state = false;
 		
 	}
 	
-	public void start(){
+	//Ci dessous gestion de play pause...
+	public void play(){
+		try{
+			clip.setMicrosecondPosition(position);
+			clip.start();
 
-		
-		lastStartTime = System.currentTimeMillis()/1000;		
-		state = true;
+		}catch(Exception exc){
+		    System.out.println("Failed to play the file."+exc);
+		}
 	}
 	
+	public double getElapsedTime(){
+		return (double)clip.getMicrosecondPosition()/1000000.0;
+	}
 	public double getTime(){
-		return System.currentTimeMillis()/1000-lastStartTime;
+		return (double)clip.getMicrosecondLength()/1000000.0;
 	}
 	
 	public void stop(){
-		state = false;
+		clip.stop();
+	}
+	
+	public void pause(){
+		position = clip.getMicrosecondPosition();
+		clip.stop();
+	}
+	
+	//Ci dessous gestion du gain
+	public void gain(float val){
+	
+		FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+		if(val>gainControl.getMaximum()){
+			val = gainControl.getMaximum();
+		}
+		if(val<gainControl.getMinimum()){
+			val = gainControl.getMinimum();
+		}
+		gainControl.setValue(val);
+	}
+	
+	public float gain(){
+		FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+		return gainControl.getValue();
+	}
+	
+	
+	//Ci dessous gestion de la panoramique
+	public void angle(float val){
+		if(val>1){
+			val = 1;
+		}
+		if(val<-1){
+			val = -1;
+		}
+		FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.PAN);
+		gainControl.setValue(val);
+	}
+	
+	public float angle(){
+		FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.PAN);
+		return gainControl.getValue();
 	}
 	
 	

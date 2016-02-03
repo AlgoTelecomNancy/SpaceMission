@@ -1,6 +1,4 @@
 package music;
-import  sun.audio.*;
-import  java.io.*;
 
 public class Music {
 	
@@ -10,12 +8,12 @@ public class Music {
 	public Music(){
 		ambiance = new Audio("alarm_03.wav");
 		music = new Audio("test.wav");            
-		music.start();
+		music.play();
 
 	}
 
 	public void update(){
-		System.out.println(music.getTime());
+		
 	}
 	
 }

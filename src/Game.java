@@ -31,7 +31,7 @@ public class Game {
 				}
 				base.Cons.deltaTime = (double)((long)System.nanoTime() - timeIn)/ 1000000000.0;
 			}
-
+			
 		}
 		
 		
@@ -54,9 +54,14 @@ public class Game {
 	//Boucle de jeu, updater l'univers qui va updater son contenu
 	private static void updateGame(){
 		
+		//Mise à jour du temps du vaisseau et de l'univers
+		base.Cons.universalDeltaTime = base.Cons.deltaTime*Univers.getPlayer(0).tempsRelatif;
+		base.Cons.universalHorloge += base.Cons.deltaTime*Univers.getPlayer(0).tempsRelatif;
+		base.Cons.horloge += base.Cons.deltaTime;
+		
 		Univers.update();
 
-		System.out.println(Univers.getPlayer(0).vitesse+" - "+Univers.getPlayer(0).masseRelative+" - "+Univers.getPlayer(0).tempsRelatif);
+		System.out.println(Univers.getPlayer(0).vitesse+" - "+base.Cons.universalHorloge+" - "+base.Cons.horloge+" - "+Univers.getPlayer(0).tempsRelatif);
 		Univers.getPlayer(0).vitesse.set(Univers.getPlayer(0).vitesse.x+100, 0, 0);
 
 	}

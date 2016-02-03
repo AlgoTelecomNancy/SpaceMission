@@ -1,9 +1,10 @@
+import Univers.*;
 import spaceship.*;
 import spaceship.modules.*;
 
 public class Game {
 	
-	public static Module test;
+	public static Espace Univers;
 	
 	public static void runGame(){
 		
@@ -35,19 +36,22 @@ public class Game {
 		
 	}
 	
+	//Initialiser le jeu
 	private static void initGame(){
 		
-		test = new Canon();
-		((Canon)test).nbHumains = 1000000;
-		((Canon)test).incendie = true;
-
+		//Créer l'espace et l'initialiser
+		Univers = new Espace();
+		Univers.init();
+		
+		//Ajouter un joueur (id=0)
+		Univers.addPlayer(0);
+		
 	}
 	
+	//Boucle de jeu, updater l'univers qui va updater son contenu
 	private static void updateGame(){
 		
-		((Canon)test).update();
-		System.out.println(((Canon)test).nbHumains + " " + ((Canon)test).incendieTime);
-
+		Univers.update();
 		
 	}
 	

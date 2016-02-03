@@ -42,6 +42,8 @@ public class Vect3D {
 		return R;
 	}
 
-	
+	@Override public String toString(){
+		return "("+this.x+", "+this.y+", "+this.z+")";
+	}
 
 }

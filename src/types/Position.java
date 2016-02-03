@@ -12,6 +12,9 @@ public class Position {
 	private Vect3D sousZone = new Vect3D(0,0,0);
 	private Vect3D zone = new Vect3D(0,0,0);
 
+	public Position(){
+	}
+	
 	public Position(double x,double y,double z,int szx,int szy,int szz,int zx,int zy,int zz){
 		this.position.set(x, y, z);
 		this.sousZone.set((double)szx, (double)szy, (double)szz);
@@ -36,6 +39,20 @@ public class Position {
 	public Vect3D getPosition(){
 		update();
 		return position;
+	}
+	
+	public void setZone(Vect3D z){
+		this.zone = z;
+		update();
+	}
+	public void setSousZone(Vect3D sz){
+		this.sousZone = sz;
+		update();
+	}
+	
+	public void setPosition(Vect3D p){
+		this.position = p;
+		update();
 	}
 	
 	//Replacer les éléments en fonction de leur position avant de les afficher
@@ -112,6 +129,38 @@ public class Position {
 		if(zone.z<-1000000000){
 			zone.z = 1000000000;
 		}
+		
+	}
+	
+	@Override public String toString(){
+		String ret = "(";
+		
+		ret += toLisibleNb(position.x,sousZone.x,zone.x)+",";
+		ret += toLisibleNb(position.y,sousZone.y,zone.y)+",";
+		ret += toLisibleNb(position.z,sousZone.z,zone.z);
+
+		ret += ")";
+		
+		return ret;
+	}
+	
+	private String toLisibleNb(double p, double sz, double z){
+		
+		String ret = "";
+		
+		double temp_p = p;
+		int temp_sz = (int)sz;
+		int temp_z = (int)z;
+		
+		if(temp_z!=0){
+			ret += 4*temp_z+"*10^15+";
+		}
+		if(temp_sz!=0){
+			ret += 2*temp_sz+"*10^6+";
+		}
+		ret += temp_p+"km";
+
+		return ret;
 		
 	}
 	

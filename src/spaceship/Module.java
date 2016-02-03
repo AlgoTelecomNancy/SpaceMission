@@ -6,18 +6,23 @@ public class Module {
 	//Taille et position du module sur le vaisseau
 	public Vect3D position = new Vect3D(0,0,0);
 	public float rayon = 1;
+	public float poids = 1;
 
-	public int nbHumains = 0; //nombre d'humains
-	public int capaciteHumaine = 0; //nombre max d'humains
+	public float nbHumains = 0; //nombre d'humains
+	public float capaciteHumaine = 0; //nombre max d'humains
 	public boolean ferme = false; //Sas ouverts ou fermés
 
 	public int dommage = 0; //0 dommage : bon état
 	public int temperature = 290; //Température interieure en Kelvin
 	public int temperatureMax = 320;
 	public int pression = 100; //Pourcentage de la pression normale
+	public float pressionTime =0 ; //Temps depuis lequel la pression est mortelle
 	public boolean incendie = false; //Incendie (si temp>320 et pression>30)
+	private float incendieTime = 0; //temps depuis lequel l'incendie est déclaré
 	public boolean alarme = false; //Alarme
-
+	public float coeffmortalite = 0; // coeff de mortalite
+	public float coeffsurvie = 0; //coeff de survie
+	
 	public int[] ArrayModulesTouche = new int[16]; //Max 16 contacts physique avec sas
 	public int[] ArrayModulesBranche = new int[64]; //Max 64 contacts branchement cable
 	
@@ -56,29 +61,40 @@ public class Module {
 		
 		
 		//Tuer des humains
-		
+		coeffmortalite = 0;
+		coeffsurvie = 1;
 		//Température (ça marche pas mal...)
 		if(Math.random()>0.4){
-			float probaDeMourrir = (float)Math.min(Math.max(0,(0.0045*Math.pow((temperature-290),2)-3)/10),1);
-			nbHumains = nbHumains - (int)((nbHumains*probaDeMourrir+1)*Math.random()*Math.random());
+			coeffmortalite = (float)Math.min(Math.max(0,(0.0045*Math.pow((temperature-290),2)-3)/10),1);
+			coeffsurvie = (float) (coeffsurvie*(1-Math.pow(coeffmortalite,2)));
+			coeffmortalite = 0;
 		}
+		
+		//Incendie
+		if(incendie){
+			incendieTime += (float) base.cons.deltaTime;  // augmente le temps de l'incendie
+			if (incendieTime>10){
+				coeffmortalite = Math.min(incendieTime/2000,1); //incendie de plus en plus mortel avec le temps
+				coeffsurvie = (float) (coeffsurvie*(1-Math.pow(coeffmortalite,2)));
+				coeffmortalite = 0;
+			}
+		} else if (incendieTime!=0){
+			incendieTime = 0;
+		}
+		
+		
+		//Pression basse
+		if(pression<50){
+			pressionTime += (float) base.cons.deltaTime;
+			if (pressionTime>45){		// après 45 secondes en sous oxygène, tout le monde est mort d'intoxication
+				nbHumains = 0;
+			};
+		} else if (pressionTime != 0){
+			pressionTime = 0;
+		}
+		
+		nbHumains = Math.max(0, nbHumains*coeffsurvie);
 		/*
-		
-		//Incendie : 2 morts par seconde
-		if(incendie && Math.random()>0.9){
-			nbHumains += -0.001*nbHumains-1;
-		}
-		//Pression basse : 0.5 morts par seconde
-		if((pression<70 || pression>130) && Math.random()>0.95){
-			nbHumains += -0.001*nbHumains-1;
-		}
-		
-		//Temperature très mauvaise : 10 morts par seconde
-		if(temperature>350 || pression<50){
-			nbHumains += -0.01*nbHumains-1;
-		}
-		nbHumains = Math.max(0, nbHumains);
-		
 		//Gérer les flux @TODO
 		if(!ferme){
 			

@@ -9,6 +9,7 @@ public class MultipleAudio {
 
 	Audio[] audios;
 	int position = 0;
+	float gain = 0;
 	
 	private boolean fadein = false;
 	private boolean fadeout = false;
@@ -32,6 +33,8 @@ public class MultipleAudio {
 	    	  }
 	      }
 	    }
+		gain = -80f;
+
 	}
 	
 	private void ShuffleArray(File[] array)
@@ -61,7 +64,7 @@ public class MultipleAudio {
 			if(audios[next].playing == false){
 				audios[next].play();
 			}
-			audios[next].gain((float) Math.max(0,audios[next].gain()+3*base.Cons.deltaTime));
+			audios[next].gain((float) Math.max(gain,audios[next].gain()+3*base.Cons.deltaTime));
 			if(audios[position].getTime()-audios[position].getElapsedTime()<1){
 				audios[position].stop();
 				position = next;
@@ -74,10 +77,10 @@ public class MultipleAudio {
 		if(fadein){
 			this.gain(Math.max(0f,(float)(this.gain()+base.Cons.deltaTime*2)));
 		}
-		if(this.gain()==0){
+		if(fadein && (this.gain()==0 || this.gain()>0)){
 			this.fadein = false;
 		}
-		if(this.gain()==-40){
+		if(fadeout && (this.gain()==-40 || this.gain()<-40)){
 			this.fadeout = false;
 		}
 		
@@ -97,6 +100,8 @@ public class MultipleAudio {
 		return audios[0].gain();
 	}
 	public void gain(float val){
+		gain = val;
+
 		for(int i=0;i<audios.length;i++){
 			if(audios[i]!=null && audios[i].playing==true){
 				audios[i].gain(val);

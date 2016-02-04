@@ -39,7 +39,7 @@ public class Music {
 		
 	    //Lancer la musique
 		musics_start.play();
-		musics_start.gain(-20);
+		musics_start.gain(-5);
 
 		musics_activity.play();
 		musics_attack.play();
@@ -48,10 +48,8 @@ public class Music {
 		musics_travel.play();
 		musics_suspens.play();
 
-		started = true;
+		started = false;
 		
-		//base.Function.say("Hello, welcome in your spaceship. I am GENIA, GEnetic and Neuronal Intelligence for Avionics. I will be your assistant for your journey in space.");
-
 	}
 
 	public void update(){
@@ -69,9 +67,10 @@ public class Music {
 		musics_travel.update();
 		musics_suspens.update();
 		
-		if(started && musics_start.ending()<5){
+		if(!started && musics_start.ending()<5){
 			musics_start.fadeOut(5);
 			musics_travel.fadeIn(5);
+			started = true;
 		}
 
 				

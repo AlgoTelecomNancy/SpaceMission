@@ -52,10 +52,17 @@ public class Audio {
 	}
 	
 	public double getElapsedTime(){
-		return (double)clip.getMicrosecondPosition()/1000000.0;
+		if(clip!=null){
+			return (double)clip.getMicrosecondPosition()/1000000.0;
+		}else{
+			return 0;
+		}
 	}
 	public double getTime(){
-		return (double)clip.getMicrosecondLength()/1000000.0;
+		if(clip!=null){
+			return (double)clip.getMicrosecondLength()/1000000.0;
+		}
+		return 0;
 	}
 	
 	public void stop(){
@@ -76,9 +83,7 @@ public class Audio {
 	
 	//Ci dessous gestion du gain
 	public void gain(float val){
-	
-		System.out.println(val + " " + this.path + " "+playing + " "+correct + " "+position);
-		
+			
 		if(playing){
 			FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
 			if(val>gainControl.getMaximum()){
@@ -95,8 +100,11 @@ public class Audio {
 	}
 	
 	public float gain(){
-		FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-		return gainControl.getValue();
+		if(clip!=null){
+			FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+			return gainControl.getValue();
+		}
+		return 0f;
 	}
 	
 	

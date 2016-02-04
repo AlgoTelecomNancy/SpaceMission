@@ -1,16 +1,19 @@
 import Univers.*;
 import music.Music;
+import GENIA.*;
 
 public class Game {
 	
 	public static Espace Univers;
 	public static Music Sounds;
+	public static Genia IA;
 
 	public static void runGame(){
 		
 		//Initialiser le jeu...
 		initGame();
 		Sounds = new Music();
+		IA = new Genia();
 		
 		//Boucle du jeu
 		while(true){
@@ -55,12 +58,15 @@ public class Game {
 	//Boucle de jeu, updater l'univers qui va updater son contenu
 	private static void updateGame(){
 		
+		System.out.println(base.Cons.horloge);
+		
 		//Mise à jour du temps du vaisseau et de l'univers
 		base.Cons.universalDeltaTime = base.Cons.deltaTime*Univers.getPlayer(0).tempsRelatif;
 		base.Cons.universalHorloge += base.Cons.deltaTime*Univers.getPlayer(0).tempsRelatif;
 		base.Cons.horloge += base.Cons.deltaTime;
 		
 		Univers.update();
+		IA.update();
 
 
 	}

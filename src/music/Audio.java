@@ -7,33 +7,44 @@ public class Audio {
 
 	Clip clip;
 	AudioInputStream me;
+	boolean correct = true;
+	String path = "";
+	boolean playing;
 	
 	public long position = 0; // Position en microsecondes
 	
 	public Audio(String path){
-		try{
-			
-	        clip = AudioSystem.getClip();
-	        // getAudioInputStream() also accepts a File or InputStream
-	        me = AudioSystem.getAudioInputStream( new File("assets/"+path) );
-			clip.open(me);
+		this.path = path;
+		playing = false;
 
+		try{				
+	        clip = AudioSystem.getClip();
+	        me = AudioSystem.getAudioInputStream( new File("assets/sounds/"+this.path) );
+			clip = null;
+			me= null; // vider la ram
+
+		}catch(Exception exc){
+		    System.out.println("Failed to load the file."+exc+this.path);
+		    this.correct = false;
 		}
-		catch(Exception exc){
-		    System.out.println("Failed to play the file."+exc);
-		}
-		
-		
 	}
 	
 	//Ci dessous gestion de play pause...
 	public void play(){
-		try{
+		try{				
+	        clip = AudioSystem.getClip();
+	        // getAudioInputStream() also accepts a File or InputStream
+	        me = AudioSystem.getAudioInputStream( new File("assets/sounds/"+this.path) );
+			clip.open(me);
+			this.gain(-80);
 			clip.setMicrosecondPosition(position);
 			clip.start();
+			playing = true;
 
 		}catch(Exception exc){
-		    System.out.println("Failed to play the file."+exc);
+		    System.out.println("Failed to play the file."+exc+this.path);
+		    this.correct = false;
+		    playing = false;
 		}
 	}
 	
@@ -45,12 +56,19 @@ public class Audio {
 	}
 	
 	public void stop(){
+		position = 0;
 		clip.stop();
+		clip = null;
+		me = null;
+		playing = false;
 	}
 	
 	public void pause(){
 		position = clip.getMicrosecondPosition();
 		clip.stop();
+		clip = null;
+		me = null;
+		playing = false;
 	}
 	
 	//Ci dessous gestion du gain
@@ -63,6 +81,7 @@ public class Audio {
 		if(val<gainControl.getMinimum()){
 			val = gainControl.getMinimum();
 		}
+
 		gainControl.setValue(val);
 	}
 	
@@ -87,6 +106,14 @@ public class Audio {
 	public float angle(){
 		FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.PAN);
 		return gainControl.getValue();
+	}
+	
+	public void loop(boolean val){
+		if(val){
+			clip.loop(Clip.LOOP_CONTINUOUSLY);
+		}else{
+			clip.loop(1);
+		}
 	}
 	
 	

@@ -29,8 +29,9 @@ public class Music {
 		space_ambiance.gain(-20);
 
 		//Ajouter les musiques
+
 		musics_activity = new MultipleAudio("musics_activity");
-		musics_attack = new MultipleAudio("musics_attack");
+  		musics_attack = new MultipleAudio("musics_attack");
 		musics_classic = new MultipleAudio("musics_classic");
 		musics_sad = new MultipleAudio("musics_sad");
 		musics_start = new MultipleAudio("musics_start");
@@ -49,6 +50,8 @@ public class Music {
 		musics_suspens.play();
 
 		started = false;
+		
+		musics_start.gainlimit(-20);
 		
 	}
 
@@ -72,10 +75,9 @@ public class Music {
 			musics_travel.fadeIn(5);
 			started = true;
 		}
-
-				
 		
 	}
+	
 
 	
 }

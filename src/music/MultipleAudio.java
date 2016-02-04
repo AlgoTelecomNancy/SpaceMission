@@ -10,6 +10,7 @@ public class MultipleAudio {
 	Audio[] audios;
 	int position = 0;
 	float gain = 0;
+	float gainLimit = 0;
 	
 	private boolean fadein = false;
 	private boolean fadeout = false;
@@ -104,7 +105,7 @@ public class MultipleAudio {
 
 		for(int i=0;i<audios.length;i++){
 			if(audios[i]!=null && audios[i].playing==true){
-				audios[i].gain(val);
+				audios[i].gain(Math.min(val,gainLimit));
 			}
 		}
 	}
@@ -122,6 +123,18 @@ public class MultipleAudio {
 	public void fadeOut(int temps){
 		fadein = false;
 		fadeout = true;
+	}
+	
+	public void gainlimit(float gl){
+		gainLimit = gl;
+		for(int i=0;i<audios.length;i++){
+			if(audios[i]!=null){
+				audios[i].gainLimit=gainLimit;
+				if(audios[i].playing==true){
+					audios[i].gain(Math.min(gainLimit,audios[i].gain()));
+				}
+			}
+		}
 	}
 	
 }

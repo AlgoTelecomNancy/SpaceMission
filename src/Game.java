@@ -57,9 +57,7 @@ public class Game {
 	
 	//Boucle de jeu, updater l'univers qui va updater son contenu
 	private static void updateGame(){
-		
-		System.out.println(base.Cons.horloge);
-		
+				
 		//Mise à jour du temps du vaisseau et de l'univers
 		base.Cons.universalDeltaTime = base.Cons.deltaTime*Univers.getPlayer(0).tempsRelatif;
 		base.Cons.universalHorloge += base.Cons.deltaTime*Univers.getPlayer(0).tempsRelatif;

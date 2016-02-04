@@ -11,6 +11,7 @@ public class Audio {
 	String path = "";
 	boolean playing;
 	float megain = -80f;
+	float gainLimit = 0;
 	
 	public long position = 0; // Position en microsecondes
 	
@@ -69,6 +70,7 @@ public class Audio {
 		position = 0;
 		clip.stop();
 		clip = null;
+		System.gc();
 		me = null;
 		playing = false;
 	}
@@ -77,6 +79,7 @@ public class Audio {
 		position = clip.getMicrosecondPosition();
 		clip.stop();
 		clip = null;
+		System.gc();
 		me = null;
 		playing = false;
 	}
@@ -86,8 +89,8 @@ public class Audio {
 			
 		if(playing){
 			FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-			if(val>gainControl.getMaximum()){
-				val = gainControl.getMaximum();
+			if(val>gainLimit){
+				val = gainLimit;
 			}
 			if(val<gainControl.getMinimum()){
 				val = gainControl.getMinimum();

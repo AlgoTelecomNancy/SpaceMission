@@ -11,8 +11,6 @@ public class Genia {
 
 	public void update(){
 		
-		System.out.println(lastValue + " " + base.Function.say());
-
 		//Si on vient de finir de parler
 		if(lastValue!=base.Function.say() && lastValue==false){
 			lastTalk = (float) base.Cons.horloge;
@@ -23,18 +21,17 @@ public class Genia {
 		}
 		lastValue=base.Function.say();
 		
+		
+		if(presentationState == 1 && (float) base.Cons.horloge - lastTalk>1){
+			base.Function.say("My voice changed, but I am still the same.");
+			presentationState = 2;
+		}
+		
 		if(presentationState == 0 && (float) base.Cons.horloge - lastTalk>1){
-			lastTalk = (float) base.Cons.horloge;
-			base.Function.say("Hello, welcome.");
+			base.Function.say("Hello again. Do you remenber me ?");
 			presentationState = 1;
 		}
 		
-		System.out.println(base.Cons.horloge - lastTalk);
-		
-		if(presentationState == 1 && (float) base.Cons.horloge - lastTalk>5){
-			base.Function.say("Test");
-			presentationState = 2;
-		}
 		
 	}
 	

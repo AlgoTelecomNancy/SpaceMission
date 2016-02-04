@@ -1,6 +1,7 @@
 package music;
 
 import java.io.File;
+import java.util.*;
 
 
 //Permet de jouer en boucle une suite de sons
@@ -9,9 +10,14 @@ public class MultipleAudio {
 	Audio[] audios;
 	int position = 0;
 	
+	private boolean fadein = false;
+	private boolean fadeout = false;
+
 	public MultipleAudio(String path){
 		File folder = new File("assets/sounds/"+path);
 		File[] listOfFiles = folder.listFiles();
+
+		ShuffleArray(listOfFiles);
 		
 		this.audios = new Audio[listOfFiles.length];
 		
@@ -25,6 +31,22 @@ public class MultipleAudio {
 	    		  this.audios[p] = null;
 	    	  }
 	      }
+	    }
+	}
+	
+	private void ShuffleArray(File[] array)
+	{
+	    int index;
+	    Random random = new Random();
+	    for (int i = array.length - 1; i > 0; i--)
+	    {
+	        index = random.nextInt(i + 1);
+	        if (index != i)
+	        {
+	            array[index] = array[i];
+	            array[i] = array[index];
+	            array[index] = array[i];
+	        }
 	    }
 	}
 	
@@ -46,6 +68,19 @@ public class MultipleAudio {
 			}
 		}
 		
+		if(fadeout){
+			this.gain(Math.min(-40f,(float)(this.gain()-base.Cons.deltaTime*2)));
+		}
+		if(fadein){
+			this.gain(Math.max(0f,(float)(this.gain()+base.Cons.deltaTime*2)));
+		}
+		if(this.gain()==0){
+			this.fadein = false;
+		}
+		if(this.gain()==-40){
+			this.fadeout = false;
+		}
+		
 	}
 	
 	public void play(){
@@ -63,10 +98,25 @@ public class MultipleAudio {
 	}
 	public void gain(float val){
 		for(int i=0;i<audios.length;i++){
-			audios[position].gain(val);
+			if(audios[i]!=null && audios[i].playing==true){
+				audios[i].gain(val);
+			}
 		}
 	}
 	
+	public float ending(){
+		return (float)(audios[position].getTime()-audios[position].getElapsedTime());
+	}
 	
+	
+	public void fadeIn(int temps){
+		fadein = true;
+		fadeout = false;
+	}
+	
+	public void fadeOut(int temps){
+		fadein = false;
+		fadeout = true;
+	}
 	
 }

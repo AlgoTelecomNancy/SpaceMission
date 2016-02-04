@@ -10,6 +10,7 @@ public class Audio {
 	boolean correct = true;
 	String path = "";
 	boolean playing;
+	float megain = -80f;
 	
 	public long position = 0; // Position en microsecondes
 	
@@ -36,10 +37,12 @@ public class Audio {
 	        // getAudioInputStream() also accepts a File or InputStream
 	        me = AudioSystem.getAudioInputStream( new File("assets/sounds/"+this.path) );
 			clip.open(me);
-			this.gain(-80);
 			clip.setMicrosecondPosition(position);
-			clip.start();
 			playing = true;
+			this.gain(this.megain);
+			clip.start();
+
+
 
 		}catch(Exception exc){
 		    System.out.println("Failed to play the file."+exc+this.path);
@@ -74,15 +77,21 @@ public class Audio {
 	//Ci dessous gestion du gain
 	public void gain(float val){
 	
-		FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-		if(val>gainControl.getMaximum()){
-			val = gainControl.getMaximum();
+		System.out.println(val + " " + this.path + " "+playing + " "+correct + " "+position);
+		
+		if(playing){
+			FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+			if(val>gainControl.getMaximum()){
+				val = gainControl.getMaximum();
+			}
+			if(val<gainControl.getMinimum()){
+				val = gainControl.getMinimum();
+			}
+	
+			gainControl.setValue(val);
+		}else{
+			this.megain = val;
 		}
-		if(val<gainControl.getMinimum()){
-			val = gainControl.getMinimum();
-		}
-
-		gainControl.setValue(val);
 	}
 	
 	public float gain(){

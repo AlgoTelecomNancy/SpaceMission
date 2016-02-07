@@ -59,7 +59,7 @@ public class MultipleAudio {
 		if(audios[position].getTime()-audios[position].getElapsedTime()<5){
 			audios[position].gain((float) (audios[position].gain()-3*base.Cons.deltaTime));
 			int next = position+1;
-			if(audios[next]==null){
+			if(next>audios.length || audios[next]==null){
 				next = 0;
 			}
 			if(audios[next].playing == false){

@@ -50,6 +50,18 @@ public class Vect3D {
 		int[] R = {(int)x, (int)y, (int)z};
 		return R;
 	}
+	
+	public void translate(Vect3D p){
+		this.x += p.x;
+		this.y += p.y;
+		this.z += p.z;
+	}
+	
+	public void modulo(int m){
+		this.x = this.x%m;
+		this.y = this.y%m;
+		this.z = this.z%m;
+	}
 
 	@Override public String toString(){
 		return "("+this.x+", "+this.y+", "+this.z+")";

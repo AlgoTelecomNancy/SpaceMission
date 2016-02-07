@@ -1,7 +1,5 @@
 package music;
 
-import java.io.*;
-
 public class Music {
 	
 	Audio space_ambiance;
@@ -40,7 +38,7 @@ public class Music {
 		
 	    //Lancer la musique
 		musics_start.play();
-		musics_start.gain(-5);
+		musics_start.gain(-15);
 
 		musics_activity.play();
 		musics_attack.play();
@@ -51,7 +49,7 @@ public class Music {
 
 		started = false;
 		
-		musics_start.gainlimit(-20);
+		musics_start.gainlimit(-15);
 		
 	}
 

@@ -3,6 +3,8 @@ import types.*;
 
 public class Module {
 	
+	public int id;
+	
 	//Taille et position du module sur le vaisseau
 	public Vect3D position = new Vect3D(0,0,0);
 	public float rayon = 1;

@@ -50,8 +50,6 @@ public class Game {
 		
 		//Ajouter un joueur (id=0)
 		Univers.addPlayer(0);
-		Univers.getPlayer(0).vitesse.set(10, 0, 0);
-		System.out.println(Univers.getPlayer(0).vitesse);
 
 	}
 	

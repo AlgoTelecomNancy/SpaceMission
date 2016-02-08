@@ -26,7 +26,7 @@ public class Audio {
 			me= null; // vider la ram
 
 		}catch(Exception exc){
-		    System.out.println("Failed to load the file."+exc+this.path);
+		    System.out.println(" /!\\ Failed to load the file "+this.path);
 		    this.correct = false;
 		}
 	}

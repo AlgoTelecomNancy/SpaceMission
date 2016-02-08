@@ -20,6 +20,9 @@ public class Music {
 	boolean hasbeensad = false;
 
 	public Music(){
+		
+		System.out.println("Initialisation des musiques et sons");
+		
 		//Créer l'ambiance
 		space_ambiance = new Audio("spaceship_ambiance.wav");
 		space_ambiance.play();
@@ -50,6 +53,9 @@ public class Music {
 		started = false;
 		
 		musics_start.gainlimit(-15);
+		
+		System.out.println("Musiques initialisees ! \n");
+
 		
 	}
 

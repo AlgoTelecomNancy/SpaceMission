@@ -47,7 +47,7 @@ public class Genia {
 		}
 		
 		if(presentationState == 0 && (float) base.Cons.horloge - lastTalk>7){
-			base.Function.say("Good morning. Today is 12 of october of the year 9 9 9 9 9 9 9 9 9 9.");
+			base.Function.say("Good morning. Today is 31 of december of the year 9999. An error occured while synchronising time.");
 			presentationState = 1;
 		}
 		

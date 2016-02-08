@@ -28,7 +28,8 @@ public class Spaceship {
 	public int nbModules = 0;
 
 	public float masseTotale = 0;
-	public Vect3D centreGravite = new Vect3D();
+	public Vect3D centreGravite = new Vect3D(); //La rotation se fait autour de ce point
+	public double externalSize = 0; //Taille du point le plus éloigné du centre du vaisseau
 
 	public Vect3D[] accelerations = new Vect3D[100]; // Au maximum 100
 														// accélérations, et on
@@ -49,7 +50,6 @@ public class Spaceship {
 
 		// Ajouter les modules selon fichier de configuration
 		addModules();
-		addLinks();
 
 		// Mettre à jour le nombre de modules
 		for (int i = 0; i < modules.length; i++) {
@@ -67,6 +67,9 @@ public class Spaceship {
 				
 			}
 		}
+		
+		addLinks();
+		addConnections();
 		
 		// Mettre à jour centre de gravité relatif au centre virtuel et masse
 		// totale
@@ -183,8 +186,8 @@ public class Spaceship {
 					
 					System.out.println(" -> Ajout d'un module de type " + separ[0] + " (id = " + id + ")");
 
-
 					// @TODO Ajouter les modules avec un switch
+					
 
 
 				} else {
@@ -250,6 +253,56 @@ public class Spaceship {
 		}
 	}
 	
+	private void addConnections() {
+
+		System.out.println("Ajout des branchements entre modules");
+
+		String[] separ;
+		int length;
+		int i;
+		int j;
+		
+		try {
+			InputStream ips = new FileInputStream("assets/story/spaceship/connections.game");
+			InputStreamReader ipsr = new InputStreamReader(ips);
+			BufferedReader br = new BufferedReader(ipsr);
+			String ligne;
+			while ((ligne = br.readLine()) != null) {
+
+				separ = ligne.split("\\|");
+				if (separ.length == 2) {
+					
+					length = modules[(int)Float.parseFloat(separ[0])].ArrayModulesBranche.length;
+					i = 0;
+					while(i<length && modules[(int)Float.parseFloat(separ[0])].ArrayModulesBranche[i] != -1){
+						i++;
+					}
+					j = 0;
+					while(j<length && modules[(int)Float.parseFloat(separ[1])].ArrayModulesBranche[j] != -1){
+						j++;
+					}
+					if(i<length && j<length){
+						modules[(int)Float.parseFloat(separ[0])].ArrayModulesBranche[i] = (int)Float.parseFloat(separ[1]);
+						modules[(int)Float.parseFloat(separ[1])].ArrayModulesBranche[j] = (int)Float.parseFloat(separ[0]);
+						
+						System.out.println(" -> Ajout d'un branchements entre les modules " + separ[0] + " et " + separ[1]);
+
+					}else{
+						System.out.println(" /!\\ Erreur, aucun branchements ajoute entre " + separ[0] + " et " + separ[1]);
+					}
+
+				} else {
+					System.out.println(
+							" /!\\ Ligne invalide lors de la lecture des branchements du vaisseau, " + separ.length + " éléments");
+				}
+
+			}
+			br.close();
+		} catch (Exception e) {
+			System.out.println(" /!\\ Le fichier connections est mal construit, des branchements ont ete ignores...");
+		}
+	}
+	
 	private void updateCentreGravite(){
 		masseTotale = 0;
 		for (int i = 0; i < nbModules; i++) {
@@ -268,6 +321,15 @@ public class Spaceship {
 		//Mettre à jour la position des modules
 		for (int i = 0; i < nbModules; i++) {
 			modules[i].updatePositionRel(centreGravite);
+		}
+		
+		//Mise a jour de la taille globale
+		//externalSize
+		externalSize = 0;
+		for (int i = 0; i < nbModules; i++) {
+			if(modules[i].positionRelative.size()+modules[i].rayon>externalSize){
+				externalSize = modules[i].positionRelative.size()+modules[i].rayon;
+			}
 		}
 		
 	}

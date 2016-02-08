@@ -7,6 +7,7 @@ public class Module {
 	
 	//Taille et position du module sur le vaisseau
 	public Vect3D position = new Vect3D(0,0,0);
+	public Vect3D positionRelative = new Vect3D(0,0,0);
 	public float rayon = 1;
 	public float poids = 1;
 
@@ -28,6 +29,7 @@ public class Module {
 	public int[] ArrayModulesTouche = new int[16]; //Max 16 contacts physique avec sas
 	public int[] ArrayModulesBranche = new int[64]; //Max 64 contacts branchement cable
 	
+	public Spaceship myParent;
 	
 	//Constructeur
 	public Module(){
@@ -106,6 +108,10 @@ public class Module {
 		}
 		*/
 		
+	}
+	
+	public void updatePositionRel(Vect3D centreGrav){
+		this.positionRelative.translate(centreGrav.multiply(-1));
 	}
 	
 	

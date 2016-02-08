@@ -22,6 +22,8 @@ public class Function {
 	
 	public static void say(String s){
 		
+		System.out.println("GENIA -> "+s);
+		
 		//Seulement sur mac...
 		if(System.getProperty("os.name").toLowerCase().indexOf("mac") < 0){
 			return;

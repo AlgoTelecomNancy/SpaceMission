@@ -5,6 +5,7 @@ public class Command extends Module {
 
 	public Command(){
 		
+		
 		this.type = "Command";
 		
 		this.capaciteHumaine = 0;

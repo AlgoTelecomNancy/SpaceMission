@@ -47,6 +47,8 @@ public class Game {
 		//Créer l'espace et l'initialiser
 		Univers = new Espace();
 		Univers.init();
+		Univers.sons = Sounds;
+		Univers.ia = IA;
 		
 		//Ajouter un joueur (id=0)
 		Univers.addPlayer(0);

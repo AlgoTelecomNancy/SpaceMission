@@ -1,5 +1,7 @@
 package Univers;
 
+import GENIA.Genia;
+import music.Music;
 import spaceship.*;
 
 ////////
@@ -14,7 +16,9 @@ public class Espace {
 	
 	public Spaceship[] joueurs = new Spaceship[10];
 	
-	
+	public Music sons;
+	public Genia ia;
+
 	
 	//Initialiser l'univers
 	public void init(){
@@ -46,6 +50,7 @@ public class Espace {
 		
 		if(id>=0 && id<10){
 			joueurs[id] = new Spaceship(id);
+			joueurs[id].myParent = this;
 		}else{
 			System.out.println("ID max du joueur : 10 (entré : "+id+")");
 		}

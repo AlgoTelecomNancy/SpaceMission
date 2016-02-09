@@ -3,6 +3,7 @@ package spaceship;
 import java.io.*;
 import java.util.regex.Pattern;
 
+import Univers.*;
 import spaceship.modules.*;
 import types.*;
 
@@ -40,6 +41,8 @@ public class Spaceship {
 												// enlève les plus faibles au
 												// fur et à mesure si
 												// dépassement
+	
+	public Espace myParent;
 
 	public Spaceship(int id) {
 		this.myId = id;
@@ -78,7 +81,7 @@ public class Spaceship {
 		
 		//Message de fin
 		System.out.println("Initialisation du vaisseau termine.\n");
-
+		
 
 	}
 

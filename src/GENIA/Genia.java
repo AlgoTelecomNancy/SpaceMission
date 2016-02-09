@@ -5,6 +5,7 @@ public class Genia {
 	int presentationState = 0;
 	float lastTalk = 0;
 	
+	
 	private boolean lastValue = true;
 	
 

@@ -1,4 +1,5 @@
 package spaceship;
+import spaceship.modules.*;
 import types.*;
 
 public class Module {
@@ -7,9 +8,12 @@ public class Module {
 	
 	//Taille et position du module sur le vaisseau
 	public Vect3D position = new Vect3D(0,0,0);
+	public Vect3D orientation = new Vect3D(0,0,0);
 	public Vect3D positionRelative = new Vect3D(0,0,0);
 	public float rayon = 1;
 	public float poids = 1;
+	
+	public String type;
 
 	public float nbHumains = 0; //nombre d'humains
 	public float capaciteHumaine = 0; //nombre max d'humains

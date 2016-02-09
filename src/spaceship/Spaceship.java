@@ -46,12 +46,12 @@ public class Spaceship {
 		
 		// Créer le module principal d'id 0 et de parent le vaisseau
 		System.out.println("Initialisation du vaisseau, creation du module principal de commande.");
-		modules[0] = new Command(0);
+		modules[0] = new Command();
 
 		// Ajouter les modules selon fichier de configuration
 		addModules();
 
-		// Mettre à jour le nombre de modules
+		// Mettre à jour le nombre de modules et leurs données
 		for (int i = 0; i < modules.length; i++) {
 			if (modules[i] != null) {
 				nbModules++;
@@ -64,7 +64,7 @@ public class Spaceship {
 					modules[i].ArrayModulesTouche[j] = -1;
 				}
 				modules[i].myParent = this;
-				
+				modules[i].id = i;
 			}
 		}
 		
@@ -186,9 +186,34 @@ public class Spaceship {
 					
 					System.out.println(" -> Ajout d'un module de type " + separ[0] + " (id = " + id + ")");
 
-					// @TODO Ajouter les modules avec un switch
+					switch (separ[0]) {
+			            case "Battery": modules[id] = new Battery(options);
+			                     break;
+			            case "Canon": modules[id] = new Canon(options);
+	                     		break;
+			            case "Engine": modules[id] = new Engine(options);
+			            		break;
+			            case "Laser": modules[id] = new Laser(options);
+			            		break;
+			            case "Radar": modules[id] = new Radar(options);
+			            		break;
+			            case "Shield": modules[id] = new Shield(options);
+                 				break;
+			            case "SolarPanels": modules[id] = new SolarPanels(options);
+         						break;
+			            case "Storage": modules[id] = new Storage(options);
+         						break;
+			            case "VSL": modules[id] = new VSL(options);
+         						break;
+			            default: modules[id] = new Room(options);
+			                     break;
+			        }
 					
-
+					modules[id].poids = (float) masse;
+					modules[id].rayon = (float) size;
+					modules[id].position.set(x, y, z);
+					modules[id].orientation.set(rx, ry, rz);
+					
 
 				} else {
 					System.out.println(

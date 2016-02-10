@@ -34,11 +34,7 @@ public class Module {
 	public int[] ArrayModulesBranche = new int[64]; //Max 64 contacts branchement cable
 	
 	public Spaceship myParent;
-	
-	//Constructeur
-	public Module(){
-		
-	}
+
 	
 	
 	//Fonction de base pour actualiser le module

@@ -73,7 +73,7 @@ public class MultipleAudio {
 		}
 		
 		if(fadeout){
-			this.gain(Math.min(-40f,(float)(this.gain()-base.Cons.deltaTime*2)));
+			this.gain(Math.min(-80f,(float)(this.gain()-base.Cons.deltaTime*2)));
 		}
 		if(fadein){
 			this.gain(Math.max(0f,(float)(this.gain()+base.Cons.deltaTime*2)));
@@ -81,7 +81,7 @@ public class MultipleAudio {
 		if(fadein && (this.gain()==0 || this.gain()>0)){
 			this.fadein = false;
 		}
-		if(fadeout && (this.gain()==-40 || this.gain()<-40)){
+		if(fadeout && (this.gain()==-80 || this.gain()<-80)){
 			this.fadeout = false;
 		}
 		

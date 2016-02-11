@@ -22,11 +22,12 @@ public class Audio {
 		try{				
 	        clip = AudioSystem.getClip();
 	        me = AudioSystem.getAudioInputStream( new File("assets/sounds/"+this.path) );
+	        
 			clip = null;
 			me= null; // vider la ram
 
 		}catch(Exception exc){
-		    System.out.println(" /!\\ Failed to load the file "+this.path);
+		    System.out.println(" /!\\ Failed to load the file "+this.path+exc);
 		    this.correct = false;
 		}
 	}

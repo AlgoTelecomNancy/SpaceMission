@@ -7,6 +7,7 @@ import Univers.*;
 import spaceship.modules.*;
 import types.*;
 
+
 public class Spaceship {
 
 	// Base
@@ -137,6 +138,12 @@ public class Spaceship {
 		horlogeExterne += base.Cons.deltaTime * tempsRelatif;
 
 		verification();
+		
+		for(int j=0; j<nbModules; j++){
+			System.out.print("[ Module "+j+" : "+" nbH = " +modules[i].nbHumains + " ] ; ");
+		}
+		System.out.println("");
+		
 	}
 
 	private void verification() {
@@ -147,6 +154,7 @@ public class Spaceship {
 	}
 
 	private void addModules() {
+		
 		
 		System.out.println("Creation du vaisseau, ajout des modules");
 
@@ -161,6 +169,7 @@ public class Spaceship {
 		double rz;
 		String[] options;
 		int id = 0;
+		
 
 		try {
 			InputStream ips = new FileInputStream("assets/story/spaceship/parts.game");

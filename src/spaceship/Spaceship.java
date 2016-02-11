@@ -72,6 +72,9 @@ public class Spaceship {
 			}
 		}
 		
+		
+
+		
 		addLinks();
 		addConnections();
 		
@@ -140,8 +143,9 @@ public class Spaceship {
 		verification();
 		
 		for(int j=0; j<nbModules; j++){
-			System.out.print("[ Module "+j+" : "+" nbH = " +modules[i].nbHumains + " ] ; ");
+			System.out.print("[ Module "+j+" : "+" nbH = " +modules[j].nbHumains + " ] ; ");
 		}
+		modules[3].incendie = true;
 		System.out.println("");
 		
 	}
@@ -226,6 +230,7 @@ public class Spaceship {
 					modules[id].position.set(x, y, z);
 					modules[id].orientation.set(rx, ry, rz);
 					
+					
 
 				} else {
 					System.out.println(
@@ -237,6 +242,8 @@ public class Spaceship {
 		} catch (Exception e) {
 			System.out.println(e.toString());
 		}
+		
+
 	}
 	
 

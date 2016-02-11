@@ -114,12 +114,16 @@ public class Module {
 		nbHumains = (float) Math.max(0, nbHumains*(1-(1-coeffSurvie)*base.Cons.deltaTime/0.05));
 		//Gérer les flux
 		
+
+		
 		if(!ferme && coeffDanger!=0){
 			transfertTime+=coeffDanger * (float) base.Cons.deltaTime;
 			while (transfertTime >= 0.5){
 				transfertTime -= 0.5;
 				for (int i=0; i<=7; i++){
-					if (myParent.modules[ArrayModulesContact[i]]!= null){
+					System.out.println(i);
+
+					if (ArrayModulesContact[i]>-1){
 						if (myParent.modules[ArrayModulesContact[i]].ferme == false){
 							nbHumains -=1;
 							myParent.modules[ArrayModulesContact[i]].nbHumains +=1 ;

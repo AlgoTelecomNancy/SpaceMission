@@ -19,6 +19,7 @@ public class Module {
 	public float capaciteHumaine = 0; //nombre max d'humains
 	public boolean ferme = false; //Sas ouverts ou fermés
 
+	public float transfertTime =0; //Temps de transfert en cas de danger
 	public int dommage = 0; //0 dommage : bon état
 	public int temperature = 290; //Température interieure en Kelvin
 	public int temperatureMax = 320;
@@ -27,10 +28,10 @@ public class Module {
 	public boolean incendie = false; //Incendie (si temp>320 et pression>30)
 	public float incendieTime = 0; //temps depuis lequel l'incendie est déclaré
 	public boolean alarme = false; //Alarme
-	public float coeffmortalite = 0; // coeff de mortalite
-	public float coeffsurvie = 0; //coeff de survie
-	
-	public int[] ArrayModulesTouche = new int[16]; //Max 16 contacts physique avec sas
+	public float coeffMortalite = 0; // coeff de mortalite
+	public float coeffSurvie = 0; //coeff de survie
+	public float coeffDanger = 0 ; //coeff de danger
+	public int[] ArrayModulesContact = new int[8]; //Max 8 contacts physique avec sas
 	public int[] ArrayModulesBranche = new int[64]; //Max 64 contacts branchement cable
 	
 	public Spaceship myParent;
@@ -39,6 +40,8 @@ public class Module {
 	
 	//Fonction de base pour actualiser le module
 	public void update(){
+		
+		//myParent.modules[ArrayModulesTouche[0]]==null;
 		
 		//Incendie
 		if(temperature>temperatureMax){
@@ -68,22 +71,26 @@ public class Module {
 		
 		
 		//Tuer des humains
-		coeffmortalite = 0;
-		coeffsurvie = 1;
+		coeffDanger = 0;
+		coeffMortalite = 0;
+		coeffSurvie = 1;
 		//Température (ça marche pas mal...)
 		if(Math.random()>0.4){
-			coeffmortalite = (float)Math.min(Math.max(0,(0.0045*Math.pow((temperature-290),2)-3)/10),1);
-			coeffsurvie = (float) (coeffsurvie*(1-Math.pow(coeffmortalite,2)));
-			coeffmortalite = 0;
+			coeffDanger+=Math.abs(290-temperature)-15/10;
+			if (coeffDanger<0) coeffDanger=0 ;
+			coeffMortalite = (float)Math.min(Math.max(0,(0.0045*Math.pow((temperature-290),2)-3)/10),1);
+			coeffSurvie = (float) (coeffSurvie*(1-Math.pow(coeffMortalite,2)));
+			coeffMortalite = 0;
 		}
 		
 		//Incendie
 		if(incendie){
+			coeffDanger=1;
 			incendieTime += (float)base.Cons.deltaTime;  // augmente le temps de l'incendie
 			if (incendieTime>10){
-				coeffmortalite = Math.min(incendieTime/2000,1); //incendie de plus en plus mortel avec le temps
-				coeffsurvie = (float) (coeffsurvie*(1-Math.pow(coeffmortalite,2)));
-				coeffmortalite = 0;
+				coeffMortalite = Math.min(incendieTime/2000,1); //incendie de plus en plus mortel avec le temps
+				coeffSurvie = (float) (coeffSurvie*(1-Math.pow(coeffMortalite,2)));
+				coeffMortalite = 0;
 			}
 		} else if (incendieTime!=0){
 			incendieTime = 0;
@@ -94,20 +101,33 @@ public class Module {
 		if(pression<50){
 			pressionTime += (float) base.Cons.deltaTime;
 			if (pressionTime>45){		// après 45 secondes en sous oxygène, tout le monde est mort d'intoxication
-				nbHumains = 0;
+				nbHumains = (float) (nbHumains*0.45);
 			};
 		} else if (pressionTime != 0){
 			pressionTime = 0;
 		}
 		
+		if(alarme) coeffDanger+=0.5;
+		else coeffDanger -=0.25;
+		if (coeffDanger < 0) coeffDanger = 0 ;
+		if (coeffDanger > 1) coeffDanger = 1 ;
+		nbHumains = (float) Math.max(0, nbHumains*(1-(1-coeffSurvie)*base.Cons.deltaTime/0.05));
+		//Gérer les flux
 		
-		nbHumains = (float) Math.max(0, nbHumains*(1-(1-coeffsurvie)*base.Cons.deltaTime/0.05));
-		/*
-		//Gérer les flux @TODO
-		if(!ferme){
-			
+		if(!ferme && coeffDanger!=0){
+			transfertTime+=coeffDanger * (float) base.Cons.deltaTime;
+			while (transfertTime >= 0.5){
+				transfertTime -= 0.5;
+				for (int i=0; i<=7; i++){
+					if (myParent.modules[ArrayModulesContact[i]]!= null){
+						if (myParent.modules[ArrayModulesContact[i]].ferme == false){
+							nbHumains -=1;
+							myParent.modules[ArrayModulesContact[i]].nbHumains +=1 ;
+						}
+					}
+				}
+			}
 		}
-		*/
 		
 	}
 	

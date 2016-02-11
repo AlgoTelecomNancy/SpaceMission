@@ -63,8 +63,8 @@ public class Spaceship {
 				for(int j=0;j<modules[i].ArrayModulesBranche.length;j++){
 					modules[i].ArrayModulesBranche[j] = -1;
 				}
-				for(int j=0;j<modules[i].ArrayModulesTouche.length;j++){
-					modules[i].ArrayModulesTouche[j] = -1;
+				for(int j=0;j<modules[i].ArrayModulesContact.length;j++){
+					modules[i].ArrayModulesContact[j] = -1;
 				}
 				modules[i].myParent = this;
 				modules[i].id = i;
@@ -250,18 +250,18 @@ public class Spaceship {
 				separ = ligne.split("\\|");
 				if (separ.length == 2) {
 					
-					length = modules[(int)Float.parseFloat(separ[0])].ArrayModulesTouche.length;
+					length = modules[(int)Float.parseFloat(separ[0])].ArrayModulesContact.length;
 					i = 0;
-					while(i<length && modules[(int)Float.parseFloat(separ[0])].ArrayModulesTouche[i] != -1){
+					while(i<length && modules[(int)Float.parseFloat(separ[0])].ArrayModulesContact[i] != -1){
 						i++;
 					}
 					j = 0;
-					while(j<length && modules[(int)Float.parseFloat(separ[1])].ArrayModulesTouche[j] != -1){
+					while(j<length && modules[(int)Float.parseFloat(separ[1])].ArrayModulesContact[j] != -1){
 						j++;
 					}
 					if(i<length && j<length){
-						modules[(int)Float.parseFloat(separ[0])].ArrayModulesTouche[i] = (int)Float.parseFloat(separ[1]);
-						modules[(int)Float.parseFloat(separ[1])].ArrayModulesTouche[j] = (int)Float.parseFloat(separ[0]);
+						modules[(int)Float.parseFloat(separ[0])].ArrayModulesContact[i] = (int)Float.parseFloat(separ[1]);
+						modules[(int)Float.parseFloat(separ[1])].ArrayModulesContact[j] = (int)Float.parseFloat(separ[0]);
 						
 						System.out.println(" -> Ajout d'un lien entre les modules " + separ[0] + " et " + separ[1]);
 

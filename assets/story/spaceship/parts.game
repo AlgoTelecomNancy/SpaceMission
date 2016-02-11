@@ -1,1 +1,7 @@
-Canon|200|0.5|5|0|0|0|0|0|orientable,12000
+// Type , Masse , X (km) , Y (km) , Z (km) ,  RX (km) ,  RY (km) ,  RZ (km) , OPTIONS
+// OPTIONS
+// Room : nbHumans , 
+
+Room|200|0.5|5|0|0|0|0|0|0
+Room|200|0.5|-5|0|0|0|0|0|0
+Room|200|1|0|-5|0|0|0|0|20

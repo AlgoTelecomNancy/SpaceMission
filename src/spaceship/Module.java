@@ -115,16 +115,16 @@ public class Module {
 		//Gérer les flux
 		
 
-		
-		if(!ferme && coeffDanger!=0){
+		//transfert d'humains
+		if(nbHumains>0 && !ferme && coeffDanger!=0){
 			transfertTime+=coeffDanger * (float) base.Cons.deltaTime;
 			while (transfertTime >= 0.5){
-				transfertTime -= 0.5;
+				transfertTime -= Math.random()*0.5;
 				for (int i=0; i<=7; i++){
 					System.out.println(i);
 
 					if (ArrayModulesContact[i]>-1){
-						if (myParent.modules[ArrayModulesContact[i]].ferme == false){
+						if (nbHumains>0 && myParent.modules[ArrayModulesContact[i]].capaciteHumaine>myParent.modules[ArrayModulesContact[i]].nbHumains && myParent.modules[ArrayModulesContact[i]].ferme == false){
 							nbHumains -=1;
 							myParent.modules[ArrayModulesContact[i]].nbHumains +=1 ;
 						}

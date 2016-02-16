@@ -24,6 +24,19 @@ public class Vect3D {
 		this.z = z;
 	}
 	
+	public double getCoef(int i) {
+		switch (i) {
+		case 0:
+			return x;
+		case 1:
+			return y;
+		case 2:
+			return z;
+		}
+		System.out.println("Wrong coef ("+i+") in Vect3D.getCoef(int i)");
+		return 0;
+	}
+	
 	//Mettre la valeur entière
 	public Vect3D floor(){
 		this.x = Math.floor(this.x);
@@ -35,6 +48,13 @@ public class Vect3D {
 	//Multiplier le vecteur
 	public Vect3D multiply(double k){
 		return new Vect3D(k*this.x,k*this.y,k*this.z);
+	}
+	
+	public Vect3D multiply(Vect3D v) {
+		
+		return new Vect3D(this.y*v.z-this.z*v.y,
+				this.z*v.x-this.x*v.z,
+				this.x*v.y-this.y*v.x);
 	}
 	
 	public double size(){

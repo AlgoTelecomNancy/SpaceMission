@@ -86,16 +86,8 @@ public class Module {
 			incendieTime += (float) base.Cons.deltaTime; // augmente le temps de
 															// l'incendie
 			if (incendieTime > 10) {
-<<<<<<< HEAD
+
 				coeffMortalite = Math.min(incendieTime / 2000, 1); // incendie de plus en plus mortel avec le temps
-=======
-				coeffMortalite = Math.min(incendieTime / 2000, 1); // incendie
-																	// de plus
-																	// en plus
-																	// mortel
-																	// avec le
-																	// temps
->>>>>>> 1ccecb32a4972e712fa85225ac543881681f7382
 				coeffSurvie = (float) (coeffSurvie * (1 - Math.pow(coeffMortalite, 2)));
 				coeffMortalite = 0;
 			}

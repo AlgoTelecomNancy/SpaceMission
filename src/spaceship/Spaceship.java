@@ -146,7 +146,7 @@ public class Spaceship {
 
 		//// TESTS
 		modules[3].incendie = base.Cons.horloge<160;
-		modules[2].ferme = true;
+		//modules[2].ferme = true;
 		////
 		
 	}

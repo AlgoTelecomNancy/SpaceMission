@@ -118,8 +118,8 @@ public class Module {
 		// Gérer les flux
 
 		// transfert d'humains
-		if (nbHumains > 0 && !ferme && coeffDanger != 0) {
-			transfertTime += coeffDanger * (float) base.Cons.deltaTime;
+		if (nbHumains > 0 && !ferme) {
+			transfertTime += (coeffDanger + ((float)nbHumains/capaciteHumaine)) * (float) base.Cons.deltaTime;
 			while (transfertTime >= 0.5) {
 				transfertTime -= Math.random() * 0.5;
 				for (int i = 0; i <= 7; i++) {
@@ -138,7 +138,7 @@ public class Module {
 		//transfert de chaleur
 		for (int i = 0; i <= 7; i++) {
 			if (ArrayModulesContact[i] > -1) {
-				boolean porte = !myParent.modules[ArrayModulesContact[i]].ferme;
+				boolean porte = !myParent.modules[ArrayModulesContact[i]].ferme && !ferme;
 				float temp = 300;
 				if (porte) temp = 60;
 				if (Math.abs(temperature-myParent.modules[ArrayModulesContact[i]].temperature)>5){

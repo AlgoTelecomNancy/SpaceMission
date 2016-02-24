@@ -88,13 +88,12 @@ public class Visualisation extends JPanel {
 				g2d.fillOval(this.fenetre.getWidth()/2+(int)(mod.position.x*10000)-(int)(mod.rayon*10000/2),
 						this.fenetre.getHeight()/2+(int)(mod.position.y*10000)-(int)(mod.rayon*10000/2),
 						(int)(mod.rayon*10000),
-						(int)(mod.rayon*10000));
+						(int)(mod.rayon*10000));	
 				
 				
 				drawVText("T="+(int)(mod.temperature-273)+"°C", this.fenetre.getWidth()/2+(int)(mod.position.x*10000), this.fenetre.getHeight()/2+(int)(mod.position.y*10000), g2d);
-				drawVText("H="+(int)(mod.nbHumains), this.fenetre.getWidth()/2+(int)(mod.position.x*10000), this.fenetre.getHeight()/2+(int)(mod.position.y*10000) + 15, g2d);
+				drawVText("H="+(int)(mod.nbHumains)+"/"+(int)(mod.capaciteHumaine), this.fenetre.getWidth()/2+(int)(mod.position.x*10000), this.fenetre.getHeight()/2+(int)(mod.position.y*10000) + 10, g2d);
 
-				
 				
 			}
 		}

@@ -7,20 +7,23 @@ public class Game {
 	public static Espace Univers;
 	public static Music Sounds;
 	public static Genia IA;
+	public static Visualisation visual = new Visualisation();
 
 	public static void runGame(){
 		
+
 		//Initialiser le jeu...
 		initGame();
 		Sounds = new Music();
 		IA = new Genia();
-		
+				
 		//Boucle du jeu
 		while(true){
 			
 			//Temps initial
 			long timeIn = System.nanoTime();
-		
+
+
 			//On fait un tour de jeu...
 			updateGame();
 			Sounds.update();

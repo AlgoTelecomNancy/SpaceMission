@@ -75,10 +75,8 @@ public class Module {
 			coeffDanger += Math.abs(290 - temperature) - 15 / 10;
 			if (coeffDanger < 0)
 				coeffDanger = 0;
-			coeffMortalite = (float) Math.min(Math.max(0,
-					(0.0045 * Math.pow((temperature - 290), 2) - 3) / 10), 1);
-			coeffSurvie = (float) (coeffSurvie * (1 - Math.pow(coeffMortalite,
-					2)));
+			coeffMortalite = (float) Math.min(Math.max(0, (0.0045 * Math.pow((temperature - 290), 2) - 3) / 10), 1);
+			coeffSurvie = (float) (coeffSurvie * (1 - Math.pow(coeffMortalite, 2)));
 			coeffMortalite = 0;
 		}
 
@@ -94,8 +92,7 @@ public class Module {
 																	// mortel
 																	// avec le
 																	// temps
-				coeffSurvie = (float) (coeffSurvie * (1 - Math.pow(
-						coeffMortalite, 2)));
+				coeffSurvie = (float) (coeffSurvie * (1 - Math.pow(coeffMortalite, 2)));
 				coeffMortalite = 0;
 			}
 		} else if (incendieTime != 0) {
@@ -122,8 +119,7 @@ public class Module {
 			coeffDanger = 0;
 		if (coeffDanger > 1)
 			coeffDanger = 1;
-		nbHumains = (float) Math.max(0, nbHumains
-				* (1 - (1 - coeffSurvie) * base.Cons.deltaTime / 0.05));
+		nbHumains = (float) Math.max(0, nbHumains * (1 - (1 - coeffSurvie) * base.Cons.deltaTime / 0.05));
 		// Gérer les flux
 
 		// transfert d'humains
@@ -147,7 +143,7 @@ public class Module {
 		}
 
 	}
-
+	
 	public void updatePositionRel(Vect3D centreGrav) {
 		this.positionRelative.translate(centreGrav.multiply(-1));
 	}

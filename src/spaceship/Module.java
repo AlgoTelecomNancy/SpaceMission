@@ -23,8 +23,8 @@ public class Module {
 
 	public float transfertTime = 0; // Temps de transfert en cas de danger
 	public int dommage = 0; // 0 dommage : bon état
-	public int temperature = 290; // Température interieure en Kelvin
-	public int temperatureMax = 320;
+	public float temperature = 290; // Température interieure en Kelvin
+	public int temperatureMax = 350;
 	public int pression = 100; // Pourcentage de la pression normale
 	public float pressionTime = 0; // Temps depuis lequel la pression est
 									// mortelle
@@ -55,13 +55,13 @@ public class Module {
 		}
 
 		// Alarme
-		alarme = (incendie || pression < 50) && nbHumains > 0; // Si pression basse ou trop
-													// élevée et humain alarme
+		alarme = (incendie || pression < 50) && nbHumains > 0; // alarme automatique
+
 
 
 		  //Incendie augmente température 
-		  if(incendie && Math.random()>0.98 && temperature<390){ 
-			  temperature += 1; 
+		  if(incendie && temperature < 390){ 
+			  temperature+= Math.exp(-35/(391-temperature))*(base.Cons.deltaTime/5)*(incendieTime/10);
 		  } //Pas d'incendie stabilise la température à 290K 
 
 
@@ -86,12 +86,16 @@ public class Module {
 			incendieTime += (float) base.Cons.deltaTime; // augmente le temps de
 															// l'incendie
 			if (incendieTime > 10) {
+<<<<<<< HEAD
+				coeffMortalite = Math.min(incendieTime / 2000, 1); // incendie de plus en plus mortel avec le temps
+=======
 				coeffMortalite = Math.min(incendieTime / 2000, 1); // incendie
 																	// de plus
 																	// en plus
 																	// mortel
 																	// avec le
 																	// temps
+>>>>>>> 1ccecb32a4972e712fa85225ac543881681f7382
 				coeffSurvie = (float) (coeffSurvie * (1 - Math.pow(coeffMortalite, 2)));
 				coeffMortalite = 0;
 			}
@@ -102,8 +106,7 @@ public class Module {
 		// Pression basse
 		if (pression < 50) {
 			pressionTime += (float) base.Cons.deltaTime;
-			if (pressionTime > 45) { // après 45 secondes en sous oxygène, tout
-										// le monde est mort d'intoxication
+			if (pressionTime > 45) { // après 45 secondes en sous oxygène, tout le monde est mort d'intoxication
 				nbHumains = (float) (nbHumains * 0.45);
 			}
 			;
@@ -128,8 +131,6 @@ public class Module {
 			while (transfertTime >= 0.5) {
 				transfertTime -= Math.random() * 0.5;
 				for (int i = 0; i <= 7; i++) {
-					System.out.println(i);
-
 					if (ArrayModulesContact[i] > -1) {
 						if (nbHumains > 0
 								&& myParent.modules[ArrayModulesContact[i]].capaciteHumaine > myParent.modules[ArrayModulesContact[i]].nbHumains
@@ -139,6 +140,21 @@ public class Module {
 						}
 					}
 				}
+			}
+		}
+		
+		//transfert de chaleur
+		for (int i = 0; i <= 7; i++) {
+			if (ArrayModulesContact[i] > -1) {
+				boolean porte = !myParent.modules[ArrayModulesContact[i]].ferme;
+				float temp = 300;
+				if (porte) temp = 60;
+				if (Math.abs(temperature-myParent.modules[ArrayModulesContact[i]].temperature)>5){
+					float tempTransfert = (float) ((temperature-myParent.modules[ArrayModulesContact[i]].temperature)*base.Cons.deltaTime/temp);
+					temperature = temperature - tempTransfert ;
+					myParent.modules[ArrayModulesContact[i]].temperature = myParent.modules[ArrayModulesContact[i]].temperature + tempTransfert;
+				}
+				
 			}
 		}
 

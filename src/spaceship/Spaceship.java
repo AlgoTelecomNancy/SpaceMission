@@ -143,7 +143,7 @@ public class Spaceship {
 		verification();
 		
 		for(int j=0; j<nbModules; j++){
-			System.out.print("[ Module "+j+" : "+" nbH = " +modules[j].nbHumains + " ] ; ");
+			System.out.print("[ Module "+j+" : "+" Temp = " +modules[j].temperature + " ] ; ");
 		}
 		modules[3].incendie = true;
 		System.out.println("");

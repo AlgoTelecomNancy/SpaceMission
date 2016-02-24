@@ -55,18 +55,16 @@ public class Module {
 		}
 
 		// Alarme
-		alarme = incendie; // Si incendie, alarme déclenchée
-		alarme = pression < 50 && nbHumains > 0; // Si pression basse ou trop
+		alarme = (incendie || pression < 50) && nbHumains > 0; // Si pression basse ou trop
 													// élevée et humain alarme
-		alarme = pression < 50 && nbHumains > 0;
 
-		/*
-		 * //Incendie augmente température if(incendie && Math.random()>0.98 &&
-		 * temperature<390){ temperature += 1; } //Pas d'incendie stabilise la
-		 * température à 290K if(!incendie && Math.random()>0.78 &&
-		 * temperature!=290){ temperature +=
-		 * -(290-temperature)/(290-temperature); }
-		 */
+
+		  //Incendie augmente température 
+		  if(incendie && Math.random()>0.98 && temperature<390){ 
+			  temperature += 1; 
+		  } //Pas d'incendie stabilise la température à 290K 
+
+
 
 		// Tuer des humains
 		coeffDanger = 0;

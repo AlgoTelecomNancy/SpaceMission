@@ -142,12 +142,12 @@ public class Spaceship {
 
 		verification();
 		
-		for(int j=0; j<nbModules; j++){
-			System.out.print("[ Module "+j+" : "+" Temp = " +modules[j].temperature + " ] ; ");
-		}
+		
+
+		//// TESTS
+		modules[3].incendie = base.Cons.horloge<160;
 		modules[2].ferme = true;
-		modules[3].incendie = base.Cons.horloge<60;
-		System.out.println("");
+		////
 		
 	}
 

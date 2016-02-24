@@ -101,7 +101,7 @@ public class Module {
 			if (pressionTime > 45) { // après 45 secondes en sous oxygène, tout le monde est mort d'intoxication
 				nbHumains = (float) (nbHumains * 0.45);
 			}
-			;
+			
 		} else if (pressionTime != 0) {
 			pressionTime = 0;
 		}
@@ -142,7 +142,7 @@ public class Module {
 				float temp = 300;
 				if (porte) temp = 60;
 				if (Math.abs(temperature-myParent.modules[ArrayModulesContact[i]].temperature)>5){
-					float tempTransfert = (float) ((temperature-myParent.modules[ArrayModulesContact[i]].temperature)*base.Cons.deltaTime/temp);
+					float tempTransfert = (float) ((temperature-myParent.modules[ArrayModulesContact[i]].temperature)*base.Cons.deltaTime/(temp*2));
 					temperature = temperature - tempTransfert ;
 					myParent.modules[ArrayModulesContact[i]].temperature = myParent.modules[ArrayModulesContact[i]].temperature + tempTransfert;
 				}

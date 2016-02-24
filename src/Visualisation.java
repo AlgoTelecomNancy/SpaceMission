@@ -1,13 +1,14 @@
 import java.awt.*;
 import javax.swing.*;
 
+import com.sun.org.apache.bcel.internal.generic.IADD;
+
 import Univers.Espace;
 import spaceship.Module;
 
-public class Visualisation {
+public class Visualisation extends JPanel {
 
 	public JFrame fenetre;
-	public JPanel panel;
 	
 	public Visualisation(){
 		
@@ -19,32 +20,38 @@ public class Visualisation {
 		 fenetre.setLocationRelativeTo(null);
 		 fenetre.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		 
-		 panel = new JPanel();
-		 panel.setBackground(Color.WHITE);
-		 panel.setLayout(null);
+		 this.setBackground(Color.WHITE);
+		 this.setLayout(null);
 		 
-		 fenetre.setContentPane(panel);
+		 fenetre.setContentPane(this);
 		 
 		 fenetre.show();
 		
 	}
 	
-	public void add(Component comp){
+	@Override
+	public void paintComponent (Graphics g) {
+		super.paintComponent(g); // take care of anything else
+		Graphics2D g2d = (Graphics2D) g;
+
+		g2d.setColor(Color.RED);
+		for(Module mod: Game.Univers.joueurs[0].modules){
+			if(mod!=null){
+				g2d.fillOval(this.fenetre.getWidth()/2+(int)(mod.position.x*10000)-(int)(mod.rayon*10000/2),
+						this.fenetre.getHeight()/2+(int)(mod.position.y*10000)-(int)(mod.rayon*10000/2),
+						(int)(mod.rayon*10000),
+						(int)(mod.rayon*10000));
+			}
+		}
 		
-		panel.add(comp);
-		panel.setOpaque(true);
-		fenetre.show();
-				
 	}
+	
 	
 	public void clear(){
-		panel.removeAll();
-		panel.revalidate();
-		panel.repaint();
+		this.removeAll();
+		this.revalidate();
+		this.repaint();
 		fenetre.show();
 	}
 	
-
-	
-
 }

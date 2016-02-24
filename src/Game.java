@@ -23,7 +23,8 @@ public class Game {
 			//Temps initial
 			long timeIn = System.nanoTime();
 
-
+			visual.repaint();
+			visual.fenetre.show();
 			//On fait un tour de jeu...
 			updateGame();
 			Sounds.update();

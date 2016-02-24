@@ -145,7 +145,8 @@ public class Spaceship {
 		for(int j=0; j<nbModules; j++){
 			System.out.print("[ Module "+j+" : "+" Temp = " +modules[j].temperature + " ] ; ");
 		}
-		modules[3].incendie = true;
+		modules[2].ferme = true;
+		modules[3].incendie = base.Cons.horloge<60;
 		System.out.println("");
 		
 	}
@@ -198,6 +199,7 @@ public class Spaceship {
 					ry = Double.parseDouble(separ[7]);
 					rz = Double.parseDouble(separ[8]);
 					options = separ[9].split(",");
+					
 					
 					
 					System.out.println(" -> Ajout d'un module de type " + separ[0] + " (id = " + id + ")");

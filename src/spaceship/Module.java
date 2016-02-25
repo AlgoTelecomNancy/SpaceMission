@@ -126,7 +126,8 @@ public class Module {
 					if (ArrayModulesContact[i] > -1) {
 						if (nbHumains > 0
 								&& myParent.modules[ArrayModulesContact[i]].capaciteHumaine > myParent.modules[ArrayModulesContact[i]].nbHumains
-								&& myParent.modules[ArrayModulesContact[i]].ferme == false) {
+								&& myParent.modules[ArrayModulesContact[i]].ferme == false
+								&& !(coeffDanger*1.7<myParent.modules[ArrayModulesContact[i]].coeffDanger)) {
 							nbHumains -= 1;
 							myParent.modules[ArrayModulesContact[i]].nbHumains += 1;
 						}

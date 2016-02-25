@@ -76,8 +76,14 @@ public class Visualisation extends JPanel {
 			}
 		}
 		
+		int x;
+		int y;
+		
 		for(Module mod: spaceship.modules){
 			if(mod!=null){
+				
+				x = this.fenetre.getWidth()/2+(int)(mod.position.x*10000);
+				y = this.fenetre.getHeight()/2+(int)(mod.position.y*10000);
 								
 				g2d.setColor(new Color((int)Math.min(Math.max(0, (mod.temperature-285)*4),255), 0, (int)Math.min(Math.max(0, (-mod.temperature+285)*4),255)));
 				
@@ -85,15 +91,19 @@ public class Visualisation extends JPanel {
 					g2d.setColor(Color.GRAY);
 				}
 				
-				g2d.fillOval(this.fenetre.getWidth()/2+(int)(mod.position.x*10000)-(int)(mod.rayon*10000/2),
-						this.fenetre.getHeight()/2+(int)(mod.position.y*10000)-(int)(mod.rayon*10000/2),
+				g2d.fillOval(x-(int)(mod.rayon*10000/2),
+						y-(int)(mod.rayon*10000/2),
 						(int)(mod.rayon*10000),
 						(int)(mod.rayon*10000));	
 				
 				
-				drawVText("T="+(int)(mod.temperature-273)+"°C", this.fenetre.getWidth()/2+(int)(mod.position.x*10000), this.fenetre.getHeight()/2+(int)(mod.position.y*10000), g2d);
-				drawVText("H="+(int)(mod.nbHumains)+"/"+(int)(mod.capaciteHumaine), this.fenetre.getWidth()/2+(int)(mod.position.x*10000), this.fenetre.getHeight()/2+(int)(mod.position.y*10000) + 10, g2d);
+				drawVText("T="+(int)(mod.temperature-273)+"°C", x, y, g2d);
+				drawVText("H="+(int)(mod.nbHumains)+"/"+(int)(mod.capaciteHumaine), x, y + 10, g2d);
 
+				if(mod.incendie){
+					g2d.setColor(Color.ORANGE);
+					g2d.drawPolygon(new int[]{x-11,x-5,x-8}, new int[]{y,y,y-6}, 3);
+				}
 				
 			}
 		}

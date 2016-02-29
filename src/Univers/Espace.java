@@ -1,8 +1,10 @@
 package Univers;
 
 import GENIA.Genia;
+import display.Window;
 import music.Music;
 import spaceship.*;
+import types.Vect3D;
 
 ////////
 // Classe conteneur de tous les objets de l'espace
@@ -15,9 +17,16 @@ import spaceship.*;
 public class Espace {
 	
 	public Spaceship[] joueurs = new Spaceship[10];
+	public Window window;
 	
 	public Music sons;
 	public Genia ia;
+	
+	
+	public Espace(Window window)
+	{
+		this.window = window;
+	}
 
 	
 	//Initialiser l'univers
@@ -32,11 +41,13 @@ public class Espace {
 		for(int i=0;i<joueurs.length;i++){
 			if(joueurs[i]!=null){
 				joueurs[i].update();
+				window.getDisplay().getCube(0).setPosition(joueurs[i].position.getPosition());
+				window.getDisplay().getCube(0).setAngles(joueurs[i].orientation);
+				window.getDisplay().getCube(0).setSize(new Vect3D(joueurs[i].externalSize, joueurs[i].externalSize, joueurs[i].externalSize));
+				window.getCamera().focus(window.getDisplay().getCube(0).position);
 			}
 		}
-		
-	}
-	
+	}	
 	
 	
 	

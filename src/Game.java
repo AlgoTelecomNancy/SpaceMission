@@ -1,5 +1,8 @@
 import Univers.*;
+import display.Cube;
+import display.Window;
 import music.Music;
+import types.Vect3D;
 import GENIA.*;
 
 public class Game {
@@ -7,7 +10,8 @@ public class Game {
 	public static Espace Univers;
 	public static Music Sounds;
 	public static Genia IA;
-
+	public static Window window;
+	
 	public static void runGame(){
 		
 		//Initialiser le jeu...
@@ -45,7 +49,16 @@ public class Game {
 	private static void initGame(){
 		
 		//Créer l'espace et l'initialiser
-		Univers = new Espace();
+		window = new Window();
+		window.getDisplay().addCube(new Cube(new Vect3D(), new Vect3D(), new Vect3D()));
+		window.getCamera().setPosition(new Vect3D(20, 20, 20));
+		
+		for (int x = -1; x < 2; x += 2)
+			for (int y = -1; y < 2; y += 2)
+				for (int z = -1; z < 2; z += 2)
+					window.getDisplay().addCube(new Cube(new Vect3D(x * 10, y * 10, z * 10), new Vect3D(1, 1, 1), new Vect3D(45, 45, 45)));
+		
+		Univers = new Espace(window);
 		Univers.init();
 		Univers.sons = Sounds;
 		Univers.ia = IA;

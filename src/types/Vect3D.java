@@ -18,6 +18,10 @@ public class Vect3D {
 		this.z = 0;
 	}
 	
+	public Vect3D clone(){
+		return new Vect3D(x, y, z);
+	}
+	
 	public void set(double x,double y,double z){
 		this.x = x;
 		this.y = y;

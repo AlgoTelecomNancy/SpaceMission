@@ -43,9 +43,8 @@ public class Espace {
 				System.out.println(joueurs[i].externalSize);
 				joueurs[i].update();
 				window.getDisplay().getCube(0).setPosition(joueurs[i].position.getPosition());
-				window.getDisplay().getCube(0).setAngles(joueurs[i].orientation);
+				//window.getDisplay().getCube(0).setAngles(joueurs[i].orientation);
 				window.getDisplay().getCube(0).setSize(new Vect3D(joueurs[i].externalSize, joueurs[i].externalSize, joueurs[i].externalSize));
-				window.getCamera().focus(window.getDisplay().getCube(0).position);
 			}
 		}
 	}	

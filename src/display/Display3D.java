@@ -17,16 +17,21 @@ public class Display3D implements GLEventListener
 	private GLU glu = new GLU();
 	private Camera3D camera;
 	private Vector<Cube> cubes;
+	private int focusedCube;
 	
 	Display3D(Camera3D camera)
 	{
 		this.camera = camera;
 		this.cubes = new Vector<Cube>();
+		focusedCube = -1;
 	}
 	
 	public void display(GLAutoDrawable drawable)
 	{
 		final GL2 gl = drawable.getGL().getGL2();
+		
+		if (focusedCube > -1)
+			camera.setFocusedPoint(getCube(focusedCube).position);
 		
 		gl.glClear (GL2.GL_COLOR_BUFFER_BIT |  GL2.GL_DEPTH_BUFFER_BIT );
 		for (int i = 0; i < cubes.size(); ++i)
@@ -61,7 +66,7 @@ public class Display3D implements GLEventListener
 		gl.glMatrixMode( GL2.GL_PROJECTION );
 		gl.glLoadIdentity();
 		
-		glu.gluPerspective( 45.0f, ratio, 1.0, 1000.0 );
+		glu.gluPerspective( 45.0f, ratio, 0.001, 1000.0 );
 		gl.glMatrixMode( GL2.GL_MODELVIEW );
 		gl.glLoadIdentity();
 	}
@@ -87,5 +92,13 @@ public class Display3D implements GLEventListener
 	{
 		if (cubeId >= 0 && cubeId < getCubeCount())
 			cubes.remove(cubeId);
+	}
+	
+	public void setFocusedCube(int cubeId)
+	{
+		if (cubeId >= 0 && cubeId < getCubeCount())
+			focusedCube = cubeId;
+		else
+			focusedCube = -1;
 	}
 }

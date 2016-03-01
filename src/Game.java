@@ -31,6 +31,12 @@ public class Game {
 			//On fait un tour de jeu...
 			updateGame();
 			Sounds.update();
+			
+			/*window.getDisplay().getCube(0).angles.z = 20;
+			window.getDisplay().getCube(0).angles.y += base.Cons.deltaTime * 100;*/
+			
+			window.getDisplay().getCube(0).angles.x = 50;
+			window.getDisplay().getCube(0).angles.z += base.Cons.deltaTime * 100;
 
 			//Temps final et calcul du deltatime (deltaTime mini = 1ms)
 			base.Cons.deltaTime = (double)((long)System.nanoTime() - timeIn)/ 1000000000.0;
@@ -42,7 +48,6 @@ public class Game {
 				}
 				base.Cons.deltaTime = (double)((long)System.nanoTime() - timeIn)/ 1000000000.0;
 			}
-			
 		}
 		
 		
@@ -54,14 +59,15 @@ public class Game {
 		//Créer l'espace et l'initialiser
 		window = new Window();
 		window.getDisplay().addCube(new Cube(new Vect3D(), new Vect3D(), new Vect3D()));
-		window.getCamera().setPosition(new Vect3D(0.01, 0.01, 0.01));
+		window.getCamera().setPosition(new Vect3D(0.05, 0.00, 0.00));
 		window.getCamera().speed = 0.001;
+		window.getDisplay().setFocusedCube(0);
 		
-		/*for (int x = -1; x < 2; x += 2)
+		for (int x = -1; x < 2; x += 2)
 			for (int y = -1; y < 2; y += 2)
 				for (int z = -1; z < 2; z += 2)
-					window.getDisplay().addCube(new Cube(new Vect3D(x * 10, y * 10, z * 10), new Vect3D(1, 1, 1), new Vect3D(45, 45, 45)));
-		*/
+					window.getDisplay().addCube(new Cube(new Vect3D(x * 0.03, y * 0.03, z * 0.03), new Vect3D(0.001, 0.001, 0.001), new Vect3D(45, 45, 45)));
+		
 		Univers = new Espace(window);
 		Univers.init();
 		Univers.sons = Sounds;

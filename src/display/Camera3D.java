@@ -12,8 +12,9 @@ public class Camera3D implements KeyListener
 	final public Vect3D position;
 	final public Vect3D angles;
 	final public Vect3D oldMousePosition;
+	public double speed;
 	
-	Camera3D(Vect3D position, Vect3D angles)
+	Camera3D(Vect3D position, Vect3D angles, double speed)
 	{
 		// position : position of the camera
 		// angles : orientation of the camera following the x, y and z axis
@@ -21,6 +22,7 @@ public class Camera3D implements KeyListener
 		this.position = position.clone();
 		this.angles = angles.clone();
 		this.oldMousePosition = new Vect3D(0, 0, 0);
+		this.speed = speed;
 	}
 	
 	public void setPosition(Vect3D position)
@@ -77,13 +79,13 @@ public class Camera3D implements KeyListener
 		
 		// Movement of the camera following X (Z and S keys) and Y (Q and D keys) axis
 		if (key == KeyEvent.VK_Z)
-			move(new Vect3D(0, 0.2f, 0));
+			move(new Vect3D(0, speed, 0));
 		if (key == KeyEvent.VK_S)
-			move(new Vect3D(0, -0.2f, 0));
+			move(new Vect3D(0, -speed, 0));
 		if (key == KeyEvent.VK_Q)
-			move(new Vect3D(-0.2f, 0, 0));
+			move(new Vect3D(-speed, 0, 0));
 		if (key == KeyEvent.VK_D)
-			move(new Vect3D(0.2f, 0, 0));
+			move(new Vect3D(speed, 0, 0));
 		
 		// Set of the orientation of the camera following X (up and down keys) and Y (left and right keys) axis
 		if (key == KeyEvent.VK_UP)

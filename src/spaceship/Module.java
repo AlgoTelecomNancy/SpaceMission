@@ -23,8 +23,8 @@ public class Module {
 
 	public float transfertTime = 0; // Temps de transfert en cas de danger
 	public int dommage = 0; // 0 dommage : bon état
-	public int temperature = 290; // Température interieure en Kelvin
-	public int temperatureMax = 320;
+	public float temperature = 290; // Température interieure en Kelvin
+	public int temperatureMax = 350;
 	public int pression = 100; // Pourcentage de la pression normale
 	public float pressionTime = 0; // Temps depuis lequel la pression est
 									// mortelle
@@ -55,18 +55,16 @@ public class Module {
 		}
 
 		// Alarme
-		alarme = incendie; // Si incendie, alarme déclenchée
-		alarme = pression < 50 && nbHumains > 0; // Si pression basse ou trop
-													// élevée et humain alarme
-		alarme = pression < 50 && nbHumains > 0;
+		alarme = (incendie || pression < 50) && nbHumains > 0; // alarme automatique
 
-		/*
-		 * //Incendie augmente température if(incendie && Math.random()>0.98 &&
-		 * temperature<390){ temperature += 1; } //Pas d'incendie stabilise la
-		 * température à 290K if(!incendie && Math.random()>0.78 &&
-		 * temperature!=290){ temperature +=
-		 * -(290-temperature)/(290-temperature); }
-		 */
+
+
+		  //Incendie augmente température 
+		  if(incendie && temperature < 390){ 
+			  temperature+= Math.exp(-35/(391-temperature))*(base.Cons.deltaTime/5)*(incendieTime/10);
+		  } //Pas d'incendie stabilise la température à 290K 
+
+
 
 		// Tuer des humains
 		coeffDanger = 0;
@@ -77,10 +75,8 @@ public class Module {
 			coeffDanger += Math.abs(290 - temperature) - 15 / 10;
 			if (coeffDanger < 0)
 				coeffDanger = 0;
-			coeffMortalite = (float) Math.min(Math.max(0,
-					(0.0045 * Math.pow((temperature - 290), 2) - 3) / 10), 1);
-			coeffSurvie = (float) (coeffSurvie * (1 - Math.pow(coeffMortalite,
-					2)));
+			coeffMortalite = (float) Math.min(Math.max(0, (0.0045 * Math.pow((temperature - 290), 2) - 3) / 10), 1);
+			coeffSurvie = (float) (coeffSurvie * (1 - Math.pow(coeffMortalite, 2)));
 			coeffMortalite = 0;
 		}
 
@@ -90,14 +86,9 @@ public class Module {
 			incendieTime += (float) base.Cons.deltaTime; // augmente le temps de
 															// l'incendie
 			if (incendieTime > 10) {
-				coeffMortalite = Math.min(incendieTime / 2000, 1); // incendie
-																	// de plus
-																	// en plus
-																	// mortel
-																	// avec le
-																	// temps
-				coeffSurvie = (float) (coeffSurvie * (1 - Math.pow(
-						coeffMortalite, 2)));
+
+				coeffMortalite = Math.min(incendieTime / 2000, 1); // incendie de plus en plus mortel avec le temps
+				coeffSurvie = (float) (coeffSurvie * (1 - Math.pow(coeffMortalite, 2)));
 				coeffMortalite = 0;
 			}
 		} else if (incendieTime != 0) {
@@ -107,11 +98,10 @@ public class Module {
 		// Pression basse
 		if (pression < 50) {
 			pressionTime += (float) base.Cons.deltaTime;
-			if (pressionTime > 45) { // après 45 secondes en sous oxygène, tout
-										// le monde est mort d'intoxication
+			if (pressionTime > 45) { // après 45 secondes en sous oxygène, tout le monde est mort d'intoxication
 				nbHumains = (float) (nbHumains * 0.45);
 			}
-			;
+			
 		} else if (pressionTime != 0) {
 			pressionTime = 0;
 		}
@@ -124,22 +114,20 @@ public class Module {
 			coeffDanger = 0;
 		if (coeffDanger > 1)
 			coeffDanger = 1;
-		nbHumains = (float) Math.max(0, nbHumains
-				* (1 - (1 - coeffSurvie) * base.Cons.deltaTime / 0.05));
+		nbHumains = (float) Math.max(0, nbHumains * (1 - (1 - coeffSurvie) * base.Cons.deltaTime / 0.05));
 		// Gérer les flux
 
 		// transfert d'humains
-		if (nbHumains > 0 && !ferme && coeffDanger != 0) {
-			transfertTime += coeffDanger * (float) base.Cons.deltaTime;
+		if (nbHumains > 0 && !ferme) {
+			transfertTime += (coeffDanger + ((float)nbHumains/capaciteHumaine)) * (float) base.Cons.deltaTime;
 			while (transfertTime >= 0.5) {
 				transfertTime -= Math.random() * 0.5;
 				for (int i = 0; i <= 7; i++) {
-					System.out.println(i);
-
 					if (ArrayModulesContact[i] > -1) {
 						if (nbHumains > 0
 								&& myParent.modules[ArrayModulesContact[i]].capaciteHumaine > myParent.modules[ArrayModulesContact[i]].nbHumains
-								&& myParent.modules[ArrayModulesContact[i]].ferme == false) {
+								&& myParent.modules[ArrayModulesContact[i]].ferme == false
+								&& !(coeffDanger*1.7<myParent.modules[ArrayModulesContact[i]].coeffDanger)) {
 							nbHumains -= 1;
 							myParent.modules[ArrayModulesContact[i]].nbHumains += 1;
 						}
@@ -147,9 +135,24 @@ public class Module {
 				}
 			}
 		}
+		
+		//transfert de chaleur
+		for (int i = 0; i <= 7; i++) {
+			if (ArrayModulesContact[i] > -1) {
+				boolean porte = !myParent.modules[ArrayModulesContact[i]].ferme && !ferme;
+				float temp = 300;
+				if (porte) temp = 60;
+				if (Math.abs(temperature-myParent.modules[ArrayModulesContact[i]].temperature)>5){
+					float tempTransfert = (float) ((temperature-myParent.modules[ArrayModulesContact[i]].temperature)*base.Cons.deltaTime/(temp*2));
+					temperature = temperature - tempTransfert ;
+					myParent.modules[ArrayModulesContact[i]].temperature = myParent.modules[ArrayModulesContact[i]].temperature + tempTransfert;
+				}
+				
+			}
+		}
 
 	}
-
+	
 	public void updatePositionRel(Vect3D centreGrav) {
 		this.positionRelative.translate(centreGrav.multiply(-1));
 	}

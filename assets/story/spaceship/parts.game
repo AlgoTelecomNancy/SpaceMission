@@ -1,7 +1,7 @@
-// Type , Masse , X (km) , Y (km) , Z (km) ,  RX (km) ,  RY (km) ,  RZ (km) , OPTIONS
+// Type , Masse , Size (ray km),  X (km) , Y (km) , Z (km) ,  RX (km) ,  RY (km) ,  RZ (km) , OPTIONS
 // OPTIONS
-// Room : capacité max, nbHumans , 
+// Room : capacit�� max, nbHumans , 
 
-Room|200|0.5|5|0|0|0|0|0|10,0
-Room|200|0.5|-5|0|0|0|0|0|50,0
-Room|200|1|0|-5|0|0|0|0|250,200
+Room|200|0.005|0.005|-0.005|0|0|0|0|1000,0
+Room|200|0.005|0|-0.005|0|0|0|0|10,0
+Room|200|0.005|-0.005|-0.005|0|0|0|0|250,200

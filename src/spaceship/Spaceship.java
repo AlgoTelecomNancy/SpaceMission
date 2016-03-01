@@ -142,11 +142,12 @@ public class Spaceship {
 
 		verification();
 		
-		for(int j=0; j<nbModules; j++){
-			System.out.print("[ Module "+j+" : "+" nbH = " +modules[j].nbHumains + " ] ; ");
-		}
-		modules[3].incendie = true;
-		System.out.println("");
+		
+
+		//// TESTS
+		modules[3].incendie = base.Cons.horloge<160;
+		//modules[2].ferme = true;
+		////
 		
 	}
 
@@ -198,6 +199,7 @@ public class Spaceship {
 					ry = Double.parseDouble(separ[7]);
 					rz = Double.parseDouble(separ[8]);
 					options = separ[9].split(",");
+					
 					
 					
 					System.out.println(" -> Ajout d'un module de type " + separ[0] + " (id = " + id + ")");

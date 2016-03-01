@@ -11,20 +11,23 @@ public class Game {
 	public static Music Sounds;
 	public static Genia IA;
 	public static Window window;
-	
+	public static Visualisation visual = new Visualisation();
 	public static void runGame(){
 		
+
 		//Initialiser le jeu...
 		initGame();
 		Sounds = new Music();
 		IA = new Genia();
-		
+				
 		//Boucle du jeu
 		while(true){
 			
 			//Temps initial
 			long timeIn = System.nanoTime();
-		
+
+			visual.repaint();
+			//visual.fenetre.show();
 			//On fait un tour de jeu...
 			updateGame();
 			Sounds.update();
@@ -51,13 +54,14 @@ public class Game {
 		//Créer l'espace et l'initialiser
 		window = new Window();
 		window.getDisplay().addCube(new Cube(new Vect3D(), new Vect3D(), new Vect3D()));
-		window.getCamera().setPosition(new Vect3D(20, 20, 20));
+		window.getCamera().setPosition(new Vect3D(0.01, 0.01, 0.01));
+		window.getCamera().speed = 0.001;
 		
-		for (int x = -1; x < 2; x += 2)
+		/*for (int x = -1; x < 2; x += 2)
 			for (int y = -1; y < 2; y += 2)
 				for (int z = -1; z < 2; z += 2)
 					window.getDisplay().addCube(new Cube(new Vect3D(x * 10, y * 10, z * 10), new Vect3D(1, 1, 1), new Vect3D(45, 45, 45)));
-		
+		*/
 		Univers = new Espace(window);
 		Univers.init();
 		Univers.sons = Sounds;

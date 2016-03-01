@@ -21,7 +21,7 @@ public class Window
 	
 	public Window()
 	{
-		camera = new Camera3D(new Vect3D(0, 0, 0), new Vect3D(0, 0, 0));
+		camera = new Camera3D(new Vect3D(0, 0, 0), new Vect3D(0, 0, 0), 0.2f);
 		display = new Display3D(camera);
 		
 		// Initialization of OpenGL

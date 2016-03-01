@@ -40,6 +40,7 @@ public class Espace {
 		//Updater les joueurs
 		for(int i=0;i<joueurs.length;i++){
 			if(joueurs[i]!=null){
+				System.out.println(joueurs[i].externalSize);
 				joueurs[i].update();
 				window.getDisplay().getCube(0).setPosition(joueurs[i].position.getPosition());
 				window.getDisplay().getCube(0).setAngles(joueurs[i].orientation);

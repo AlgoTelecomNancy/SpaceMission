@@ -5,7 +5,7 @@ import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.glu.GLU;
 
-import javafx.beans.binding.FloatBinding;
+//import javafx.beans.binding.FloatBinding;
 import types.Matrix;
 import types.Vect3D;
 

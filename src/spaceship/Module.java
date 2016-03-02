@@ -166,6 +166,21 @@ public class Module {
 	 * @return Le moment dynamique appliqué sur le centre de gravité du vaisseau
 	 */
 	public Vect3D getMoment(Vect3D force) {
+
+		Matrix passMatrix = rotMatrixModule_Spaceship();
+
+		// La force appliquée sur le module dans le repère du vaisseau
+		Vect3D newForce = passMatrix.multiply(force);
+
+		return positionRelative.multiply(newForce);
+
+	}
+	
+	/**
+	 * Compute the rotation matrix between the module and the spaceship
+	 * @return The rotation matrix between the module and the spaceship
+	 */
+	public Matrix rotMatrixModule_Spaceship() {
 		Matrix rotx = new Matrix();
 		rotx.setCoef(1, 1, 1);
 		rotx.setCoef(2, 2, Math.cos(orientation.x));
@@ -186,14 +201,8 @@ public class Module {
 		rotz.setCoef(2, 2, Math.cos(orientation.z));
 		rotz.setCoef(1, 2, -Math.sin(orientation.z));
 		rotz.setCoef(2, 1, Math.sin(orientation.z));
-
-		Matrix passMatrix = Matrix.multiply(Matrix.multiply(rotz, roty), rotx);
-
-		// La force appliquée sue le modules dans le repère du vaisseau
-		Vect3D newForce = passMatrix.multiply(force);
-
-		return positionRelative.multiply(newForce);
-
+		
+		return Matrix.multiply(Matrix.multiply(rotz, roty), rotx);
 	}
 
 }

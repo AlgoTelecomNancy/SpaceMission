@@ -10,8 +10,9 @@ public class Module {
 
 	// Taille et position du module sur le vaisseau
 	public Vect3D position = new Vect3D(0, 0, 0);
+	public Vect3D AbsolutePosition = new Vect3D(0, 0, 0);
 	public Vect3D orientation = new Vect3D(0, 0, 0);
-	public Vect3D positionRelative = new Vect3D(0, 0, 0);
+	public Vect3D positionRelativeBarycentre = new Vect3D(0, 0, 0);
 	public float rayon = 1;
 	public float poids = 1;
 
@@ -154,7 +155,7 @@ public class Module {
 	}
 	
 	public void updatePositionRel(Vect3D centreGrav) {
-		this.positionRelative.translate(centreGrav.multiply(-1));
+		this.positionRelativeBarycentre.translate(centreGrav.multiply(-1));
 	}
 
 	/**
@@ -172,7 +173,7 @@ public class Module {
 		// La force appliquée sur le module dans le repère du vaisseau
 		Vect3D newForce = passMatrix.multiply(force);
 
-		return positionRelative.multiply(newForce);
+		return positionRelativeBarycentre.multiply(newForce);
 
 	}
 	

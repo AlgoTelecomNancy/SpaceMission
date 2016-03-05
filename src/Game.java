@@ -2,6 +2,7 @@ import Univers.*;
 import display.Cube;
 import display.Window;
 import music.Music;
+import spaceship.Module;
 import types.Vect3D;
 import GENIA.*;
 
@@ -52,10 +53,31 @@ public class Game {
 	//Initialiser le jeu
 	private static void initGame(){
 		
+
+		Univers = new Espace();
+		Univers.init();
+		Univers.sons = Sounds;
+		Univers.ia = IA;
+		
+		//Ajouter un joueur (id=0)
+		Univers.addPlayer(0);
+		
+		
+		//Visualiseur
 		//Créer l'espace et l'initialiser
 		window = new Window();
+		
+		//Centre vaisseau
 		window.getDisplay().addCube(new Cube(new Vect3D(), new Vect3D(), new Vect3D()));
 		window.getCamera().setPosition(new Vect3D(0.05, 0.00, 0.00));
+		
+		//Modules
+		for(Module m: Univers.getPlayer(0).modules){
+			
+			window.getDisplay().addCube(new Cube(new Vect3D(), new Vect3D(), new Vect3D()));
+			
+		}
+		
 		window.getCamera().speed = 0.001;
 		window.getDisplay().setFocusedCube(0);
 		
@@ -64,13 +86,7 @@ public class Game {
 				for (int z = -1; z < 2; z += 2)
 					window.getDisplay().addCube(new Cube(new Vect3D(x * 0.03, y * 0.03, z * 0.03), new Vect3D(0.001, 0.001, 0.001), new Vect3D(45, 45, 45)));
 		
-		Univers = new Espace(window);
-		Univers.init();
-		Univers.sons = Sounds;
-		Univers.ia = IA;
-		
-		//Ajouter un joueur (id=0)
-		Univers.addPlayer(0);
+		Univers.window = window;
 
 	}
 	

@@ -23,9 +23,8 @@ public class Espace {
 	public Genia ia;
 	
 	
-	public Espace(Window window)
+	public Espace()
 	{
-		this.window = window;
 	}
 
 	
@@ -42,11 +41,27 @@ public class Espace {
 			if(joueurs[i]!=null){
 				System.out.println(joueurs[i].externalSize);
 				joueurs[i].update(); //joueurs[i].position.getPosition()
+
 				window.getDisplay().getCube(0).setPosition(joueurs[i].position.getPosition());
-				//window.getDisplay().getCube(0).setAngles(joueurs[i].orientation);
-				window.getDisplay().getCube(0).setSize(new Vect3D(joueurs[i].externalSize, joueurs[i].externalSize, joueurs[i].externalSize));
+				window.getDisplay().getCube(0).setSize(new Vect3D(0.0001,0.0001,0.0001));
+				
+				joueurs[i].computeAbsolutePos();
+				
+				int j = 1;
+				for(Module m: joueurs[0].modules){
+					
+					if(window.getDisplay().getCube(j) != null && m != null){
+						
+						window.getDisplay().getCube(j).setPosition(m.AbsolutePosition);
+						window.getDisplay().getCube(j).setSize(new Vect3D(m.rayon,m.rayon,m.rayon));
+						
+						j++;
+					}
+				}
+			
 			}
 		}
+		
 	}	
 	
 	

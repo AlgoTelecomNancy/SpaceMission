@@ -126,8 +126,8 @@ public class Spaceship {
 		}
 		///////
 		
-
-		vitesse.y = 0.001;
+		vitesse.y = 0.01;
+		vitesseRot.y = 1;
 		
 		// Mise à jour vitesse
 		vitesse.translate(acceleration.multiply(base.Cons.universalDeltaTime));
@@ -392,7 +392,7 @@ public class Spaceship {
 		Vect3D v;
 		for (int i = 0; i < nbModules; i++) {
 			v = rotateMatrix.multiply(modules[i].positionRelativeBarycentre);
-			v.translate(modules[i].positionRelativeBarycentre);
+			v.translate(this.position.getPosition());
 			modules[i].AbsolutePosition = v.clone();
 		}
 	}

@@ -155,7 +155,9 @@ public class Module {
 	}
 	
 	public void updatePositionRel(Vect3D centreGrav) {
-		this.positionRelativeBarycentre.translate(centreGrav.multiply(-1));
+		this.positionRelativeBarycentre.x = this.position.x - centreGrav.x;
+		this.positionRelativeBarycentre.y = this.position.y - centreGrav.y;
+		this.positionRelativeBarycentre.z = this.position.z - centreGrav.z;
 	}
 
 	/**

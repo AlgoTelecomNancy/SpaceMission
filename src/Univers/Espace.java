@@ -50,7 +50,7 @@ public class Espace {
 				int j = 1;
 				for(Module m: joueurs[0].modules){
 					
-					if(window.getDisplay().getCube(j) != null && m != null){
+					if(window.getDisplay().getCube(j) != null && m != null){			
 						
 						window.getDisplay().getCube(j).setPosition(m.AbsolutePosition);
 						window.getDisplay().getCube(j).setSize(new Vect3D(m.rayon,m.rayon,m.rayon));

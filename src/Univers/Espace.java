@@ -17,7 +17,6 @@ import types.Vect3D;
 public class Espace {
 	
 	public Spaceship[] joueurs = new Spaceship[10];
-	public Window window;
 	
 	public Music sons;
 	public Genia ia;
@@ -41,22 +40,7 @@ public class Espace {
 			if(joueurs[i]!=null){
 				
 				joueurs[i].update();
-				window.getDisplay().getCube(0).setPosition(joueurs[i].position.getPosition());
-				window.getDisplay().getCube(0).setSize(new Vect3D(0.0001,0.0001,0.0001));
-				
 				joueurs[i].computeAbsolutePos();
-				
-				int j = 1;
-				for(Module m: joueurs[0].modules){
-					
-					if(window.getDisplay().getCube(j) != null && m != null){			
-						
-						window.getDisplay().getCube(j).setPosition(m.AbsolutePosition);
-						window.getDisplay().getCube(j).setSize(new Vect3D(m.rayon,m.rayon,m.rayon));
-						
-						j++;
-					}
-				}
 			
 			}
 		}

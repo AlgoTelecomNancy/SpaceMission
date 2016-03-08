@@ -32,11 +32,7 @@ public class Game {
 			updateGame();
 			Sounds.update();
 			
-			/*window.getDisplay().getCube(0).angles.z = 20;
-			window.getDisplay().getCube(0).angles.y += base.Cons.deltaTime * 100;*/
-			
-			window.getDisplay().getCube(0).angles.x = 50;
-			window.getDisplay().getCube(0).angles.z += base.Cons.deltaTime * 100;
+
 
 			//Temps final et calcul du deltatime (deltaTime mini = 1ms)
 			base.Cons.deltaTime = (double)((long)System.nanoTime() - timeIn)/ 1000000000.0;

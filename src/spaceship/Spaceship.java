@@ -73,6 +73,8 @@ public class Spaceship {
 		}
 		
 		
+		
+		
 
 		
 		addLinks();
@@ -123,7 +125,10 @@ public class Spaceship {
 			i++;
 		}
 		///////
+		
 
+		vitesse.y = 0.001;
+		
 		// Mise à jour vitesse
 		vitesse.translate(acceleration.multiply(base.Cons.universalDeltaTime));
 		vitesseRot.translate(accelerationRot.multiply(base.Cons.universalDeltaTime));
@@ -143,9 +148,8 @@ public class Spaceship {
 		verification();
 		
 		
-
 		//// TESTS
-		modules[3].incendie = base.Cons.horloge<160;
+		modules[3].temperature += -base.Cons.deltaTime;
 		//modules[2].ferme = true;
 		////
 		

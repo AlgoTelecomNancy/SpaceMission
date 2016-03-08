@@ -127,7 +127,8 @@ public class Spaceship {
 		///////
 		
 		vitesse.y = 0.01;
-		vitesseRot.y = 1;
+		//vitesseRot.y = 1;
+		vitesseRot.x = 3;
 		
 		// Mise à jour vitesse
 		vitesse.translate(acceleration.multiply(base.Cons.universalDeltaTime));

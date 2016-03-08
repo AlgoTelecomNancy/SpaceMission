@@ -39,16 +39,8 @@ public class Espace {
 		//Updater les joueurs
 		for(int i=0;i<joueurs.length;i++){
 			if(joueurs[i]!=null){
-<<<<<<< HEAD
+				
 				joueurs[i].update();
-=======
-				System.out.println(joueurs[i].externalSize);
-				joueurs[i].update(); //joueurs[i].position.getPosition()
-<<<<<<< HEAD
->>>>>>> 5f5cf2646abb8d34d7f1d3c11687fe35760ddab0
-=======
-
->>>>>>> 866f28384fa77a9907b6eb0d5f74632a47b5dff1
 				window.getDisplay().getCube(0).setPosition(joueurs[i].position.getPosition());
 				window.getDisplay().getCube(0).setSize(new Vect3D(0.0001,0.0001,0.0001));
 				

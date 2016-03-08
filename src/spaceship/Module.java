@@ -154,6 +154,34 @@ public class Module {
 
 	}
 	
+	/**
+	 * 
+	 * Cherche une batterie branchée et si il n'y en a pas renvois null
+	 * Sinon renvoi la batterie avec le plus d'énergie
+	 * 
+	 * @return Battery
+	 */
+	public Battery getBattery(){
+		
+		float max = 0;
+		int idmax = 0;
+		
+		for(int mid: ArrayModulesBranche){
+			if(myParent.modules[mid] instanceof Battery){
+				if(max < ((Battery)myParent.modules[mid]).getState()){
+					max = ((Battery)myParent.modules[mid]).getState();
+					idmax = mid;
+				}
+			}
+		}
+		
+		if(max==0){
+			return null;
+		}
+		return (Battery)(myParent.modules[idmax]);
+		
+	}
+	
 	public void updatePositionRel(Vect3D centreGrav) {
 		this.positionRelativeBarycentre.x = this.position.x - centreGrav.x;
 		this.positionRelativeBarycentre.y = this.position.y - centreGrav.y;

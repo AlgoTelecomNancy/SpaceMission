@@ -131,7 +131,10 @@ public class Audio {
 	
 	public void loop(boolean val){
 		if(val){
-			clip.loop(Clip.LOOP_CONTINUOUSLY);
+			try {clip.loop(Clip.LOOP_CONTINUOUSLY);}
+			catch (java.lang.IllegalStateException e) {
+				
+			}
 		}else{
 			clip.loop(1);
 		}

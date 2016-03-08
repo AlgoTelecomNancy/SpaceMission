@@ -126,8 +126,8 @@ public class Spaceship {
 		}
 		///////
 		
-
-		vitesse.y = 0.001;
+		vitesse.y = 0.01;
+		vitesseRot.y = 1;
 		
 		// Mise à jour vitesse
 		vitesse.translate(acceleration.multiply(base.Cons.universalDeltaTime));
@@ -377,11 +377,53 @@ public class Spaceship {
 		//externalSize
 		externalSize = 0;
 		for (int i = 0; i < nbModules; i++) {
-			if(modules[i].positionRelative.size()+modules[i].rayon>externalSize){
-				externalSize = modules[i].positionRelative.size()+modules[i].rayon;
+			if(modules[i].positionRelativeBarycentre.size()+modules[i].rayon>externalSize){
+				externalSize = modules[i].positionRelativeBarycentre.size()+modules[i].rayon;
 			}
 		}
 		
+	}
+	
+	/**
+	 * Rempli le tableau des positions absolues des modules
+	 */
+	public void computeAbsolutePos() {
+		Matrix rotateMatrix = rotMatrixModule_Space();
+		Vect3D v;
+		for (int i = 0; i < nbModules; i++) {
+			v = rotateMatrix.multiply(modules[i].positionRelativeBarycentre);
+			v.translate(this.position.getPosition());
+			modules[i].AbsolutePosition = v.clone();
+		}
+	}
+	
+	/**
+	 * Compute the rotation matrix between the spaceship and the space
+	 * @return The rotation matrix between the spaceship and the space
+	 */
+	public Matrix rotMatrixModule_Space() {
+		Matrix rotx = new Matrix();
+		rotx.setCoef(1, 1, 1);
+		rotx.setCoef(2, 2, Math.cos(orientation.x));
+		rotx.setCoef(3, 3, Math.cos(orientation.x));
+		rotx.setCoef(2, 3, -Math.sin(orientation.x));
+		rotx.setCoef(3, 2, Math.sin(orientation.x));
+
+		Matrix roty = new Matrix();
+		roty.setCoef(2, 2, 1);
+		roty.setCoef(1, 1, Math.cos(orientation.y));
+		roty.setCoef(3, 3, Math.cos(orientation.y));
+		roty.setCoef(1, 3, Math.sin(orientation.y));
+		roty.setCoef(3, 1, -Math.sin(orientation.y));
+
+		Matrix rotz = new Matrix();
+		rotz.setCoef(3, 3, 1);
+		rotz.setCoef(1, 1, Math.cos(orientation.z));
+		rotz.setCoef(2, 2, Math.cos(orientation.z));
+		rotz.setCoef(1, 2, -Math.sin(orientation.z));
+		rotz.setCoef(2, 1, Math.sin(orientation.z));
+		
+		return Matrix.multiply(Matrix.multiply(rotz, roty), rotx);
 	}
 
 }

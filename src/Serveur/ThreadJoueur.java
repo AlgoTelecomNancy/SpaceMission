@@ -63,11 +63,6 @@ public class ThreadJoueur implements Runnable{
 			System.out.println("deconnexion du joueur "+_numClient);
 			//_serveur.removeJoueur(_numClient);
 		}
-
-		// si c'est un client graphique
-		// ajouter le printWriter a serveur en temps que graphique
-		// sinon c'est un joueur
-		// boucle en fonction de si c'est un joueur ou un graphique
 	}
 
 }

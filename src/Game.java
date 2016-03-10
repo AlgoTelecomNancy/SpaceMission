@@ -5,6 +5,7 @@ import music.Music;
 import spaceship.Module;
 import types.Vect3D;
 import GENIA.*;
+import Serveur.Serveur;
 
 public class Game {
 	
@@ -13,9 +14,12 @@ public class Game {
 	public static Genia IA;
 	public static Window window;
 	public static Visualisation visual = new Visualisation();
+	public static Serveur serveur;
 	public static void runGame(){
 		
-
+		// initialisation du serveur
+		serveur = Serveur.getServeur();
+		
 		//Initialiser le jeu...
 		initGame();
 		Sounds = new Music();

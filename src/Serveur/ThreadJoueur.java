@@ -35,7 +35,7 @@ public class ThreadJoueur implements Runnable{
 	public void run() {
 		try {
 			// send hello pour le fun :)
-			_out.print("hello !!!\n");
+			_out.println("hello !!!");
 			_out.flush();
 			// lit le premier message du client
 			String reponse = _in.readLine();
@@ -45,19 +45,30 @@ public class ThreadJoueur implements Runnable{
 				// ajoute le flux de sortie au serveur
 				_numClient = _serveur.addJoueur(_out);
 				System.out.println("envoie du message");
-				_out.print("vous etes le joueur "+_numClient);
+				_out.println("vous etes le joueur "+_numClient);
 				_out.flush();
 				run = true;
 				// boucle de communication
 				while(run){
 					System.out.println("attente de reponse joueur "+_numClient);
 					reponse = _in.readLine();
-					System.out.println("reponse : "+reponse);
-					_out.print("bien recu");
-					_out.flush();
+					if (reponse != null){
+						System.out.println("reponse : "+reponse);
+						_out.println("bien recu");
+						_out.flush();
+					} else {
+						System.out.println("le joueur "+_numClient+" c'est deconnecte");
+						run = false;
+					}
 				}
 			}
 			// TODO: faire la gestion des clients graphiques
+			
+			
+			// fermeture des flux et du socket
+			_out.close();
+			_in.close();
+			_s.close();
 			
 		} catch (IOException e) {
 			System.out.println("deconnexion du joueur "+_numClient);

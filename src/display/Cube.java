@@ -180,5 +180,6 @@ public class Cube {
 		gl.glVertex3f(1.0f, -1.0f, -1.0f);
 
 		gl.glEnd();
+
 	}
 }

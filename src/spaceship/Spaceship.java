@@ -87,7 +87,6 @@ public class Spaceship {
 		
 		//Message de fin
 		System.out.println("Initialisation du vaisseau termine.\n");
-		
 
 	}
 

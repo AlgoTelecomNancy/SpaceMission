@@ -1,7 +1,9 @@
 // Type , Masse , Size (ray km),  X (km) , Y (km) , Z (km) ,  RX (km) ,  RY (km) ,  RZ (km) , OPTIONS
 // OPTIONS
 // Room : capacit�� max, nbHumans , 
+// Batterie capacite humaine, capacite electrique
 
 Room|200|0.005|0.005|-0.005|0|0|0|0|1000,0
 Room|200|0.005|0|-0.005|0|0|0|0|10,0
 Room|200|0.005|-0.005|-0.005|0|0|0|0|250,200
+Battery|200|0.005|0|-0.01|0|0|0|0|10,250

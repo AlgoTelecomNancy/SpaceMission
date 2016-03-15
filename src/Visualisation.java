@@ -6,6 +6,7 @@ import com.sun.org.apache.bcel.internal.generic.IADD;
 import Univers.Espace;
 import spaceship.Module;
 import spaceship.Spaceship;
+import spaceship.modules.Battery;
 
 
 /**
@@ -99,6 +100,11 @@ public class Visualisation extends JPanel {
 				
 				drawVText("T="+(int)(mod.temperature-273)+"°C", x, y, g2d);
 				drawVText("H="+(int)(mod.nbHumains)+"/"+(int)(mod.capaciteHumaine), x, y + 10, g2d);
+				
+				//Batterie
+				if(mod instanceof Battery){
+					drawVText("nrj="+(int)(((Battery)mod).getState())+"/"+(int)(((Battery)mod).getCapacity()), x, y + 20, g2d);
+				}
 
 				if(mod.incendie){
 					g2d.setColor(Color.ORANGE);

@@ -4,11 +4,16 @@ import spaceship.Module;
 
 public class Battery extends Module  {
 	
-	private float capacity = 0;
+	private float capacity = 1000;
 	private float value = 0;
 
 	public Battery(String[] opts){
 		this.type = "Battery";
+				
+		this.capaciteHumaine = (int)Double.parseDouble(opts[0]);
+		
+		this.capacity = (float)Double.parseDouble(opts[1]);
+		this.value = this.capacity;
 	}
 	
 	public boolean use(float howmany){

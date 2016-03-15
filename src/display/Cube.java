@@ -131,7 +131,8 @@ public class Cube {
 		gl.glRotated(angles.x, axis.x, axis.y, axis.z);
 		axis = getRotatedVector(new Vect3D(0, 1, 0), new Vect3D(-angles.x, 0, 0));
 		gl.glRotated(angles.y, axis.x, axis.y, axis.z);
-		axis = getRotatedVector(new Vect3D(0, 0, 1), new Vect3D(-angles.x, -angles.y, 0));
+		axis = getRotatedVector(new Vect3D(0, 0, 1), new Vect3D(0, -angles.y, 0));
+		axis = getRotatedVector(axis, new Vect3D(-angles.x, 0, 0));
 		gl.glRotated(angles.z, axis.x, axis.y, axis.z);
 
 		/*

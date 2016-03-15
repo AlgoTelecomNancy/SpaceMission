@@ -34,9 +34,6 @@ public class Visualisation3D {
 		for(int i=0;i<espace.joueurs.length;i++){
 			if(espace.joueurs[i]!=null){
 				
-				espace.joueurs[i].update();
-				espace.joueurs[i].computeAbsolutePos();
-				
 				window.getDisplay().getCube(0).setPosition(espace.joueurs[i].position.getPosition());
 				window.getDisplay().getCube(0).setSize(new Vect3D(0.0001,0.0001,0.0001));
 				
@@ -47,7 +44,9 @@ public class Visualisation3D {
 						
 						window.getDisplay().getCube(j).setPosition(m.AbsolutePosition);
 						window.getDisplay().getCube(j).setSize(new Vect3D(m.rayon,m.rayon,m.rayon));
-						
+						window.getDisplay().getCube(j).setAngles(new Vect3D(Math.toDegrees(espace.joueurs[0].orientation.x),
+								Math.toDegrees(espace.joueurs[0].orientation.y),
+								Math.toDegrees(espace.joueurs[0].orientation.z)));
 						j++;
 					}
 				}

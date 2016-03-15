@@ -1,0 +1,36 @@
+<a href="../index.html">Retour</a>
+<br><br>
+Les modules sont de différentes sortes :<br>
+- spaceship.modules.Battery<br>
+- spaceship.modules.Canon<br>
+- spaceship.modules.Command<br>
+- spaceship.modules.Engine<br>
+- spaceship.modules.Laser<br>
+- spaceship.modules.Radar<br>
+- spaceship.modules.Room<br>
+- spaceship.modules.Shield<br>
+- spaceship.modules.SolarPanels<br>
+- spaceship.modules.Storage<br>
+- spaceship.modules.VSL<br><br>
+Il existe une classe abstraite spaceship.Module qui gère la partie commune à chaque modules.
+
+<br><br>
+<h2>spaceship.Module</h2><br>
+<b>Variables :</b><br>
+int id = identifiant du module dans le vaisseau<br>
+Spaceship myParent = accéder au vaisseau parent (= on est le module de quoi ?)<br>
+<br>
+vect3D position = position en km relativement au centre (module de commande) du vaisseau<br>
+vect3D positionRelativeBarycentre = position relative au centre de rotation du vaisseau (centre de masse)<br>
+vect3D orientation = orientation extrinseque du vaisseau<br>
+vect3D AbsolutePosition = position du vaisseau selon le repère universel dans la zone actuelle (voir <a href="zones.html">zones</a>)<br>
+<br>
+float rayon = rayon du module (tout les modules sont des "sphères" dans le moteur)<br>
+float poids = masse du module, utile dans le calcul du barycentre<br>
+<br>
+String type = type de module pour le debugage<br>
+<br>
+boolean ferme = sas ouverts ou fermés (true = fermé)<br>
+boolean alarme = alarme active ou non<br>
+boolean breach = ouverture dans le module ou non<br>
+boolean incendie = incendie dans le vaisseau ou non<br>

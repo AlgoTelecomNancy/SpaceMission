@@ -1,12 +1,25 @@
 package spaceship;
 
-import java.io.*;
-import java.util.regex.Pattern;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
-import Univers.*;
-import spaceship.modules.*;
-import types.*;
-
+import Univers.Espace;
+import spaceship.modules.Battery;
+import spaceship.modules.Canon;
+import spaceship.modules.Command;
+import spaceship.modules.Engine;
+import spaceship.modules.Laser;
+import spaceship.modules.Radar;
+import spaceship.modules.Room;
+import spaceship.modules.Shield;
+import spaceship.modules.SolarPanels;
+import spaceship.modules.Storage;
+import spaceship.modules.VSL;
+import types.Matrix;
+import types.Position;
+import types.Vect3D;
 
 public class Spaceship {
 
@@ -30,8 +43,10 @@ public class Spaceship {
 	public int nbModules = 0;
 
 	public float masseTotale = 0;
-	public Vect3D centreGravite = new Vect3D(); //La rotation se fait autour de ce point
-	public double externalSize = 0; //Taille du point le plus éloigné du centre du vaisseau
+	public Vect3D centreGravite = new Vect3D(); // La rotation se fait autour de
+												// ce point
+	public double externalSize = 0; // Taille du point le plus éloigné du centre
+									// du vaisseau
 
 	public Vect3D[] accelerations = new Vect3D[100]; // Au maximum 100
 														// accélérations, et on
@@ -42,12 +57,12 @@ public class Spaceship {
 												// enlève les plus faibles au
 												// fur et à mesure si
 												// dépassement
-	
+
 	public Espace myParent;
 
 	public Spaceship(int id) {
 		this.myId = id;
-		
+
 		// Créer le module principal d'id 0 et de parent le vaisseau
 		System.out.println("Initialisation du vaisseau, creation du module principal de commande.");
 		modules[0] = new Command();
@@ -59,41 +74,33 @@ public class Spaceship {
 		for (int i = 0; i < modules.length; i++) {
 			if (modules[i] != null) {
 				nbModules++;
-			
-				//Initialiser des variables
-				for(int j=0;j<modules[i].ArrayModulesBranche.length;j++){
+
+				// Initialiser des variables
+				for (int j = 0; j < modules[i].ArrayModulesBranche.length; j++) {
 					modules[i].ArrayModulesBranche[j] = -1;
 				}
-				for(int j=0;j<modules[i].ArrayModulesContact.length;j++){
+				for (int j = 0; j < modules[i].ArrayModulesContact.length; j++) {
 					modules[i].ArrayModulesContact[j] = -1;
 				}
 				modules[i].myParent = this;
 				modules[i].id = i;
 			}
 		}
-		
-		
-		
-		
 
-		
 		addLinks();
 		addConnections();
-		
+
 		// Mettre à jour centre de gravité relatif au centre virtuel et masse
 		// totale
 		updateCentreGravite();
 		///////////
-		
-		//Message de fin
+
+		// Message de fin
 		System.out.println("Initialisation du vaisseau termine.\n");
-		
 
 	}
 
 	public void update() {
-
-		
 
 		// Vider l'array de vecteur accélération et moment
 		accelerations = new Vect3D[accelerations.length];
@@ -125,11 +132,13 @@ public class Spaceship {
 			i++;
 		}
 		///////
-		
-		vitesse.y = 0.01;
-		//vitesseRot.y = 1;
+
+		// vitesse.y = 0.01;
+		// vitesseRot.y = 1;
+		vitesseRot.z = 3;
+		vitesseRot.y = 3;
 		vitesseRot.x = 3;
-		
+
 		// Mise à jour vitesse
 		vitesse.translate(acceleration.multiply(base.Cons.universalDeltaTime));
 		vitesseRot.translate(accelerationRot.multiply(base.Cons.universalDeltaTime));
@@ -147,13 +156,12 @@ public class Spaceship {
 		horlogeExterne += base.Cons.deltaTime * tempsRelatif;
 
 		verification();
-		
-		
+
 		//// TESTS
 		modules[3].temperature += -base.Cons.deltaTime;
-		//modules[2].ferme = true;
+		// modules[2].ferme = true;
 		////
-		
+
 	}
 
 	private void verification() {
@@ -164,8 +172,7 @@ public class Spaceship {
 	}
 
 	private void addModules() {
-		
-		
+
 		System.out.println("Creation du vaisseau, ajout des modules");
 
 		String[] separ;
@@ -179,7 +186,6 @@ public class Spaceship {
 		double rz;
 		String[] options;
 		int id = 0;
-		
 
 		try {
 			InputStream ips = new FileInputStream("assets/story/spaceship/parts.game");
@@ -192,7 +198,7 @@ public class Spaceship {
 				if (separ.length == 10) {
 
 					id = 0;
-					while(id<modules.length && modules[id] != null){
+					while (id < modules.length && modules[id] != null) {
 						id++;
 					}
 					masse = Double.parseDouble(separ[1]);
@@ -204,44 +210,50 @@ public class Spaceship {
 					ry = Double.parseDouble(separ[7]);
 					rz = Double.parseDouble(separ[8]);
 					options = separ[9].split(",");
-					
-					
-					
+
 					System.out.println(" -> Ajout d'un module de type " + separ[0] + " (id = " + id + ")");
 
 					switch (separ[0]) {
-			            case "Battery": modules[id] = new Battery(options);
-			                     break;
-			            case "Canon": modules[id] = new Canon(options);
-	                     		break;
-			            case "Engine": modules[id] = new Engine(options);
-			            		break;
-			            case "Laser": modules[id] = new Laser(options);
-			            		break;
-			            case "Radar": modules[id] = new Radar(options);
-			            		break;
-			            case "Shield": modules[id] = new Shield(options);
-                 				break;
-			            case "SolarPanels": modules[id] = new SolarPanels(options);
-         						break;
-			            case "Storage": modules[id] = new Storage(options);
-         						break;
-			            case "VSL": modules[id] = new VSL(options);
-         						break;
-			            default: modules[id] = new Room(options);
-			                     break;
-			        }
-					
+					case "Battery":
+						modules[id] = new Battery(options);
+						break;
+					case "Canon":
+						modules[id] = new Canon(options);
+						break;
+					case "Engine":
+						modules[id] = new Engine(options);
+						break;
+					case "Laser":
+						modules[id] = new Laser(options);
+						break;
+					case "Radar":
+						modules[id] = new Radar(options);
+						break;
+					case "Shield":
+						modules[id] = new Shield(options);
+						break;
+					case "SolarPanels":
+						modules[id] = new SolarPanels(options);
+						break;
+					case "Storage":
+						modules[id] = new Storage(options);
+						break;
+					case "VSL":
+						modules[id] = new VSL(options);
+						break;
+					default:
+						modules[id] = new Room(options);
+						break;
+					}
+
 					modules[id].poids = (float) masse;
 					modules[id].rayon = (float) size;
 					modules[id].position.set(x, y, z);
 					modules[id].orientation.set(rx, ry, rz);
-					
-					
 
 				} else {
-					System.out.println(
-							" /!\\ Ligne invalide lors de la lecture du modèle du vaisseau, " + separ.length + " éléments");
+					System.out.println(" /!\\ Ligne invalide lors de la lecture du modèle du vaisseau, " + separ.length
+							+ " éléments");
 				}
 
 			}
@@ -249,10 +261,8 @@ public class Spaceship {
 		} catch (Exception e) {
 			System.out.println(e.toString());
 		}
-		
 
 	}
-	
 
 	private void addLinks() {
 
@@ -262,7 +272,7 @@ public class Spaceship {
 		int length;
 		int i;
 		int j;
-		
+
 		try {
 			InputStream ips = new FileInputStream("assets/story/spaceship/links.game");
 			InputStreamReader ipsr = new InputStreamReader(ips);
@@ -272,29 +282,31 @@ public class Spaceship {
 
 				separ = ligne.split("\\|");
 				if (separ.length == 2) {
-					
-					length = modules[(int)Float.parseFloat(separ[0])].ArrayModulesContact.length;
+
+					length = modules[(int) Float.parseFloat(separ[0])].ArrayModulesContact.length;
 					i = 0;
-					while(i<length && modules[(int)Float.parseFloat(separ[0])].ArrayModulesContact[i] != -1){
+					while (i < length && modules[(int) Float.parseFloat(separ[0])].ArrayModulesContact[i] != -1) {
 						i++;
 					}
 					j = 0;
-					while(j<length && modules[(int)Float.parseFloat(separ[1])].ArrayModulesContact[j] != -1){
+					while (j < length && modules[(int) Float.parseFloat(separ[1])].ArrayModulesContact[j] != -1) {
 						j++;
 					}
-					if(i<length && j<length){
-						modules[(int)Float.parseFloat(separ[0])].ArrayModulesContact[i] = (int)Float.parseFloat(separ[1]);
-						modules[(int)Float.parseFloat(separ[1])].ArrayModulesContact[j] = (int)Float.parseFloat(separ[0]);
-						
+					if (i < length && j < length) {
+						modules[(int) Float.parseFloat(separ[0])].ArrayModulesContact[i] = (int) Float
+								.parseFloat(separ[1]);
+						modules[(int) Float.parseFloat(separ[1])].ArrayModulesContact[j] = (int) Float
+								.parseFloat(separ[0]);
+
 						System.out.println(" -> Ajout d'un lien entre les modules " + separ[0] + " et " + separ[1]);
 
-					}else{
+					} else {
 						System.out.println(" /!\\ Erreur, aucun lien ajoute entre " + separ[0] + " et " + separ[1]);
 					}
 
 				} else {
-					System.out.println(
-							" /!\\ Ligne invalide lors de la lecture des liens du vaisseau, " + separ.length + " éléments");
+					System.out.println(" /!\\ Ligne invalide lors de la lecture des liens du vaisseau, " + separ.length
+							+ " éléments");
 				}
 
 			}
@@ -303,7 +315,7 @@ public class Spaceship {
 			System.out.println(" /!\\ Le fichier links est mal construit, des liens ont ete ignores...");
 		}
 	}
-	
+
 	private void addConnections() {
 
 		System.out.println("Ajout des branchements entre modules");
@@ -312,7 +324,7 @@ public class Spaceship {
 		int length;
 		int i;
 		int j;
-		
+
 		try {
 			InputStream ips = new FileInputStream("assets/story/spaceship/connections.game");
 			InputStreamReader ipsr = new InputStreamReader(ips);
@@ -322,29 +334,33 @@ public class Spaceship {
 
 				separ = ligne.split("\\|");
 				if (separ.length == 2) {
-					
-					length = modules[(int)Float.parseFloat(separ[0])].ArrayModulesBranche.length;
+
+					length = modules[(int) Float.parseFloat(separ[0])].ArrayModulesBranche.length;
 					i = 0;
-					while(i<length && modules[(int)Float.parseFloat(separ[0])].ArrayModulesBranche[i] != -1){
+					while (i < length && modules[(int) Float.parseFloat(separ[0])].ArrayModulesBranche[i] != -1) {
 						i++;
 					}
 					j = 0;
-					while(j<length && modules[(int)Float.parseFloat(separ[1])].ArrayModulesBranche[j] != -1){
+					while (j < length && modules[(int) Float.parseFloat(separ[1])].ArrayModulesBranche[j] != -1) {
 						j++;
 					}
-					if(i<length && j<length){
-						modules[(int)Float.parseFloat(separ[0])].ArrayModulesBranche[i] = (int)Float.parseFloat(separ[1]);
-						modules[(int)Float.parseFloat(separ[1])].ArrayModulesBranche[j] = (int)Float.parseFloat(separ[0]);
-						
-						System.out.println(" -> Ajout d'un branchements entre les modules " + separ[0] + " et " + separ[1]);
+					if (i < length && j < length) {
+						modules[(int) Float.parseFloat(separ[0])].ArrayModulesBranche[i] = (int) Float
+								.parseFloat(separ[1]);
+						modules[(int) Float.parseFloat(separ[1])].ArrayModulesBranche[j] = (int) Float
+								.parseFloat(separ[0]);
 
-					}else{
-						System.out.println(" /!\\ Erreur, aucun branchements ajoute entre " + separ[0] + " et " + separ[1]);
+						System.out.println(
+								" -> Ajout d'un branchements entre les modules " + separ[0] + " et " + separ[1]);
+
+					} else {
+						System.out.println(
+								" /!\\ Erreur, aucun branchements ajoute entre " + separ[0] + " et " + separ[1]);
 					}
 
 				} else {
-					System.out.println(
-							" /!\\ Ligne invalide lors de la lecture des branchements du vaisseau, " + separ.length + " éléments");
+					System.out.println(" /!\\ Ligne invalide lors de la lecture des branchements du vaisseau, "
+							+ separ.length + " éléments");
 				}
 
 			}
@@ -353,8 +369,8 @@ public class Spaceship {
 			System.out.println(" /!\\ Le fichier connections est mal construit, des branchements ont ete ignores...");
 		}
 	}
-	
-	private void updateCentreGravite(){
+
+	private void updateCentreGravite() {
 		masseTotale = 0;
 		for (int i = 0; i < nbModules; i++) {
 			masseTotale += modules[i].poids;
@@ -368,23 +384,23 @@ public class Spaceship {
 		centreGravite.x = centreGravite.x / masseTotale;
 		centreGravite.y = centreGravite.y / masseTotale;
 		centreGravite.z = centreGravite.z / masseTotale;
-		
-		//Mettre à jour la position des modules
+
+		// Mettre à jour la position des modules
 		for (int i = 0; i < nbModules; i++) {
 			modules[i].updatePositionRel(centreGravite);
 		}
-		
-		//Mise a jour de la taille globale
-		//externalSize
+
+		// Mise a jour de la taille globale
+		// externalSize
 		externalSize = 0;
 		for (int i = 0; i < nbModules; i++) {
-			if(modules[i].positionRelativeBarycentre.size()+modules[i].rayon>externalSize){
-				externalSize = modules[i].positionRelativeBarycentre.size()+modules[i].rayon;
+			if (modules[i].positionRelativeBarycentre.size() + modules[i].rayon > externalSize) {
+				externalSize = modules[i].positionRelativeBarycentre.size() + modules[i].rayon;
 			}
 		}
-		
+
 	}
-	
+
 	/**
 	 * Rempli le tableau des positions absolues des modules
 	 */
@@ -397,9 +413,10 @@ public class Spaceship {
 			modules[i].AbsolutePosition = v.clone();
 		}
 	}
-	
+
 	/**
 	 * Compute the rotation matrix between the spaceship and the space
+	 * 
 	 * @return The rotation matrix between the spaceship and the space
 	 */
 	public Matrix rotMatrixModule_Space() {
@@ -423,7 +440,7 @@ public class Spaceship {
 		rotz.setCoef(2, 2, Math.cos(orientation.z));
 		rotz.setCoef(1, 2, -Math.sin(orientation.z));
 		rotz.setCoef(2, 1, Math.sin(orientation.z));
-		
+
 		return Matrix.multiply(Matrix.multiply(rotz, roty), rotx);
 	}
 

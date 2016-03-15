@@ -22,7 +22,7 @@ public class Game {
 		
 		//Initialiser le jeu...
 		initGame();
-		Sounds = new Music();
+		//Sounds = new Music();
 		IA = new Genia();
 				
 		//Boucle du jeu
@@ -35,7 +35,7 @@ public class Game {
 			//visual.fenetre.show();
 			//On fait un tour de jeu...
 			updateGame();
-			Sounds.update();
+			//Sounds.update();
 			
 
 
@@ -60,7 +60,7 @@ public class Game {
 
 		Univers = new Espace();
 		Univers.init();
-		Univers.sons = Sounds;
+		//Univers.sons = Sounds;
 		Univers.ia = IA;
 		
 		//Ajouter un joueur (id=0)

@@ -32,6 +32,7 @@ public class Module {
 	public boolean incendie = false; // Incendie (si temp>320 et pression>30)
 	public float incendieTime = 0; // temps depuis lequel l'incendie est déclaré
 	public boolean alarme = false; // Alarme
+	public boolean breach = false;
 	public float coeffMortalite = 0; // coeff de mortalite
 	public float coeffSurvie = 0; // coeff de survie
 	public float coeffDanger = 0; // coeff de danger
@@ -151,6 +152,21 @@ public class Module {
 				
 			}
 		}
+		
+		//transfert de pression
+        for (int i = 0; i <= 7; i++) {
+            if (ArrayModulesContact[i] > -1) {
+                boolean porte = !myParent.modules[ArrayModulesContact[i]].ferme && !ferme;
+                if (porte) {
+                    myParent.modules[ArrayModulesContact[i]].pression = (myParent.modules[ArrayModulesContact[i]].pression + pression)/2 ;
+                    pression = myParent.modules[ArrayModulesContact[i]].pression;
+                    if(breach){
+                        pression = 0;
+                    }
+                }
+            }
+        }
+        
 
 	}
 	

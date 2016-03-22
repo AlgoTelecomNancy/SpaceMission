@@ -14,6 +14,8 @@ public class ThreadJoueur implements Runnable{
 	private Serveur _serveur;
 	private int _numClient;
 	private boolean run;
+	private boolean joueur;
+	private Controller controller;
 	
 	public ThreadJoueur(Socket s, Serveur serveur){
 		_s = s;
@@ -24,6 +26,7 @@ public class ThreadJoueur implements Runnable{
 	      _out = new PrintWriter(_s.getOutputStream());
 	      // fabrication d'une variable permettant l'utilisation du flux d'entrée avec des string
 	      _in = new BufferedReader(new InputStreamReader(_s.getInputStream()));
+	      System.out.println("IP client : "+s.getInetAddress());
 	    }
 	    catch (IOException e){ }
 
@@ -42,6 +45,7 @@ public class ThreadJoueur implements Runnable{
 			System.out.println("reponse : " + reponse);
 			// si c'est un joueur
 			if (reponse.equals("joueur")){
+				joueur = true;
 				// ajoute le flux de sortie au serveur
 				_numClient = _serveur.addJoueur(_out);
 				System.out.println("envoie du message");
@@ -54,8 +58,14 @@ public class ThreadJoueur implements Runnable{
 					reponse = _in.readLine();
 					if (reponse != null){
 						System.out.println("reponse : "+reponse);
-						_out.println("bien recu");
-						_out.flush();
+						if (controller.traiter(reponse)){
+							_out.println("bien recu");
+							_out.flush();
+						} else {
+							_out.println("erreur: commande non valide");
+							_out.flush();
+						}
+						
 					} else {
 						System.out.println("le joueur "+_numClient+" c'est deconnecte");
 						run = false;
@@ -66,12 +76,19 @@ public class ThreadJoueur implements Runnable{
 			
 			
 			// fermeture des flux et du socket
+			if (joueur)
+				_serveur.delJoueur(_out);
+			else
+				_serveur.delGraphique(_out);
 			_out.close();
 			_in.close();
-			_s.close();
-			
+			_s.close();			
 		} catch (IOException e) {
 			System.out.println("deconnexion du joueur "+_numClient);
+			if (joueur)
+				_serveur.delJoueur(_out);
+			else
+				_serveur.delGraphique(_out);
 			//_serveur.removeJoueur(_numClient);
 		}
 	}

@@ -17,11 +17,13 @@ public class Serveur implements Runnable{
 	private volatile boolean run;
 	private volatile ArrayList<PrintWriter> clientGraphiques;
 	private volatile ArrayList<PrintWriter> clientJoueurs;
+	private int newIdJoueur;
 	
 	/**
 	 * init les listes et le port par defaut a 18000
 	 */
 	private Serveur(){
+		newIdJoueur = 0;
 		port = 18000;
 		clientGraphiques = new ArrayList<>();
 		clientJoueurs = new ArrayList<>();
@@ -46,6 +48,7 @@ public class Serveur implements Runnable{
 		try {
 			// creer le socket
 			ServerSocket ss = new ServerSocket(port);
+			System.out.println("IP serveur : "+ss.getInetAddress());
 			run = true;
 			while (run){
 				System.out.println("attente d'une connexion...");
@@ -65,10 +68,15 @@ public class Serveur implements Runnable{
 	 * @param _out flux de sortie
 	 * @return numero du joueur
 	 */
-	public synchronized int addJoueur(PrintWriter _out) {	
+	public synchronized int addJoueur(PrintWriter _out) {
+		newIdJoueur++;
 		clientJoueurs.add(_out);
 		System.out.println("ajout du joueur "+clientJoueurs.size());
-		return clientJoueurs.size();
+		return newIdJoueur;
+	}
+	
+	public synchronized void delJoueur(PrintWriter _out){
+		clientJoueurs.remove(_out);
 	}
 	
 	/**
@@ -81,5 +89,7 @@ public class Serveur implements Runnable{
 		return clientGraphiques.size();
 	}
 	
-	
+	public synchronized void delGraphique(PrintWriter _out){
+		clientGraphiques.remove(_out);
+	}
 }

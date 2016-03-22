@@ -133,11 +133,6 @@ public class Spaceship {
 		}
 		///////
 
-		// vitesse.y = 0.01;
-		//vitesseRot.z = 3;
-		vitesseRot.y = 1;
-		//vitesseRot.x = 3;
-
 		// Mise à jour vitesse
 		vitesse.translate(acceleration.multiply(base.Cons.universalDeltaTime));
 		vitesseRot.translate(accelerationRot.multiply(base.Cons.universalDeltaTime));
@@ -411,6 +406,60 @@ public class Spaceship {
 			v.translate(this.position.getPosition());
 			modules[i].AbsolutePosition = v.clone();
 		}
+	}
+	
+	/**
+	 * Permet d'ajouter une nouvelle acceleration
+	 */
+	public void addAcceleration(Vect3D value){
+		
+		float min = Float.MAX_VALUE;
+		int minp = 0;
+		double val;
+		
+		int i = 0;
+		for(Vect3D v : accelerations){
+			if(v == null){
+				accelerations[i] = value;
+				return;
+			}
+			val = v.size();
+			if(val<min){
+				min = (float)val;
+				minp = i;
+			}
+			i++;
+		}
+		
+		accelerations[minp] = value;
+		
+	}
+	
+	/**
+	 * Permet d'ajouter un nouveau moment
+	 */
+	public void addMoment(Vect3D value){
+		
+		float min = Float.MAX_VALUE;
+		int minp = 0;
+		double val;
+		
+		int i = 0;
+		for(Vect3D v : moments){
+			if(v == null){
+				moments[i] = value;
+				return;
+			}
+			val = v.size();
+			if(val<min){
+				min = (float)val;
+				minp = i;
+			}
+			i++;
+		}
+		
+		moments[minp] = value;
+		
 	}
 
 	/**

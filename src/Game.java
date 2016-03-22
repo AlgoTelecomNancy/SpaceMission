@@ -15,6 +15,11 @@ public class Game {
 	public static Visualisation3D visual3D;
 	public static Visualisation visual = new Visualisation();
 	public static Serveur serveur;
+	
+	
+	/**
+	 * Lance le jeu et l'initialise, puis créé le système de tours de jeu
+	 */
 	public static void runGame(){
 		
 		// initialisation du serveur
@@ -54,10 +59,11 @@ public class Game {
 		
 	}
 	
-	//Initialiser le jeu
+	/**
+	 * Initialisation des varaibles
+	 */
 	private static void initGame(){
 		
-
 		Univers = new Espace();
 		Univers.init();
 		//Univers.sons = Sounds;
@@ -66,9 +72,12 @@ public class Game {
 		//Ajouter un joueur (id=0)
 		Univers.addPlayer(0);
 		visual3D = new Visualisation3D(Univers);
+		
 	}
 	
-	//Boucle de jeu, updater l'univers qui va updater son contenu
+	/**
+	 * Boucle du jeu
+	 */
 	private static void updateGame(){
 				
 		//Mise à jour du temps du vaisseau et de l'univers

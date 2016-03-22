@@ -15,7 +15,7 @@ Les modules sont de différentes sortes :<br>
 Il existe une classe abstraite spaceship.Module qui gère la partie commune à chaque modules.
 
 <br><br>
-<h2>spaceship.Module</h2><br>
+<h2>spaceship.Module</h2>
 <b>Variables :</b><br>
 int id = identifiant du module dans le vaisseau<br>
 Spaceship myParent = accéder au vaisseau parent (= on est le module de quoi ?)<br>
@@ -34,3 +34,48 @@ boolean ferme = sas ouverts ou fermés (true = fermé)<br>
 boolean alarme = alarme active ou non<br>
 boolean breach = ouverture dans le module ou non<br>
 boolean incendie = incendie dans le vaisseau ou non<br>
+
+<br><br><br>
+
+<h2>spaceship.modules.Battery</h2>
+- Options (fichier story) : <br>
+nbHumains possible,<br>
+capacité electrique<br>
+<br>- Variables :<br>
+<i>float capacity</i><br>
+<i>float value</i><br>
+<br>
+Ce module permet de stocker l'energie électrique. Il peut être rempli grace aux panneaux solaires !<br><br>
+
+<h2>spaceship.modules.Engine</h2>
+- Options (fichier story) : <br>
+mode (0=actionner un instant la force maximum puis stope, 1=actioner ou arreter sont les seules actions, 2=on peut demander un pourcentage de la force maximum),<br>
+force maximum (double 1 unité de force = 1km/s^2),<br>
+utilisation de l'energie electrique (par unité de force, en kW),<br>
+utilisation de carburant (par unité de force, en kW)
+<br>
+<br>- Variables :<br>
+<i>float state</i> (allumé ou non)<br>
+<i>int choosedMode</i> (permet de changer de mode, exemple passer au mode 0 pour un moment, puis revenir au 2)<br>
+<i>int mode</i> (mode par defaut, permet d'empecher un changement de mode vers 2 si initialement le moteur est en 0)<br>
+<i>double maxForce</i><br>
+<i>double batteryUse</i><br>
+<i>double carburantUse</i><br>
+<br>
+Ce module permet de faire bouger le vaisseau, en jouant sur les paramètres, on peut créer différents types de moteurs :<br>
+Moteurs de réglage d'orientation faibles et électriques<br>
+Boosters à carburant sans réglage de puissance<br>
+Moteur secondaires avec réglage de la puissance<br>...
+<br><br>
+
+<h2>spaceship.modules.Storage</h2>
+- Options (fichier story) : <br>
+nbHumains possible,<br>
+capacité,<br>
+type de stockage (0 = carburant, 1 = missiles)<br>
+<br>- Variables :<br>
+<i>int storageType</i><br>
+<i>float capacity</i><br>
+<i>float value</i><br>
+<br>
+Ce module, comme le module batterie permet de stocker un élément du jeu.<br><br>

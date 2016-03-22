@@ -2,6 +2,13 @@ package spaceship.modules;
 
 import spaceship.Module;
 
+/**
+ * 
+ * Stockage des batteries
+ * 
+ * @author Romaric Mollard
+ *
+ */
 public class Battery extends Module  {
 	
 	private float capacity = 1000;

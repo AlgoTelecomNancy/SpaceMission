@@ -174,11 +174,32 @@ public class Module {
 	
 	/**
 	 * 
-	 * Cherche une batterie branchée et si il n'y en a pas renvois null
-	 * Sinon renvoi la batterie avec le plus d'énergie
+	 * Cherche un storage branchée d'un certain type et si il n'y en a pas renvois null
+	 * Sinon renvoi le storage avec le plus d'énergie
 	 * 
-	 * @return Battery
+	 * @return Storage
 	 */
+	public Storage getStorage(int type){
+		
+		float max = 0;
+		int idmax = 0;
+		
+		for(int mid: ArrayModulesBranche){
+			if(myParent.modules[mid] instanceof Storage){
+				if(max < ((Storage)myParent.modules[mid]).getState() && ((Storage)myParent.modules[mid]).getType() == type){
+					max = ((Storage)myParent.modules[mid]).getState();
+					idmax = mid;
+				}
+			}
+		}
+		
+		if(max==0){
+			return null;
+		}
+		return (Storage)(myParent.modules[idmax]);
+		
+	}
+	
 	public Battery getBattery(){
 		
 		float max = 0;

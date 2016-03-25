@@ -15,7 +15,6 @@ public class ThreadJoueur implements Runnable{
 	private int _numClient;
 	private boolean run;
 	private boolean joueur;
-	private Controller controller;
 	
 	public ThreadJoueur(Socket s, Serveur serveur){
 		_s = s;
@@ -58,14 +57,10 @@ public class ThreadJoueur implements Runnable{
 					reponse = _in.readLine();
 					if (reponse != null){
 						System.out.println("reponse : "+reponse);
-						if (controller.traiter(reponse)){
-							_out.println("bien recu");
-							_out.flush();
-						} else {
-							_out.println("erreur: commande non valide");
-							_out.flush();
-						}
-						
+						// met dans la file d'attente la requete qui sera traitee dans le prochain tour de boucle du jeu principale
+						_serveur.addRequete(reponse);
+						_out.println("bien recu");
+						_out.flush();
 					} else {
 						System.out.println("le joueur "+_numClient+" c'est deconnecte");
 						run = false;

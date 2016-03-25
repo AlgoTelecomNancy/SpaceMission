@@ -5,6 +5,7 @@ import music.Music;
 import spaceship.Module;
 import types.Vect3D;
 import GENIA.*;
+import Serveur.Controller;
 import Serveur.Serveur;
 
 public class Game {
@@ -42,7 +43,8 @@ public class Game {
 			updateGame();
 			//Sounds.update();
 			
-
+			Controller.traiter(serveur.getCloneRequetes());
+			serveur.clearRequetes();
 
 			//Temps final et calcul du deltatime (deltaTime mini = 1ms)
 			base.Cons.deltaTime = (double)((long)System.nanoTime() - timeIn)/ 1000000000.0;

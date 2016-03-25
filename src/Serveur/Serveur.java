@@ -18,6 +18,7 @@ public class Serveur implements Runnable{
 	private volatile ArrayList<PrintWriter> clientGraphiques;
 	private volatile ArrayList<PrintWriter> clientJoueurs;
 	private int newIdJoueur;
+	private volatile ArrayList<String> listRequetes; // liste des requetes en attente de traitement
 	
 	/**
 	 * init les listes et le port par defaut a 18000
@@ -27,6 +28,7 @@ public class Serveur implements Runnable{
 		port = 18000;
 		clientGraphiques = new ArrayList<>();
 		clientJoueurs = new ArrayList<>();
+		listRequetes = new ArrayList<>();
 	}
 	
 	/**
@@ -80,6 +82,14 @@ public class Serveur implements Runnable{
 	}
 	
 	/**
+	 * ajoute une requete dans la file d'attente
+	 * @param requete
+	 */
+	public synchronized void addRequete(String s){
+		listRequetes.add(s);
+	}
+	
+	/**
 	 * ajoute un client graphique
 	 * @param _out flux de sortie
 	 * @return numero du client
@@ -91,5 +101,20 @@ public class Serveur implements Runnable{
 	
 	public synchronized void delGraphique(PrintWriter _out){
 		clientGraphiques.remove(_out);
+	}
+	
+	/**
+	 * retourne une copie de la liste des requetes en attentes
+	 * @return copie de la liste des requetes en attentes
+	 */
+	public ArrayList<String> getCloneRequetes(){
+		return (ArrayList<String>)this.listRequetes.clone();
+	}
+	
+	/**
+	 * vide la liste des requetes
+	 */
+	public synchronized void clearRequetes(){
+		this.listRequetes.clear();
 	}
 }

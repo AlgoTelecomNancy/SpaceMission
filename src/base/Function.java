@@ -31,7 +31,7 @@ public class Function {
 		
 		if(speak==null){
 			try {
-				speak = Runtime.getRuntime().exec("esay \""+s+"\"");
+				speak = Runtime.getRuntime().exec("say \""+s+"\"");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

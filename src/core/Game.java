@@ -1,3 +1,4 @@
+package core;
 import Univers.*;
 import display.Cube;
 import display.Window;
@@ -36,16 +37,19 @@ public class Game {
 			
 			//Temps initial
 			long timeIn = System.nanoTime();
-
+			
+			Controller.traiter(serveur.getCloneRequetes());
+			serveur.clearRequetes();
+			
 			visual.repaint();
 			//visual.fenetre.show();
 			//On fait un tour de jeu...
 			updateGame();
 			//Sounds.update();
 			
-			Controller.traiter(serveur.getCloneRequetes());
-			serveur.clearRequetes();
 
+			Univers.joueurs[0].addMoment(new Vect3D(1,0,0));
+			
 			//Temps final et calcul du deltatime (deltaTime mini = 1ms)
 			base.Cons.deltaTime = (double)((long)System.nanoTime() - timeIn)/ 1000000000.0;
 			if(base.Cons.deltaTime<0.001){

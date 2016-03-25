@@ -21,8 +21,9 @@ public class Engine extends Module  {
 	
 	public void update(){
 		
-		
-		myParent.addAcceleration(new Vect3D(1,1,1));
+		if(state == 100){
+			myParent.addMoment(new Vect3D(1,0,0));
+		}
 		
 	}
 	

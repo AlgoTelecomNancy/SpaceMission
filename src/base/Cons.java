@@ -7,4 +7,5 @@ public class Cons {
 	public static double horloge = 0.05;
 	public static double universalHorloge = 0.05;
 	
+	
 }

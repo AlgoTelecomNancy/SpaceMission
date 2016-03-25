@@ -122,6 +122,7 @@ public class Spaceship {
 
 			i++;
 		}
+
 		accelerationRot.set(0, 0, 0);
 		i = 0;
 		while (moments[i] != null && i < moments.length) {
@@ -412,6 +413,7 @@ public class Spaceship {
 	 * Permet d'ajouter une nouvelle acceleration
 	 */
 	public void addAcceleration(Vect3D value){
+		
 		
 		float min = Float.MAX_VALUE;
 		int minp = 0;

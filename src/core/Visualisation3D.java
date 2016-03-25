@@ -1,3 +1,4 @@
+package core;
 import Univers.Espace;
 import display.Cube;
 import display.Window;
@@ -44,9 +45,9 @@ public class Visualisation3D {
 						
 						window.getDisplay().getCube(j).setPosition(m.AbsolutePosition);
 						window.getDisplay().getCube(j).setSize(new Vect3D(m.rayon,m.rayon,m.rayon));
-						window.getDisplay().getCube(j).setAngles(new Vect3D(Math.toDegrees(espace.joueurs[0].orientation.x),
-								Math.toDegrees(espace.joueurs[0].orientation.y),
-								Math.toDegrees(espace.joueurs[0].orientation.z)));
+						window.getDisplay().getCube(j).setAngles(new Vect3D(Math.toDegrees(espace.joueurs[0].orientation.x + m.orientation.x),
+								Math.toDegrees(espace.joueurs[0].orientation.y + m.orientation.y),
+								Math.toDegrees(espace.joueurs[0].orientation.z + m.orientation.z)));
 						j++;
 					}
 				}

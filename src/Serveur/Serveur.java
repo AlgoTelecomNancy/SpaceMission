@@ -107,8 +107,10 @@ public class Serveur implements Runnable{
 	 * retourne une copie de la liste des requetes en attentes
 	 * @return copie de la liste des requetes en attentes
 	 */
-	public ArrayList<String> getCloneRequetes(){
-		return (ArrayList<String>)this.listRequetes.clone();
+	public ArrayList<String> getCloneRequetes(boolean clear){
+		ArrayList<String> tmp = (ArrayList<String>)this.listRequetes.clone();
+		if (clear) this.listRequetes.clear();
+		return tmp;
 	}
 	
 	/**

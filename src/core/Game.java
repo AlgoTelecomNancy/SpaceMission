@@ -38,8 +38,7 @@ public class Game {
 			//Temps initial
 			long timeIn = System.nanoTime();
 			
-			Controller.traiter(serveur.getCloneRequetes());
-			serveur.clearRequetes();
+			Controller.traiter(serveur.getCloneRequetes(true));
 			
 			visual.repaint();
 			//visual.fenetre.show();

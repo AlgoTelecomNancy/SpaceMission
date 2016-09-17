@@ -3,6 +3,8 @@ import types.*;
 import spaceship.modules.*;
 import java.util.ArrayList;
 
+import core.Game;
+
 public class Controller {
 	
 	public static boolean traiter(ArrayList<String> requetes){
@@ -20,6 +22,10 @@ public class Controller {
 			
 		}
 		return true;
+	}
+	
+	public static void addPlayer(){
+		Game.Univers.addPlayer(0);
 	}
 	
 }

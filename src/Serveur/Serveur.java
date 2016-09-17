@@ -50,7 +50,7 @@ public class Serveur implements Runnable{
 		try {
 			// creer le socket
 			ServerSocket ss = new ServerSocket(port);
-			System.out.println("IP serveur : "+ss.getInetAddress());
+			System.out.println("IP serveur : "+ss.getInetAddress()+" port "+port);
 			run = true;
 			while (run){
 				System.out.println("attente d'une connexion...");

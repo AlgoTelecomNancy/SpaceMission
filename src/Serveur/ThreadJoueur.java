@@ -36,12 +36,11 @@ public class ThreadJoueur implements Runnable{
 	@Override
 	public void run() {
 		try {
-			// send hello pour le fun :)
-			_out.println("hello !!!");
-			_out.flush();
 			// lit le premier message du client
 			String reponse = _in.readLine();
-			System.out.println("reponse : " + reponse);
+			if (reponse.equals("new player")){ 
+				Controller.addPlayer();
+			}
 			// si c'est un joueur
 			if (reponse.equals("joueur")){
 				joueur = true;
@@ -56,6 +55,9 @@ public class ThreadJoueur implements Runnable{
 					System.out.println("attente de reponse joueur "+_numClient);
 					reponse = _in.readLine();
 					if (reponse != null){
+						if(reponse.equals("exit")){
+							run = false;
+						}
 						System.out.println("reponse : "+reponse);
 						// met dans la file d'attente la requete qui sera traitee dans le prochain tour de boucle du jeu principale
 						_serveur.addRequete(reponse);

@@ -16,6 +16,15 @@ public class Function {
 		
 	}
 	
+	public static String generatePassword(){
+		String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+		String code = "";
+		for(int i=0; i<12; i++){
+			code = code + AB.charAt((int)(Math.random()*AB.length()));
+		}
+		return code;
+	}
+	
 	
 	//To speak
 	public static Process speak;

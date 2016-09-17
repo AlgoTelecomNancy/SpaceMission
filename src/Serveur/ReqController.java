@@ -5,7 +5,11 @@ import java.util.ArrayList;
 
 import core.Game;
 
-public class Controller {
+public class ReqController {
+	
+	public static void run(Request req, PlayerOnServer player){
+		player.write("Evaluate => "+req);
+	}
 	
 	public static boolean traiter(ArrayList<String> requetes){
 		for (String requete : requetes) {

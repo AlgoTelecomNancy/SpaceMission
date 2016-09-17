@@ -8,7 +8,7 @@ import spaceship.Module;
 import spaceship.Spaceship;
 import types.Vect3D;
 import GENIA.*;
-import Serveur.Controller;
+import Serveur.ReqController;
 import Serveur.Serveur;
 
 public class Game {
@@ -19,7 +19,7 @@ public class Game {
 	public static Visualisation3D visual3D;
 	public static Serveur serveur;
 	
-	private static String password;
+	public static String password;
 	
 	
 	/**
@@ -42,9 +42,9 @@ public class Game {
 			//Temps initial
 			long timeIn;
 			
-			Controller.traiter(serveur.getCloneRequetes(true));
+			serveur.players.doReq(); //Traiter les demandes
 			
-			if(Univers.joueurs.length>0){
+			if(Univers.joueurs[0]!=null){
 				//visual.repaint();
 				//visual.fenetre.show();
 				//On fait un tour de jeu...

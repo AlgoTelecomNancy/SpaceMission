@@ -5,6 +5,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Map.Entry;
+
+import core.Game;
 
 public class ThreadJoueur implements Runnable{
 	private Thread _t; // contiendra le thread du client
@@ -15,6 +19,8 @@ public class ThreadJoueur implements Runnable{
 	private int _numClient;
 	private boolean run;
 	private boolean joueur;
+	
+	private PlayerOnServer me;
 	
 	public ThreadJoueur(Socket s, Serveur serveur){
 		_s = s;
@@ -31,63 +37,106 @@ public class ThreadJoueur implements Runnable{
 
 	    _t = new Thread(this); // instanciation du thread
 	    _t.start(); // demarrage du thread, la fonction run() est ici lancée
+	    
 	}
 	
 	@Override
 	public void run() {
 		try {
-			// lit le premier message du client
-			String reponse = _in.readLine();
-			if (reponse.equals("new player")){ 
-				Controller.addPlayer();
-			}
-			// si c'est un joueur
-			if (reponse.equals("joueur")){
-				joueur = true;
-				// ajoute le flux de sortie au serveur
-				_numClient = _serveur.addJoueur(_out);
-				System.out.println("envoie du message");
-				_out.println("vous etes le joueur "+_numClient);
-				_out.flush();
-				run = true;
-				// boucle de communication
-				while(run){
-					System.out.println("attente de reponse joueur "+_numClient);
-					reponse = _in.readLine();
-					if (reponse != null){
-						if(reponse.equals("exit")){
-							run = false;
-						}
-						System.out.println("reponse : "+reponse);
-						// met dans la file d'attente la requete qui sera traitee dans le prochain tour de boucle du jeu principale
-						_serveur.addRequete(reponse);
-						_out.println("bien recu");
-						_out.flush();
-					} else {
-						System.out.println("le joueur "+_numClient+" c'est deconnecte");
+			
+			String ip = _s.getRemoteSocketAddress().toString().substring(0,_s.getRemoteSocketAddress().toString().lastIndexOf(":"));
+			
+			run = true;
+			
+			String reponse;
+			Request request;
+			while(run){
+				reponse = _in.readLine();
+				request = new Request(reponse);
+				
+				if (reponse != null){
+					if(reponse.equals("exit")){ //Quitter
 						run = false;
+					}else{
+						if(me==null){
+							if(reponse.equals("graphics")){ //Only for graphics
+								me = _serveur.players.addPlayer(1, _out, ip);
+							}else if(request.arg(0).equals("create") && request.isOpt("p") && request.opt("p").equals(Game.password)){ //Administrator (only one)
+							
+								if(request.arg(1).equals("admin")){ //Administrator (only one)
+									me = _serveur.players.addPlayer(0, _out, ip, Game.password);
+								}else{
+									String password = null;
+									if(request.isOpt("p")){
+										password = request.opt("p");
+									}
+									me = _serveur.players.addPlayer(2, _out, ip, password); //Simple player
+									if(request.isOpt("n")){
+										me.changeName(request.opt("n"));
+									}
+								}
+							}else if(request.arg(0).equals("connect")){ //Try to connect to existing player
+								int id=0;
+								String name=null;
+								String password=null;
+								
+								if(request.isOpt("i")){
+									id = Integer.parseInt(request.opt("i"));
+								}
+								if(request.isOpt("n")){
+									name = request.opt("n");
+								}
+								if(!request.isOpt("p") || (id==0 && name==null)){
+									_out.println("error, please give a password");
+								}
+								
+								//Search the player
+								for(Entry<Integer, PlayerOnServer> player: _serveur.players.players().entrySet()){
+									if(player.getValue().getPassword().equals(password) && (player.getKey()==id || player.getValue().getName().equals(name))){
+										me = player.getValue();
+									}
+								}
+								
+							}else{
+								//Tenter de retrouver le joueur avec l'ip
+								//Search the player
+								for(Entry<Integer, PlayerOnServer> player: _serveur.players.players().entrySet()){
+									if(player.getValue().getIp()==ip){
+										me = player.getValue();
+										me.addReq(request);
+									}
+								}
+							}
+							
+							if(me!=null){
+								_out.println("Connected as player "+me.getId() + " " +me.getIp());
+								me.connected=true;
+							}else{
+								_out.println("Not connected");
+							}
+														
+						}else{
+							me.addReq(request);
+						}
 					}
+					
+				} else {
+					System.out.println("le joueur "+_numClient+" c'est deconnecte");
+					run = false;
 				}
 			}
-			// TODO: faire la gestion des clients graphiques
-			
-			
-			// fermeture des flux et du socket
-			if (joueur)
-				_serveur.delJoueur(_out);
-			else
-				_serveur.delGraphique(_out);
+
 			_out.close();
 			_in.close();
-			_s.close();			
+			_s.close();
 		} catch (IOException e) {
 			System.out.println("deconnexion du joueur "+_numClient);
-			if (joueur)
-				_serveur.delJoueur(_out);
-			else
-				_serveur.delGraphique(_out);
-			//_serveur.removeJoueur(_numClient);
 		}
+		
+		if(me!=null){
+			_serveur.players.players().get(me.getId()).connected = false;
+		}
+		
 	}
 
 }

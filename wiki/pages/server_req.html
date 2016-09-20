@@ -1,13 +1,21 @@
 <a href="../index.html">Retour</a>
 <br><br>
 <h2>Liste des requetes sur le serveur</h2>
-<b>Le serveur est accéssible en connexion socket sur le port 18000</b><br><br>
+<b>Le serveur est accessible en connexion socket sur le port 18000</b><br><br>
 
-Requetes de connexion :<br>
-<i>new spaceship [NUMBER] [NAME] [KEY]</i> Assigner une clef secrette à un vaisseau (possible qu'une fois au début du jeu) et dans l'ordre (pas de 1 avant de 0...)<br>
-<i>connect [NUMBER] [NAME] [KEY]</i> Après une connexion socket, permet d'être connu par le serveur comme membre de l'équipe indiquée.<br>
-<i>disconnect</i> Le serveur oublie ma connexion (innutile dans la plupard des cas)
-<br><br>
-
-Requetes de lecture :<br>
-<i>
+Pour envoyer des requetes au serveur, il faut d'abord se connecter :<br>
+<b>Création des utilisateurs</b><br>
+Administrateur : <i>create admin -p [MOT DE PASSE ADMIN DONNÉ DANS LA CONSOLE JAVA]</i><br>
+Joueur : <i>create player -p [MOT DE PASSE ADMIN DONNÉ DANS LA CONSOLE JAVA]</i><br>
+Un utilisateur est automatiquement reconnecté par lecture de l'adresse ip si déconnecté.
+<br>
+<b>Connexion</b><br>
+Si un joueur a changé d'adresse ip / de machine la connexion se fait de cette façon :<br>
+<i>connect -i [numéro de joueur] -p [mot de passe]</i><br>
+<i>connect -n [pseudo de joueur] -p [mot de passe]</i><br>
+<br>
+<b>Données de jeu</b><br>
+Tout le monde : <br>
+<i>players</i> liste les joueurs<br>
+Connecté en tant qu'admin : <br>
+<i>mainpassword [new password]</i> permet d'afficher le mot de passe de jeu / de le changer

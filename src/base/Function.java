@@ -16,13 +16,16 @@ public class Function {
 		
 	}
 	
-	public static String generatePassword(){
+	public static String generatePassword(int nb){
 		String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 		String code = "";
-		for(int i=0; i<12; i++){
+		for(int i=0; i<nb; i++){
 			code = code + AB.charAt((int)(Math.random()*AB.length()));
 		}
 		return code;
+	}
+	public static String generatePassword(){
+		return generatePassword(6);
 	}
 	
 	

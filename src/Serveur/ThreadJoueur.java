@@ -31,7 +31,6 @@ public class ThreadJoueur implements Runnable{
 	      _out = new PrintWriter(_s.getOutputStream());
 	      // fabrication d'une variable permettant l'utilisation du flux d'entrée avec des string
 	      _in = new BufferedReader(new InputStreamReader(_s.getInputStream()));
-	      System.out.println("IP client : "+s.getInetAddress());
 	    }
 	    catch (IOException e){ }
 
@@ -46,19 +45,25 @@ public class ThreadJoueur implements Runnable{
 			
 			String ip = _s.getRemoteSocketAddress().toString().substring(0,_s.getRemoteSocketAddress().toString().lastIndexOf(":"));
 			
+			_out.println(ip);
+			_out.flush();
+			
+			
 			run = true;
 			
-			String reponse;
+			String reponse = "hello";
 			Request request;
 			while(run){
-				reponse = _in.readLine();
+				
 				request = new Request(reponse);
 				
 				if (reponse != null){
+										
 					if(reponse.equals("exit")){ //Quitter
 						run = false;
 					}else{
 						if(me==null){
+							
 							if(reponse.equals("graphics")){ //Only for graphics
 								me = _serveur.players.addPlayer(1, _out, ip);
 							}else if(request.arg(0).equals("create") && request.isOpt("p") && request.opt("p").equals(Game.password)){ //Administrator (only one)
@@ -101,41 +106,53 @@ public class ThreadJoueur implements Runnable{
 								//Tenter de retrouver le joueur avec l'ip
 								//Search the player
 								for(Entry<Integer, PlayerOnServer> player: _serveur.players.players().entrySet()){
-									if(player.getValue().getIp()==ip){
+									if(player.getValue().getIp().equals(ip)){
 										me = player.getValue();
+										me.changeOut(_out);
 										me.addReq(request);
 									}
 								}
 							}
-							
+														
 							if(me!=null){
 								_out.println("Connected as player "+me.getId() + " " +me.getIp());
 								me.connected=true;
+								System.out.println("Le joueur "+me.getId()+" est connecté. (connexion "+_numClient+")");
+
 							}else{
 								_out.println("Not connected");
+								System.out.println("Un joueur inconnu s'est connecté. (connexion "+_numClient+")");
 							}
+							_out.flush();
 														
 						}else{
 							me.addReq(request);
 						}
 					}
-					
-				} else {
-					System.out.println("le joueur "+_numClient+" c'est deconnecte");
-					run = false;
+
 				}
+				
+				if(!run || reponse == null){
+					System.out.println("Le joueur "+me.getId()+" s'est deconnecte (connexion "+_numClient+")");
+					run = false;
+				}else{
+					reponse = _in.readLine();
+				}
+				
 			}
+			
 
 			_out.close();
 			_in.close();
 			_s.close();
 		} catch (IOException e) {
-			System.out.println("deconnexion du joueur "+_numClient);
+			System.out.println("deconnexion d'un joueur (connexion "+_numClient+")");
 		}
 		
 		if(me!=null){
 			_serveur.players.players().get(me.getId()).connected = false;
 		}
+		
 		
 	}
 

@@ -65,6 +65,9 @@ public class PlayerOnServer {
 			this._out.flush();
 		}
 	}
+	public void changeOut(PrintWriter o){
+		this._out = o;
+	}
 	
 	public int getId(){
 		return id;
@@ -74,6 +77,9 @@ public class PlayerOnServer {
 	}
 	public String getName(){
 		return name;
+	}
+	public int getLevel(){
+		return this.level;
 	}
 	public String getPassword(){
 		return password;

@@ -10,7 +10,7 @@ public class Request {
 
 	public Request(String req){
 		
-		if(req.length()<2){
+		if(req==null || req.length()<2){
 			return;
 		}
 		
@@ -38,9 +38,11 @@ public class Request {
 		return opts.containsKey(index);
 	}
 	public String opt(String index){
+		if(!opts.containsKey(index)){ return null; }
 		return opts.get(index);
 	}
 	public String arg(int index){
+		if(index<0 || index>=args.size()){ return null; }
 		return args.get(index);
 	}
 	

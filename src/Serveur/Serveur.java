@@ -48,7 +48,7 @@ public class Serveur implements Runnable{
 			System.out.println("IP serveur : "+ss.getInetAddress()+" port "+port);
 			run = true;
 			while (run){
-				System.out.println("attente d'une connexion...");
+				//System.out.println("attente d'une connexion...");
 				// creer un nouveau thread pour chaque nouveau joueur
 				new ThreadJoueur(ss.accept(), serveur);
 			}

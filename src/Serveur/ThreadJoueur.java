@@ -51,11 +51,11 @@ public class ThreadJoueur implements Runnable{
 			
 			run = true;
 			
-			String reponse = "hello";
+			String reponse = "";
 			Request request;
 			while(run){
 				
-				request = new Request(reponse);
+				request = new Request(reponse, _out);
 				
 				if (reponse != null){
 										
@@ -65,21 +65,26 @@ public class ThreadJoueur implements Runnable{
 						if(me==null){
 							
 							if(reponse.equals("graphics")){ //Only for graphics
-								me = _serveur.players.addPlayer(1, _out, ip);
+								me = _serveur.players.addPlayer(1, ip);
 							}else if(request.arg(0).equals("create") && request.isOpt("p") && request.opt("p").equals(Game.password)){ //Administrator (only one)
 							
 								if(request.arg(1).equals("admin")){ //Administrator (only one)
-									me = _serveur.players.addPlayer(0, _out, ip, Game.password);
+									me = _serveur.players.addPlayer(0, ip, Game.password);
 								}else{
 									String password = null;
 									if(request.isOpt("p")){
 										password = request.opt("p");
 									}
-									me = _serveur.players.addPlayer(2, _out, ip, password); //Simple player
+									me = _serveur.players.addPlayer(2, ip, password); //Simple player
 									if(request.isOpt("n")){
 										me.changeName(request.opt("n"));
 									}
 								}
+								
+								if(me!=null){
+									me.addReq(new Request("me", _out));
+								}
+								
 							}else if(request.arg(0).equals("connect")){ //Try to connect to existing player
 								int id=0;
 								String name=null;
@@ -108,7 +113,6 @@ public class ThreadJoueur implements Runnable{
 								for(Entry<Integer, PlayerOnServer> player: _serveur.players.players().entrySet()){
 									if(player.getValue().getIp().equals(ip)){
 										me = player.getValue();
-										me.changeOut(_out);
 										me.addReq(request);
 									}
 								}

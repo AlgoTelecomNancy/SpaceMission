@@ -6,7 +6,6 @@ import java.util.*;
 public class PlayerOnServer {
 
 	private LinkedList<Request> reqList;
-	private PrintWriter _out;
 	private int level; //0 administrator, 1 graphics, 2 player
 	private int id;
 	private String name = "<unknown>"; //Player name
@@ -16,8 +15,8 @@ public class PlayerOnServer {
 	public boolean connected = false;
 	
 	//Create a player with level and socket output
-	public PlayerOnServer(int l, PrintWriter o, int id, String ip, String password){
-		this._out = o;
+	public PlayerOnServer(int l, int id, String ip, String password){
+
 		this.level = l;
 		this.reqList = new LinkedList<Request>();
 		this.id = id;
@@ -30,7 +29,6 @@ public class PlayerOnServer {
 			this.password = password;
 		}
 		
-		this.write("{\"id\":\""+id+"\",\"password\":\""+password+"\"}");
 	}
 	
 	/**
@@ -56,18 +54,6 @@ public class PlayerOnServer {
 		}
 	}
 	
-	/**
-	 * Say something to the player
-	 */
-	public void write(String data){
-		if(this.connected){
-			this._out.println(data);
-			this._out.flush();
-		}
-	}
-	public void changeOut(PrintWriter o){
-		this._out = o;
-	}
 	
 	public int getId(){
 		return id;

@@ -1,5 +1,6 @@
 package Serveur;
 
+import java.io.PrintWriter;
 import java.util.*;
 
 public class Request {
@@ -7,12 +8,15 @@ public class Request {
 	private String rawReq;
 	private HashMap<String,String> opts;
 	private ArrayList<String> args;
+	private PrintWriter out;
 
-	public Request(String req){
+	public Request(String req, PrintWriter o){
 		
 		if(req==null || req.length()<2){
-			return;
+			req = "<null>";
 		}
+		
+		this.out = o;
 		
 		this.rawReq = req;
 		this.args = new ArrayList<String>(Arrays.asList(req.split(" ")));
@@ -38,12 +42,17 @@ public class Request {
 		return opts.containsKey(index);
 	}
 	public String opt(String index){
-		if(!opts.containsKey(index)){ return null; }
+		if(opts==null || !opts.containsKey(index)){ return null; }
 		return opts.get(index);
 	}
 	public String arg(int index){
-		if(index<0 || index>=args.size()){ return null; }
+		if(args==null || index<0 || index>=args.size()){ return null; }
 		return args.get(index);
+	}
+	
+	public void write(String data){
+		this.out.println(data);
+		this.out.flush();
 	}
 	
 	@Override

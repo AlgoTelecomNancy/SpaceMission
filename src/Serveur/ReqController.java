@@ -20,8 +20,8 @@ public class ReqController {
 			valid = valid || graphicsFunctions(req, player);
 		}
 		valid = valid || commonFunctions(req, player);
-		if(!valid){
-			player.write("{'error':'unknown command'}");
+		if(!valid && !(req+"").equals("<null>")){
+			req.write("{'error':'unknown command','command':'"+req+"'}");
 		}
 	}
 	
@@ -36,9 +36,9 @@ public class ReqController {
 		if(req.arg(0).equals("mainpassword")){
 			if(req.arg(1)!=null){
 				Game.password = req.arg(1);
-				player.write("{'password':'"+Game.password+"'}");
+				req.write("{'password':'"+Game.password+"'}");
 			}else{
-				player.write("{'password':'"+Game.password+"'}");
+				req.write("{'password':'"+Game.password+"'}");
 			}
 			valid = true;
 		}
@@ -82,7 +82,7 @@ public class ReqController {
 						+"}";
 			}
 			
-			player.write(result.substring(0, result.length()-1)+"]");
+			req.write(result.substring(0, result.length()-1)+"]");
 			valid = true;
 		}
 		

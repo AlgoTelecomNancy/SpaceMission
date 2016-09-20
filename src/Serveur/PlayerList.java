@@ -19,19 +19,19 @@ public class PlayerList {
 		return this.playersList;
 	}
 	
-	public PlayerOnServer addPlayer(int level, PrintWriter o, String ip, String password){
+	public PlayerOnServer addPlayer(int level, String ip, String password){
 		if(level == 0){
 			if(hasAdmin){
 				return null; //Do not add multiple admins
 			}
 			hasAdmin = true;
 		}
-		PlayerOnServer player = new PlayerOnServer(level, o, idIncrement, ip, password);
+		PlayerOnServer player = new PlayerOnServer(level, idIncrement, ip, password);
 		this.playersList.put(idIncrement, player);
 		return player;
 	}
-	public PlayerOnServer addPlayer(int level, PrintWriter o, String ip){
-		return addPlayer(level, o, ip, null);
+	public PlayerOnServer addPlayer(int level, String ip){
+		return addPlayer(level, ip, null);
 	}
 	public void removePlayer(int id){
 		this.playersList.remove(id);

@@ -17,5 +17,11 @@ Si un joueur a changé d'adresse ip / de machine la connexion se fait de cette f
 <b>Données de jeu</b><br>
 Tout le monde : <br>
 <i>players</i> liste les joueurs<br>
+<i>me</i> données sur le joueur actuellement connecté [TODO]<br>
+<i>password [new password]</i> affiche le mot de passe / change le mot de passe du joueur [TODO]<br>
 Connecté en tant qu'admin : <br>
-<i>mainpassword [new password]</i> permet d'afficher le mot de passe de jeu / de le changer
+<i>mainpassword [new password]</i> permet d'afficher le mot de passe de jeu / de le changer<br>
+--> TODO ci-dessous <--<br>
+<i>player {[-n pseudo] or [-i id]} assign [liste de modules]</i> permet d'assigner des accès à des modules, le mot clef "all" permet d'autoriser l'accès à tous les modules.<br>
+<i>team new [-n team name]</i> créé un vaisseau / équipe de nom team name (les joueurs sans équipe sont transférés dans la nouvelle équipe)<br>
+<i>team [team id] add {[-n pseudo] or [-i id]}</i> permet de définir l'équipe d'un joueur

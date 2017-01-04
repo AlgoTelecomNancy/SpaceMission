@@ -5,6 +5,7 @@ import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.glu.GLU;
 
 import maths.Vect3D;
+import maths.VectRotation;
 
 
 public class Cube {
@@ -31,9 +32,9 @@ public class Cube {
 	}
 
 	public void setAngles(Vect3D angles) {
-		this.angles.x = (int) angles.x % 360 + (angles.x - (int) angles.x);
-		this.angles.y = (int) angles.y % 360 + (angles.y - (int) angles.y);
-		this.angles.z = (int) angles.z % 360 + (angles.z - (int) angles.z);
+		this.angles.x = angles.x;
+		this.angles.y = angles.y;
+		this.angles.z = angles.z;
 	}
 
 	public void setSize(Vect3D size) {
@@ -41,27 +42,28 @@ public class Cube {
 		this.size.y = size.y;
 		this.size.z = size.z;
 	}
-
+	
+	//TODO Contain errors !
 	private Vect3D getRotatedVector(Vect3D vector, Vect3D angles) {
 		Vect3D newVector = vector;
 
 		Vect3D oldVector = vector;
-		newVector.y = (float) (oldVector.y * Math.cos(angles.x * Math.PI / 180)
-				- oldVector.z * Math.sin(angles.x * Math.PI / 180));
-		newVector.z = (float) (oldVector.y * Math.sin(angles.x * Math.PI / 180)
-				+ oldVector.z * Math.cos(angles.x * Math.PI / 180));
+		newVector.y = (float) (oldVector.y * Math.cos(angles.x)
+				- oldVector.z * Math.sin(angles.x));
+		newVector.z = (float) (oldVector.y * Math.sin(angles.x)
+				+ oldVector.z * Math.cos(angles.x));
 
 		oldVector = newVector;
-		newVector.z = (float) (oldVector.z * Math.cos(angles.y * Math.PI / 180)
-				- oldVector.x * Math.sin(angles.y * Math.PI / 180));
-		newVector.x = (float) (oldVector.z * Math.sin(angles.y * Math.PI / 180)
-				+ oldVector.x * Math.cos(angles.y * Math.PI / 180));
+		newVector.z = (float) (oldVector.z * Math.cos(angles.y)
+				- oldVector.x * Math.sin(angles.y));
+		newVector.x = (float) (oldVector.z * Math.sin(angles.y)
+				+ oldVector.x * Math.cos(angles.y));
 
 		oldVector = newVector;
-		newVector.x = (float) (oldVector.x * Math.cos(angles.z * Math.PI / 180)
-				- oldVector.y * Math.sin(angles.z * Math.PI / 180));
-		newVector.y = (float) (oldVector.x * Math.sin(angles.z * Math.PI / 180)
-				+ oldVector.y * Math.cos(angles.z * Math.PI / 180));
+		newVector.x = (float) (oldVector.x * Math.cos(angles.z)
+				- oldVector.y * Math.sin(angles.z));
+		newVector.y = (float) (oldVector.x * Math.sin(angles.z)
+				+ oldVector.y * Math.cos(angles.z));
 
 		return newVector;
 	}
@@ -69,74 +71,21 @@ public class Cube {
 	public void draw(GLAutoDrawable drawable, Camera3D camera) {
 		GL2 gl = drawable.getGL().getGL2();
 
-		/*
-		 * Vect3D rotations = getRotations(angles);
-		 * 
-		 * gl.glLoadIdentity();
-		 * 
-		 * /*gl.glMultMatrixf(FloatBuffer.wrap(new float[]{ 1, 0, 0, 0, 0,
-		 * (float)Math.cos(-rotations.x), -(float)Math.sin(-rotations.x), 0, 0,
-		 * (float)Math.sin(-rotations.x), (float)Math.cos(-rotations.x), 0, 0,
-		 * 0, 0, 1}));
-		 */
-
-		/*
-		 * gl.glMultMatrixf(FloatBuffer.wrap(new float[]{ 1, 0, 0, 0, 0,
-		 * (float)Math.cos(-rotations.x), (float)Math.sin(-rotations.x), 0, 0,
-		 * -(float)Math.sin(-rotations.x), (float)Math.cos(-rotations.x), 0, 0,
-		 * 0, 0, 1}));
-		 */
-
-		/*
-		 * gl.glMultMatrixf(new float[]{ (float)Math.cos(-rotations.y), 0,
-		 * (float)Math.sin(-rotations.y), 0, 0, 1, 0, 0,
-		 * -(float)Math.sin(-rotations.y), 0, (float)Math.cos(-rotations.y), 0,
-		 * 0, 0, 0, 1}, 0); gl.glMultMatrixf(new float[]{
-		 * (float)Math.cos(-rotations.z), -(float)Math.sin(-rotations.z), 0, 0,
-		 * (float)Math.sin(-rotations.z), (float)Math.cos(-rotations.z), 0, 0,
-		 * 0, 0, 1, 0, 0, 0, 0, 1}, 0);
-		 */
-		/*
-		 * gl.glRotatef(-(float)rotations.x, 1.0f, 0.0f, 0.0f);
-		 * gl.glRotatef(-(float)rotations.y, 0.0f, 1.0f, 0.0f);
-		 * gl.glRotatef(-(float)rotations.z, 0.0f, 0.0f, 1.0f);
-		 */
-
-		/*
-		 * gl.glMultMatrixf(FloatBuffer.wrap(new float[]{ 1, 0, 0, 0, 0,
-		 * (float)Math.cos(Math.toRadians(angles.x)),
-		 * -(float)Math.sin(Math.toRadians(angles.x)), 0, 0,
-		 * (float)Math.sin(Math.toRadians(angles.x)),
-		 * (float)Math.cos(Math.toRadians(angles.x)), 0, 0, 0, 0, 1}));
-		 * 
-		 * gl.glMultMatrixf(FloatBuffer.wrap(new float[]{
-		 * (float)Math.cos(Math.toRadians(angles.y)), 0,
-		 * (float)Math.sin(Math.toRadians(angles.y)), 0, 0, 1, 0, 0,
-		 * -(float)Math.sin(Math.toRadians(angles.y)), 0,
-		 * (float)Math.cos(Math.toRadians(angles.y)), 0, 0, 0, 0, 1}));
-		 * 
-		 * gl.glMultMatrixf(FloatBuffer.wrap(new float[]{
-		 * (float)Math.cos(Math.toRadians(angles.z)),
-		 * -(float)Math.sin(Math.toRadians(angles.z)), 0, 0,
-		 * (float)Math.sin(Math.toRadians(angles.z)),
-		 * (float)Math.cos(Math.toRadians(angles.z)), 0, 0, 0, 0, 1, 0, 0, 0, 0,
-		 * 1}));
-		 */
-
 		gl.glLoadIdentity();
 		glu.gluLookAt(camera.position.x, camera.position.y, camera.position.z, camera.focusedPoint.x,
 				camera.focusedPoint.y, camera.focusedPoint.z, 0, 0, 1);
 
 		gl.glTranslatef((float) position.x, (float) position.y, (float) position.z);
-
-		Vect3D axis = getRotatedVector(new Vect3D(1, 0, 0), new Vect3D(0, 0, 0));
-		gl.glRotated(angles.x, axis.x, axis.y, axis.z);
-		axis = getRotatedVector(new Vect3D(0, 1, 0), new Vect3D(-angles.x, 0, 0));
-		gl.glRotated(angles.y, axis.x, axis.y, axis.z);
-		axis = getRotatedVector(new Vect3D(0, 0, 1), new Vect3D(0, -angles.y, 0));
-		axis = getRotatedVector(axis, new Vect3D(-angles.x, 0, 0));
-		gl.glRotated(angles.z, axis.x, axis.y, axis.z);
-
+		
+		gl.glRotated(angles.z * (180/Math.PI), 0, 0, 1);
+		Vect3D rotated = getRotatedVector(new Vect3D(0, 1, 0), new Vect3D(0, 0, -angles.z));
+		gl.glRotated(angles.y * (180/Math.PI), rotated.x, rotated.y, rotated.z);
+		
+		rotated = getRotatedVector(new Vect3D(1, 0, 0), new Vect3D(0, -angles.y, 0));
+		rotated = getRotatedVector(rotated, new Vect3D(0, 0, -angles.z));
+		
+		gl.glRotated(angles.x * (180/Math.PI), rotated.x, rotated.y, rotated.z);
+		
 
 		gl.glScaled(size.x / 2, size.y / 2, size.z / 2);
 

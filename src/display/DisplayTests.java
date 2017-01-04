@@ -27,28 +27,28 @@ public class DisplayTests {
 		test.addChild(sub7);
 		test.addChild(sub8);
 		
-		sub1.setRadius(0.1);
+		sub1.setRadius(0.5);
 		sub1.setMass(1);
 
-		sub2.setRadius(0.1);
+		sub2.setRadius(0.5);
 		sub2.setMass(1);
 		
-		sub3.setRadius(0.1);
+		sub3.setRadius(0.5);
 		sub3.setMass(1);
 
-		sub4.setRadius(0.1);
+		sub4.setRadius(0.5);
 		sub4.setMass(1);
 		
-		sub5.setRadius(0.1);
+		sub5.setRadius(0.5);
 		sub5.setMass(1);
 
-		sub6.setRadius(0.1);
+		sub6.setRadius(0.5);
 		sub6.setMass(1);
 		
-		sub7.setRadius(0.1);
+		sub7.setRadius(0.5);
 		sub7.setMass(1);
 
-		sub8.setRadius(0.1);
+		sub8.setRadius(0.5);
 		sub8.setMass(1);
 
 		sub1.setPosition(new Vect3D(0, 0, 1));
@@ -90,7 +90,7 @@ public class DisplayTests {
 
 			for (int i = 0; i < spaceship.getChildren().size(); ++i) {
 				window.getDisplay().getCube(i).setPosition(spaceship.getChildren().get(i).getAbsolutePosition());
-				//window.getDisplay().getCube(i).setAngles(spaceship.getChildren().get(i).getAbsoluteRotPosition().mult(180/(Math.PI)));
+				window.getDisplay().getCube(i).setAngles(spaceship.getChildren().get(i).getAbsoluteRotPosition());
 			}
 
 			

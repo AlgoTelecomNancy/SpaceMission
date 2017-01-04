@@ -5,7 +5,7 @@ import physics.Body;
 
 public class Tests {
 
-	public static void main(){
+	public static void main(String args[]){
 		
 		Body test = new Body();
 
@@ -25,7 +25,6 @@ public class Tests {
 		
 		sub1.setForce(new Vect3D(0,0,1));
 		
-
 		double deltaTime = 0.1;
 		test.updateState(deltaTime);
 		

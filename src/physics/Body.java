@@ -90,8 +90,12 @@ public class Body {
 		return this.position;
 	}
 	
+	public Vect3D getRotPosition(){
+		return this.rotPosition;
+	}
+	
 	private void updateProperties(){
-		
+				
 		//Update mass
 		double newMass = 0;
 		for(Body child : this.children){
@@ -109,9 +113,10 @@ public class Body {
 					);
 			massSum += child.getMass();
 		}
-		gravityCenterDelta = gravityCenterDelta.mult(1/massSum);
+		if(massSum!=0){
+			gravityCenterDelta = gravityCenterDelta.mult(1/massSum);
+		}
 		this.position = this.position.minus(gravityCenterDelta); //Change position to have gravity center equal to 0
-		
 		
 		//Update global radius
 		//TODO improve this to have the minimum sphere that fit the body
@@ -131,10 +136,17 @@ public class Body {
 		this.force = new Vect3D();
 		this.moment = new Vect3D();		
 		for(Body child : this.children){
-			this.force = this.force.add(child.getForce()); //Add forces
+			
+			Vect3D childRelativeRotation = child.getRotPosition().minus(this.getRotPosition());
+			
+			Matrix rotateMatrix = rotMatrixModule_Space(childRelativeRotation);
+			Vect3D childRotatedForce = rotateMatrix.multiply(child.getForce()); //We have to rotate the force because it is relative to the child referential
+			
+			
+			this.force = this.force.add(childRotatedForce); //Add forces
 			this.moment = this.moment.add( //Add all moments
 					child.moment.add( //Moment on the child
-							child.getForce().vectProd( //Force on the child ^
+							childRotatedForce.vectProd( //Force on the child ^
 									this.position.minus(child.position) //Distance parent-child
 									)
 							)
@@ -204,14 +216,16 @@ public class Body {
 
 	public void setForce(Vect3D force) {
 		this.force = force;
+		this.parent.updateProperties();
 	}
 	
 	public Vect3D getMoment() {
 		return moment;
 	}
 
-	public void getMoment(Vect3D moment) {
+	public void setMoment(Vect3D moment) {
 		this.moment = moment;
+		this.parent.updateProperties();
 	}
 	
 	/** get children

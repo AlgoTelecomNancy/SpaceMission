@@ -40,8 +40,7 @@ public class DisplayTests {
 			window.getDisplay().addCube(cube);
 		}
 
-		int j = 0;
-		while (j++ < 20) {
+		while (true) {
 			System.out.println(spaceship.getPosition());
 			spaceship.updateState(1. / 60);
 			window.getCamera().setFocusedPoint(spaceship.getPosition());

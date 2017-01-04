@@ -22,8 +22,9 @@ public class DisplayTests {
 		sub2.setMass(1);
 
 		sub1.setPosition(new Vect3D(0, 0, 3));
-
-		test.getChildren().get(0).setForce(new Vect3D(0,0,0));
+		
+		test.getChildren().get(0).setForce(new Vect3D(100,0,0));
+		test.getChildren().get(1).setForce(new Vect3D(100,0,0));
 
 		return test;
 	}
@@ -39,18 +40,20 @@ public class DisplayTests {
 					child.getRotPosition());
 			window.getDisplay().addCube(cube);
 		}
+		
 
 		int j = 0;
 		while (true) {
 			j++;
-			System.out.println(spaceship.getPosition());
+
 			spaceship.updateState(1. / 60);
-			
+			//spaceship.setRotPosition(new Vect3D(0,j*0.001,j*0.01));
+
 			window.getCamera().setFocusedPoint(spaceship.getPosition());
 
 			for (int i = 0; i < spaceship.getChildren().size(); ++i) {
-				window.getDisplay().getCube(i).setPosition(spaceship.getChildren().get(i).getPosition());
-				window.getDisplay().getCube(i).setAngles(spaceship.getChildren().get(i).getRotPosition());
+				window.getDisplay().getCube(i).setPosition(spaceship.getChildren().get(i).getAbsolutePosition());
+				window.getDisplay().getCube(i).setAngles(spaceship.getChildren().get(i).getAbsoluteRotPosition().mult(180/(Math.PI)));
 			}
 
 			try {
@@ -61,8 +64,9 @@ public class DisplayTests {
 				e.printStackTrace();
 			}
 			
-			
 			spaceship.getChildren().get(0).setForce(new Vect3D());
+			spaceship.getChildren().get(1).setForce(new Vect3D());
+
 		}
 	}
 

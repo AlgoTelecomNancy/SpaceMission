@@ -28,7 +28,7 @@ public class Body {
 	private Vect3D speed = new Vect3D();
 	private Vect3D acceleration = new Vect3D();
 
-	private Vect3D rotPosition = new Vect3D(); //Position relative to the parent body	
+	private Vect3D rotPosition = new Vect3D(); //RotPosition relative to the parent body	
 	private Vect3D rotSpeed = new Vect3D();
 	private Vect3D rotAcceleration = new Vect3D();
 
@@ -63,20 +63,22 @@ public class Body {
 
 	public void setRadius(double newRadius) {
 		this.radius = newRadius;
-		if (this.parent != null) {
-			this.parent.updateProperties(); //Changer la taille du parent car on n'a plus la même taille
-		}
+		this.parent.updateProperties(); //Changer la taille du parent car on n'a plus la même taille
 	}
 
 	public void setMass(double newMass) {
 		this.mass = newMass;
-		if (this.parent != null) {
-			this.parent.updateProperties(); //Changer la taille du parent car on n'a plus la même taille
-		}
+		this.parent.updateProperties(); //Changer la taille du parent car on n'a plus la même taille
 	}
 
 	public void setPosition(Vect3D newPosition) {
 		this.position = newPosition;
+		this.updateProperties();
+	}
+	
+	public void setRotPosition(Vect3D newRotPosition){
+		this.rotPosition = newRotPosition;
+		this.updateProperties();
 	}
 
 	public double getRadius() {
@@ -96,62 +98,69 @@ public class Body {
 	}
 
 	private void updateProperties() {
+		
 
 		//Update mass
-		double newMass = 0;
-		for (Body child : this.children) {
-			newMass += child.getMass();
-		}
-		this.mass = newMass;
-
-		//Update position
-		//The current position will be changed to the gravity center
-		Vect3D gravityCenterDelta = new Vect3D();
-		double massSum = 0;
-		for (Body child : this.children) {
-			gravityCenterDelta = gravityCenterDelta.add(
-					child.getPosition().mult(child.getMass()));
-			massSum += child.getMass();
-		}
-
-		if(massSum!=0){
-			gravityCenterDelta = gravityCenterDelta.mult(1/massSum);
-		}
-		this.position = this.position.minus(gravityCenterDelta); //Change position to have gravity center equal to 0
-		
-		//Update global radius
-		//TODO improve this to have the minimum sphere that fit the body
-		// (actualy this is the minimum sphere that fit AND having a center
-		// equal to the barycentre center)
-		double newRadius = 0;
-		for (Body child : this.children) {
-			newRadius = Math.max(
-					newRadius,
-					(child.getPosition().minus(this.getPosition())).size() + child.getRadius());
-		}
-		this.radius = newRadius;
-
-
-		//Update force at barycenter
-		this.force = new Vect3D();
-
-		this.moment = new Vect3D();		
-		for(Body child : this.children){
+		if(this.children.size()>0){
+			double newMass = 0;
+			for (Body child : this.children) {
+				newMass += child.getMass();
+			}
+			this.mass = newMass;
+	
+			//Update position
+			//The current position will be changed to the gravity center
+			Vect3D gravityCenterDelta = new Vect3D();
+			double massSum = 0;
+			for (Body child : this.children) {
+				gravityCenterDelta = gravityCenterDelta.add(
+						(child.getPosition()).mult(child.getMass()));
+				massSum += child.getMass();
+			}
+	
+			if(massSum!=0){
+				gravityCenterDelta = gravityCenterDelta.mult(1/massSum);
+			}
+			this.position = this.position.add(gravityCenterDelta); //Change position to have gravity center equal to 0
+			if(gravityCenterDelta.size()!=0){
+				for (Body child : this.children) {
+					child.position = child.getPosition().minus(gravityCenterDelta);
+				}
+			}
 			
-			Vect3D childRelativeRotation = child.getRotPosition().minus(this.getRotPosition());
-			
-			Matrix rotateMatrix = rotMatrixModule_Space(childRelativeRotation);
-			Vect3D childRotatedForce = rotateMatrix.multiply(child.getForce()); //We have to rotate the force because it is relative to the child referential
-			
-			
-			this.force = this.force.add(childRotatedForce); //Add forces
-			this.moment = this.moment.add( //Add all moments
-					child.moment.add( //Moment on the child
-							childRotatedForce.vectProd( //Force on the child ^
-									this.position.minus(child.position) //Distance parent-child
-							)));
-		}
+			//Update global radius
+			//TODO improve this to have the minimum sphere that fit the body
+			// (actualy this is the minimum sphere that fit AND having a center
+			// equal to the barycentre center)
+			double newRadius = 0;
+			for (Body child : this.children) {
+				newRadius = Math.max(
+						newRadius,
+						(child.getPosition()).size() + child.getRadius());
+			}
+			this.radius = newRadius;
+	
+	
+			//Update force at barycenter
+			this.force = new Vect3D();
+	
+			this.moment = new Vect3D();		
+			for(Body child : this.children){
+				
+				Vect3D childRelativeRotation = child.getRotPosition();
+				Matrix rotateMatrix = rotMatrixModule_Space(childRelativeRotation);
+				Vect3D childRotatedForce = rotateMatrix.multiply(child.getForce()); //We have to rotate the force because it is relative to the child referential
+				
+				
+				this.force = this.force.add(childRotatedForce); //Add forces
+				this.moment = this.moment.add( //Add all moments
+						child.moment.add( //Moment on the child
+								childRotatedForce.vectProd( //Force on the child ^
+										child.position //Distance parent-child
+								)));
+			}
 
+		}
 
 		if (this.parent != null) {
 			this.parent.updateProperties(); //Changer la taille du parent car on n'a plus la même taille
@@ -166,16 +175,13 @@ public class Body {
 	 */
 	public void updateState(double deltaTime) {
 
-		if (this.parent == null) {
-
+		if (this.parent == null) { //Seulement le parent principal
+ 
 			Vect3D deltaPosition = this.speed.mult(deltaTime);
 			Vect3D deltaRotPosition = this.rotSpeed.mult(deltaTime);
 
 			Vect3D deltaSpeed = this.acceleration.mult(deltaTime);
 			Vect3D deltaRotSpeed = this.rotAcceleration.mult(deltaTime);
-
-			Vect3D deltaAcceleration = this.force.mult(1 / this.mass);
-			Vect3D deltaRotAcceleration = this.force.mult(1 / this.mass);
 
 			this.position = this.position.add(deltaPosition);
 			this.rotPosition = this.rotPosition.add(deltaRotPosition);
@@ -183,28 +189,33 @@ public class Body {
 			this.speed = this.speed.add(deltaSpeed);
 			this.rotSpeed = this.rotSpeed.add(deltaRotSpeed);
 
-			this.acceleration = this.acceleration.add(deltaAcceleration);
-			this.rotAcceleration = this.rotAcceleration.add(deltaRotAcceleration);
 
-			for (Body child : this.children) {
-				child.updatePosition(this.position, this.rotPosition, deltaRotPosition);
-			}
+			this.acceleration = this.force.mult(1 / this.mass);
+			this.rotAcceleration = this.moment.mult(1 / this.mass);
 
 		}
 
 	}
 
-	public void updatePosition(Vect3D parentPosition, Vect3D parentRotPosition, Vect3D parentDeltaRotPosition) {
+	public Vect3D getAbsolutePosition() {
+		
+		if(this.parent==null){
+			return this.position;
+		}else{
+			
+			Matrix rotateMatrix = rotMatrixModule_Space(this.parent.getAbsoluteRotPosition());
+			return rotateMatrix.multiply(this.position).add(this.parent.getAbsolutePosition());
+			
+		}
 
-		Matrix rotateMatrix = rotMatrixModule_Space(parentRotPosition);
+	}
 
-		this.rotPosition = this.rotPosition.add(parentDeltaRotPosition);
-
-		this.position = rotateMatrix.multiply(parentPosition.minus(this.position));
-		this.position.add(parentPosition);
-
-		for (Body child : this.children) {
-			child.updatePosition(parentPosition, parentRotPosition, parentDeltaRotPosition);
+	public Vect3D getAbsoluteRotPosition() {
+		
+		if(this.parent==null){
+			return this.rotPosition;
+		}else{
+			return this.parent.getAbsoluteRotPosition().add(this.rotPosition);
 		}
 
 	}

@@ -71,4 +71,8 @@ public class Vect3D {
 	public String toString() {
 		return "(" + x + "; " + y + "; " + z + ")";
 	}
+	
+	public Vect3D clone(){
+		return new Vect3D(x, y, z);
+	}
 }

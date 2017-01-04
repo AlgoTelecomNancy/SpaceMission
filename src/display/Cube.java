@@ -15,9 +15,9 @@ public class Cube {
 
 
 	public Cube(Vect3D position, Vect3D size, Vect3D angles) {
-		this.position = position;
-		this.size = size;
-		this.angles = angles;
+		this.position = position.clone();
+		this.size = size.clone();
+		this.angles = angles.clone();
 	}
 
 	public Cube clone() {

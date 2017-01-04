@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import maths.Matrix;
 import maths.Vect3D;
+import maths.VectRotation;
 
 
 /**
@@ -43,8 +44,6 @@ public class Body {
 	public void addChild(Body child) {
 		child.parent = this;
 		this.children.add(child);
-
-		updateProperties(); //Changer la taille car on a un nouvel enfant
 	}
 
 	public void destroyChild(Body child) {
@@ -57,28 +56,23 @@ public class Body {
 	public void die() {
 		if (this.parent != null) {
 			this.parent.destroyChild(this);
-			this.parent.updateProperties(); //Changer la taille du parent car on n'existe plus
 		}
 	}
 
 	public void setRadius(double newRadius) {
 		this.radius = newRadius;
-		this.parent.updateProperties(); //Changer la taille du parent car on n'a plus la même taille
 	}
 
 	public void setMass(double newMass) {
 		this.mass = newMass;
-		this.parent.updateProperties(); //Changer la taille du parent car on n'a plus la même taille
 	}
 
 	public void setPosition(Vect3D newPosition) {
 		this.position = newPosition;
-		this.updateProperties();
 	}
 	
 	public void setRotPosition(Vect3D newRotPosition){
 		this.rotPosition = newRotPosition;
-		this.updateProperties();
 	}
 
 	public double getRadius() {
@@ -97,7 +91,7 @@ public class Body {
 		return this.rotPosition;
 	}
 
-	private void updateProperties() {
+	public void updateProperties() {
 		
 
 		//Update mass
@@ -148,8 +142,7 @@ public class Body {
 			for(Body child : this.children){
 				
 				Vect3D childRelativeRotation = child.getRotPosition();
-				Matrix rotateMatrix = rotMatrixModule_Space(childRelativeRotation);
-				Vect3D childRotatedForce = rotateMatrix.multiply(child.getForce()); //We have to rotate the force because it is relative to the child referential
+				Vect3D childRotatedForce = VectRotation.rotate(child.getForce(), childRelativeRotation); //We have to rotate the force because it is relative to the child referential
 				
 				
 				this.force = this.force.add(childRotatedForce); //Add forces
@@ -203,8 +196,7 @@ public class Body {
 			return this.position;
 		}else{
 			
-			Matrix rotateMatrix = rotMatrixModule_Space(this.parent.getAbsoluteRotPosition());
-			return rotateMatrix.multiply(this.position).add(this.parent.getAbsolutePosition());
+			return (VectRotation.rotate(this.position,this.parent.getAbsoluteRotPosition())).add(this.parent.getAbsolutePosition());
 			
 		}
 
@@ -226,7 +218,6 @@ public class Body {
 
 	public void setForce(Vect3D force) {
 		this.force = force;
-		this.parent.updateProperties();
 	}
 
 	public Vect3D getMoment() {
@@ -235,7 +226,6 @@ public class Body {
 
 	public void setMoment(Vect3D moment) {
 		this.moment = moment;
-		this.parent.updateProperties();
 	}
 
 	/**
@@ -244,36 +234,6 @@ public class Body {
 	 */
 	public ArrayList<Body> getChildren() {
 		return this.children;
-	}
-
-	/**
-	 * Compute the rotation matrix between the spaceship and the space
-	 * 
-	 * @return The rotation matrix between the spaceship and the space
-	 */
-	public Matrix rotMatrixModule_Space(Vect3D orientation) {
-		Matrix rotx = new Matrix();
-		rotx.setCoef(1, 1, 1);
-		rotx.setCoef(2, 2, Math.cos(orientation.x));
-		rotx.setCoef(3, 3, Math.cos(orientation.x));
-		rotx.setCoef(2, 3, -Math.sin(orientation.x));
-		rotx.setCoef(3, 2, Math.sin(orientation.x));
-
-		Matrix roty = new Matrix();
-		roty.setCoef(2, 2, 1);
-		roty.setCoef(1, 1, Math.cos(orientation.y));
-		roty.setCoef(3, 3, Math.cos(orientation.y));
-		roty.setCoef(1, 3, Math.sin(orientation.y));
-		roty.setCoef(3, 1, -Math.sin(orientation.y));
-
-		Matrix rotz = new Matrix();
-		rotz.setCoef(3, 3, 1);
-		rotz.setCoef(1, 1, Math.cos(orientation.z));
-		rotz.setCoef(2, 2, Math.cos(orientation.z));
-		rotz.setCoef(1, 2, -Math.sin(orientation.z));
-		rotz.setCoef(2, 1, Math.sin(orientation.z));
-
-		return Matrix.multiply(Matrix.multiply(rotz, roty), rotx);
 	}
 
 }

@@ -31,9 +31,9 @@ public class Cube {
 	}
 
 	public void setAngles(Vect3D angles) {
-		this.angles.x = angles.x;
-		this.angles.y = angles.y;
-		this.angles.z = angles.z;
+		this.angles.x = (int) angles.x % 360 + (angles.x - (int) angles.x);
+		this.angles.y = (int) angles.y % 360 + (angles.y - (int) angles.y);
+		this.angles.z = (int) angles.z % 360 + (angles.z - (int) angles.z);
 	}
 
 	public void setSize(Vect3D size) {

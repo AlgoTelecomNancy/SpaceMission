@@ -23,7 +23,7 @@ public class DisplayTests {
 
 		sub1.setPosition(new Vect3D(0, 0, 3));
 
-		sub1.setForce(new Vect3D(0, 0, 1));
+		test.getChildren().get(0).setForce(new Vect3D(0,0,0));
 
 		return test;
 	}
@@ -40,9 +40,12 @@ public class DisplayTests {
 			window.getDisplay().addCube(cube);
 		}
 
+		int j = 0;
 		while (true) {
+			j++;
 			System.out.println(spaceship.getPosition());
 			spaceship.updateState(1. / 60);
+			
 			window.getCamera().setFocusedPoint(spaceship.getPosition());
 
 			for (int i = 0; i < spaceship.getChildren().size(); ++i) {
@@ -57,6 +60,9 @@ public class DisplayTests {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			
+			
+			spaceship.getChildren().get(0).setForce(new Vect3D());
 		}
 	}
 

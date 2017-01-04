@@ -156,20 +156,44 @@ public class Body {
 	public void updateState(double deltaTime){
 		
 		if(this.parent == null){
-		
+			
+			Vect3D deltaPosition = this.speed.mult(deltaTime);
+			Vect3D deltaRotPosition = this.rotSpeed.mult(deltaTime);
+	
+			Vect3D deltaSpeed = this.acceleration.mult(deltaTime);
+			Vect3D deltaRotSpeed = this.rotAcceleration.mult(deltaTime);
+	
+			Vect3D deltaAcceleration = this.force.mult(1/this.mass);
+			Vect3D deltaRotAcceleration = this.force.mult(1/this.mass);
+			
+			this.position = this.position.add(deltaPosition);
+			this.rotPosition = this.rotPosition.add(deltaRotPosition);
+			
+			this.speed = this.speed.add(deltaSpeed);
+			this.rotSpeed = this.rotSpeed.add(deltaRotSpeed);
+			
+			this.acceleration = this.acceleration.add(deltaAcceleration);
+			this.rotAcceleration = this.rotAcceleration.add(deltaRotAcceleration);
+			
 			for(Body child : this.children){
-				child.updateState(deltaTime);
+				child.updatePosition(this.position, this.rotPosition, deltaRotPosition);
 			}
 			
-			this.position = this.position.add( this.speed.mult(deltaTime) );
-			this.rotPosition = this.rotPosition.add( this.rotSpeed.mult(deltaTime) );
-	
-			this.speed = this.speed.add( this.acceleration = new Vect3D().mult(deltaTime) );
-			this.rotSpeed = this.rotSpeed.add( this.rotAcceleration = new Vect3D().mult(deltaTime) );
-	
-			this.acceleration = this.force.mult(1/this.mass);
-			this.rotAcceleration = this.force.mult(1/this.mass);
+		}
 		
+	}
+	
+	public void updatePosition(Vect3D parentPosition, Vect3D parentRotPosition, Vect3D parentDeltaRotPosition){
+		
+		Matrix rotateMatrix = rotMatrixModule_Space(parentRotPosition);
+		
+		this.rotPosition = this.rotPosition.add(parentDeltaRotPosition);
+		
+		this.position = rotateMatrix.multiply(parentPosition.minus(this.position));
+		this.position.add(parentPosition);
+		
+		for(Body child : this.children){
+			child.updatePosition(parentPosition, parentRotPosition, parentDeltaRotPosition);
 		}
 		
 	}
@@ -188,6 +212,43 @@ public class Body {
 
 	public void getMoment(Vect3D moment) {
 		this.moment = moment;
+	}
+	
+	/** get children
+	 * 
+	 */
+	public ArrayList<Body> getChildren(){
+		return this.children;
+	}
+	
+	/**
+	 * Compute the rotation matrix between the spaceship and the space
+	 * 
+	 * @return The rotation matrix between the spaceship and the space
+	 */
+	public Matrix rotMatrixModule_Space(Vect3D orientation) {
+		Matrix rotx = new Matrix();
+		rotx.setCoef(1, 1, 1);
+		rotx.setCoef(2, 2, Math.cos(orientation.x));
+		rotx.setCoef(3, 3, Math.cos(orientation.x));
+		rotx.setCoef(2, 3, -Math.sin(orientation.x));
+		rotx.setCoef(3, 2, Math.sin(orientation.x));
+
+		Matrix roty = new Matrix();
+		roty.setCoef(2, 2, 1);
+		roty.setCoef(1, 1, Math.cos(orientation.y));
+		roty.setCoef(3, 3, Math.cos(orientation.y));
+		roty.setCoef(1, 3, Math.sin(orientation.y));
+		roty.setCoef(3, 1, -Math.sin(orientation.y));
+
+		Matrix rotz = new Matrix();
+		rotz.setCoef(3, 3, 1);
+		rotz.setCoef(1, 1, Math.cos(orientation.z));
+		rotz.setCoef(2, 2, Math.cos(orientation.z));
+		rotz.setCoef(1, 2, -Math.sin(orientation.z));
+		rotz.setCoef(2, 1, Math.sin(orientation.z));
+
+		return Matrix.multiply(Matrix.multiply(rotz, roty), rotx);
 	}
 	
 }

@@ -2,6 +2,7 @@ package physics;
 
 import java.util.ArrayList;
 
+import maths.Matrix;
 import maths.Vect3D;
 
 /**
@@ -128,9 +129,16 @@ public class Body {
 		
 		//Update force at barycenter
 		this.force = new Vect3D();
-		this.moment = new Vect3D();
+		this.moment = new Vect3D();		
 		for(Body child : this.children){
-			
+			this.force = this.force.add(child.getForce()); //Add forces
+			this.moment = this.moment.add( //Add all moments
+					child.moment.add( //Moment on the child
+							child.getForce().vectProd( //Force on the child ^
+									this.position.minus(child.position) //Distance parent-child
+									)
+							)
+					);
 		}
 		
 		
@@ -165,13 +173,21 @@ public class Body {
 		}
 		
 	}
-	
-	public Vect3D getSpeed() {
-		return speed;
+
+	public Vect3D getForce() {
+		return force;
 	}
 
-	public void setSpeed(Vect3D speed) {
-		this.speed = speed;
+	public void setForce(Vect3D force) {
+		this.force = force;
+	}
+	
+	public Vect3D getMoment() {
+		return moment;
+	}
+
+	public void getMoment(Vect3D moment) {
+		this.moment = moment;
 	}
 	
 }

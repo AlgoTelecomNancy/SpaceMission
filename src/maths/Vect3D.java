@@ -16,6 +16,19 @@ public class Vect3D {
 		
 	}
 	
+	public double getCoef(int i) {
+		switch (i) {
+		case 0:
+			return x;
+		case 1:
+			return y;
+		case 2:
+			return z;
+		}
+		System.out.println("Wrong coef ("+i+") in Vect3D.getCoef(int i)");
+		return 0;
+	}
+	
 	/**
 	 * Return a new vector that is this one minus the parameter
 	 * @param Vect3D v vect2
@@ -31,6 +44,14 @@ public class Vect3D {
 	
 	public Vect3D mult(double m){
 		return new Vect3D(this.x*m, this.y*m, this.z*m);
+	}
+	
+	public Vect3D vectProd(Vect3D v){
+		return new Vect3D(
+				this.y*v.z - this.z*v.y,
+				this.z*v.x - this.x*v.z,
+				this.x*v.y - this.y*v.x
+				);
 	}
 	
 	/**

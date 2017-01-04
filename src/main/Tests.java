@@ -23,8 +23,8 @@ public class Tests {
 
 		sub1.setPosition(new Vect3D(0,0,2));
 		
-		sub1.setForce(new Vect3D(0,0,1));
-		
+		sub1.setForce(new Vect3D(0,1,0));
+				
 		double deltaTime = 0.1;
 		test.updateState(deltaTime);
 		

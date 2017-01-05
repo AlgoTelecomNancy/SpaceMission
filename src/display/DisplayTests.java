@@ -37,31 +37,17 @@ public class DisplayTests {
 		Window window = new Window();
 
 		Body spaceship = getSpaceShip();
+		spaceship.setRotPosition(new Vect3D(0,0,0));
+		
+		window.getDisplay().attach(spaceship);
 
-		for (Body child : spaceship.getChildren()) {
-			Cube cube = new Cube(child.getPosition(),
-					new Vect3D(child.getRadius() * 2, child.getRadius() * 2, child.getRadius() * 2),
-					child.getRotPosition());
-			window.getDisplay().addCube(cube);
-		}
-		
-		window.getDisplay().addCube(new Cube(new Vect3D(),
-				new Vect3D(0.5,0.5,0.5),
-				new Vect3D()));
-		
-		
-		int j = 0;
 		while (true) {
-			j++;
 			
 			spaceship.updateState(1. / 60);
 
 			window.getCamera().setFocusedPoint(spaceship.getPosition());
 
-			for (int i = 0; i < spaceship.getChildren().size(); ++i) {
-				window.getDisplay().getCube(i).setPosition(spaceship.getChildren().get(i).getAbsolutePosition());
-				window.getDisplay().getCube(i).setAngles(spaceship.getChildren().get(i).getAbsoluteRotPosition());
-			}
+			window.getDisplay().update();
 
 			
 			try {

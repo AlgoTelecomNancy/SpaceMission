@@ -42,31 +42,6 @@ public class Cube {
 		this.size.y = size.y;
 		this.size.z = size.z;
 	}
-	
-	//TODO Contain errors !
-	private Vect3D getRotatedVector(Vect3D vector, Vect3D angles) {
-		Vect3D newVector = vector;
-
-		Vect3D oldVector = vector;
-		newVector.y = (float) (oldVector.y * Math.cos(angles.x)
-				- oldVector.z * Math.sin(angles.x));
-		newVector.z = (float) (oldVector.y * Math.sin(angles.x)
-				+ oldVector.z * Math.cos(angles.x));
-
-		oldVector = newVector;
-		newVector.z = (float) (oldVector.z * Math.cos(angles.y)
-				- oldVector.x * Math.sin(angles.y));
-		newVector.x = (float) (oldVector.z * Math.sin(angles.y)
-				+ oldVector.x * Math.cos(angles.y));
-
-		oldVector = newVector;
-		newVector.x = (float) (oldVector.x * Math.cos(angles.z)
-				- oldVector.y * Math.sin(angles.z));
-		newVector.y = (float) (oldVector.x * Math.sin(angles.z)
-				+ oldVector.y * Math.cos(angles.z));
-
-		return newVector;
-	}
 
 	public void draw(GLAutoDrawable drawable, Camera3D camera) {
 		GL2 gl = drawable.getGL().getGL2();

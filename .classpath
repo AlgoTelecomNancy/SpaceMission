@@ -6,10 +6,5 @@
 	<classpathentry kind="lib" path="jogamp-all-platforms/jar/gluegen-rt.jar"/>
 	<classpathentry kind="lib" path="jogamp-all-platforms/jar/jogl-all-natives-windows-amd64.jar"/>
 	<classpathentry kind="lib" path="jogamp-all-platforms/jar/jogl-all.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Java3DLib">
-		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="SpaceMission/bin"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

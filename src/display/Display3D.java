@@ -1,11 +1,16 @@
 package display;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Vector;
 
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.glu.GLU;
+
+import maths.Vect3D;
+import physics.Body;
 
 
 public class Display3D implements GLEventListener {
@@ -87,4 +92,36 @@ public class Display3D implements GLEventListener {
 		else
 			focusedCube = -1;
 	}
+
+	//Observer
+	private ArrayList<Body> attachedBodies = new ArrayList<Body>();
+
+	public void attach(Body test) {
+		this.attachedBodies.add(test);
+	}
+	
+	private HashMap<Body,Integer> BodyToCube = new HashMap<Body,Integer>();
+
+	public void update(){
+		int i = 0;
+		for(Body body: attachedBodies){ //Each attached body
+			for(Body terminalBody: body.getAllTerminalBodies()){
+				if(BodyToCube.containsKey(terminalBody)){
+					i = BodyToCube.get(terminalBody);
+					this.getCube(i).setPosition(terminalBody.getAbsolutePosition());
+					this.getCube(i).setAngles(terminalBody.getAbsoluteRotPosition());
+				}else{
+					this.addCube(
+							new Cube(
+									terminalBody.getAbsolutePosition(),
+									new Vect3D(1, 1, 1).mult(terminalBody.getRadius()*2),
+									terminalBody.getAbsoluteRotPosition()
+							)
+						);
+					BodyToCube.put(terminalBody, this.cubes.size()-1);
+				}
+			}
+		}
+	}
+	
 }

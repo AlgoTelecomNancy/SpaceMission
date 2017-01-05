@@ -152,7 +152,7 @@ public class Body {
 										child.position //Distance parent-child
 								)));
 			}
-
+			
 		}
 
 		if (this.parent != null) {
@@ -168,6 +168,7 @@ public class Body {
 	 */
 	public void updateState(double deltaTime) {
 
+		//TODO Change deltaPosition calculation assuming that forces are LOCAL not GLOBAL
 		if (this.parent == null) { //Seulement le parent principal
  
 			Vect3D deltaPosition = this.speed.mult(deltaTime);
@@ -183,7 +184,7 @@ public class Body {
 			this.rotSpeed = this.rotSpeed.add(deltaRotSpeed);
 
 
-			this.acceleration = this.force.mult(1 / this.mass);
+			this.acceleration = VectRotation.rotate(this.force.mult(1 / this.mass), this.getAbsoluteRotPosition());
 			this.rotAcceleration = this.moment.mult(1 / this.mass);
 
 		}
@@ -233,6 +234,24 @@ public class Body {
 	 * 
 	 */
 	public ArrayList<Body> getChildren() {
+		return this.children;
+	}
+
+	public ArrayList<Body> getAllTerminalBodies() {
+		
+		ArrayList<Body> res = new ArrayList<Body>();
+		
+		if(this.children.size()==0){
+			res.add(this);
+			return res;
+		}
+		
+		for(Body child: this.children){
+			for(Body el: child.getAllTerminalBodies()){
+				res.add(el);
+			}
+		}
+		
 		return this.children;
 	}
 

@@ -78,14 +78,8 @@ public class Cube {
 		gl.glTranslatef((float) position.x, (float) position.y, (float) position.z);
 		
 		gl.glRotated(angles.z * (180/Math.PI), 0, 0, 1);
-		Vect3D rotated = getRotatedVector(new Vect3D(0, 1, 0), new Vect3D(0, 0, -angles.z));
-		gl.glRotated(angles.y * (180/Math.PI), rotated.x, rotated.y, rotated.z);
-		
-		rotated = getRotatedVector(new Vect3D(1, 0, 0), new Vect3D(0, -angles.y, 0));
-		rotated = getRotatedVector(rotated, new Vect3D(0, 0, -angles.z));
-		
-		gl.glRotated(angles.x * (180/Math.PI), rotated.x, rotated.y, rotated.z);
-		
+		gl.glRotated(angles.y * (180/Math.PI), 0, 1, 0);
+		gl.glRotated(angles.x * (180/Math.PI), 1, 0, 0);
 
 		gl.glScaled(size.x / 2, size.y / 2, size.z / 2);
 

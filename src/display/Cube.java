@@ -5,10 +5,10 @@ import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.glu.GLU;
 
 import maths.Vect3D;
-import maths.VectRotation;
 
 
-public class Cube {
+public class Cube implements DrawableObject {
+	
 	final public Vect3D position;
 	final public Vect3D size;
 	final public Vect3D angles;
@@ -20,9 +20,10 @@ public class Cube {
 		this.size = size.clone();
 		this.angles = angles.clone();
 	}
-
-	public Cube clone() {
-		return new Cube(position, size, angles);
+	
+	public Vect3D getPosition()
+	{
+		return position;
 	}
 
 	public void setPosition(Vect3D position) {

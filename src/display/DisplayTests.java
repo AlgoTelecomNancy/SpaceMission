@@ -39,7 +39,7 @@ public class DisplayTests {
 		Body spaceship = getSpaceShip();
 		spaceship.setRotPosition(new Vect3D(0,0,0));
 		DrawableSpaceship drawableSpaceship = new DrawableSpaceship(spaceship, window);
-
+		
 		while (true) {
 			
 			spaceship.updateState(1. / 60);

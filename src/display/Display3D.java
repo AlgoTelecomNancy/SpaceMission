@@ -11,25 +11,25 @@ import com.jogamp.opengl.glu.GLU;
 public class Display3D implements GLEventListener {
 	private GLU glu = new GLU();
 	private Camera3D camera;
-	private Vector<Cube> cubes;
-	private int focusedCube;
+	private Vector<DrawableObject> drawableObjects;
+	private int focusedObject;
 
 
 	Display3D(Camera3D camera) {
 		this.camera = camera;
-		this.cubes = new Vector<Cube>();
-		focusedCube = -1;
+		this.drawableObjects = new Vector<>();
+		focusedObject = -1;
 	}
 
 	public void display(GLAutoDrawable drawable) {
 		final GL2 gl = drawable.getGL().getGL2();
 
-		if (focusedCube > -1)
-			camera.setFocusedPoint(getCube(focusedCube).position);
+		if (focusedObject > -1)
+			camera.setFocusedPoint(getDrawableObject(focusedObject).getPosition());
 
 		gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
-		for (int i = 0; i < cubes.size(); ++i)
-			cubes.get(i).draw(drawable, camera);
+		for (int i = 0; i < drawableObjects.size(); ++i)
+			drawableObjects.get(i).draw(drawable, camera);
 		gl.glFlush();
 	}
 
@@ -62,29 +62,28 @@ public class Display3D implements GLEventListener {
 		gl.glLoadIdentity();
 	}
 
-	public int getCubeCount() {
-		return cubes.size();
+	public int getObjectCount() {
+		return drawableObjects.size();
 	}
 
-	public void addCube(Cube cube) {
-		cubes.add(cube);
+	public void addDrawableObject(DrawableObject cube) {
+		drawableObjects.add(cube);
 	}
 
-	public Cube getCube(int cubeId) {
-		if (cubeId >= 0 && cubeId < getCubeCount())
-			return cubes.get(cubeId);
+	public DrawableObject getDrawableObject(int cubeId) {
+		if (cubeId >= 0 && cubeId < getObjectCount())
+			return drawableObjects.get(cubeId);
 		return null;
 	}
 
-	public void removeCube(int cubeId) {
-		if (cubeId >= 0 && cubeId < getCubeCount())
-			cubes.remove(cubeId);
+	public void removeDrawableObject(DrawableObject object) {
+		drawableObjects.remove(object);
 	}
 
-	public void setFocusedCube(int cubeId) {
-		if (cubeId >= 0 && cubeId < getCubeCount())
-			focusedCube = cubeId;
+	public void setFocusedObject(int cubeId) {
+		if (cubeId >= 0 && cubeId < getObjectCount())
+			focusedObject = cubeId;
 		else
-			focusedCube = -1;
+			focusedObject = -1;
 	}	
 }

@@ -20,6 +20,10 @@ public class DrawableSpaceship {
 		this.window = window;
 	}
 	
+	public Body getSpaceship() {
+		return spaceship;
+	}
+	
 	public void updateSpaceship() {
 
 		for (int i = 0; i < spaceship.getAllTerminalBodies().size(); ++i) {
@@ -36,7 +40,18 @@ public class DrawableSpaceship {
 						(new Vect3D(1, 1, 1)).mult(child.getRadius() * 2));
 				addedChildBodies.add(child);
 				addedChildBodiesCubes.add(cube);
-				window.getDisplay().addCube(cube);
+				window.getDisplay().addDrawableObject(cube);
+			}
+		}
+		
+		for (int i = addedChildBodies.size() - 1; i >= 0; --i) {
+			Body child = addedChildBodies.get(i);
+			
+			if (!spaceship.getAllTerminalBodies().contains(child))
+			{
+				window.getDisplay().removeDrawableObject(addedChildBodiesCubes.get(i));
+				addedChildBodies.remove(i);
+				addedChildBodiesCubes.remove(i);
 			}
 		}
 	}

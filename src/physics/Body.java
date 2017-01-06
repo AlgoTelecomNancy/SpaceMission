@@ -21,20 +21,24 @@ public class Body {
 
 	private Body parent;
 	private ArrayList<Body> children = new ArrayList<Body>();
+	private boolean propertiesLock = false;
 
 	private double radius = 0;
 	private double mass = 0;
 
+	//Position is local and global if no parent
 	private Vect3D position = new Vect3D(); //Position relative to the parent body	
-	private Vect3D speed = new Vect3D();
-	private Vect3D acceleration = new Vect3D();
-
-	private Vect3D rotPosition = new Vect3D(); //RotPosition relative to the parent body	
-	private Vect3D rotSpeed = new Vect3D();
-	private Vect3D rotAcceleration = new Vect3D();
-
+	private Vect3D rotPosition = new Vect3D(); //RotPosition relative to the parent body
+	
+	//Force is local
 	private Vect3D force = new Vect3D();
 	private Vect3D moment = new Vect3D();
+	
+	//Acceleration and speed are absolute (space axis)
+	public Vect3D absoluteSpeed = new Vect3D();
+	public Vect3D absoluteAcceleration = new Vect3D();
+	public Vect3D absoluteRotSpeed = new Vect3D();
+	public Vect3D absoluteRotAcceleration = new Vect3D();
 
 
 	public Body() {
@@ -44,10 +48,12 @@ public class Body {
 	public void addChild(Body child) {
 		child.parent = this;
 		this.children.add(child);
+		this.updateProperties();
 	}
 
 	public void destroyChild(Body child) {
 		this.children.remove(child);
+		this.updateProperties();
 	}
 
 	/*
@@ -58,21 +64,36 @@ public class Body {
 			this.parent.destroyChild(this);
 		}
 	}
+	
+	/*
+	 * Détacher le corps
+	 */
+	public Body detach(){
+		this.position = this.getAbsolutePosition();
+		this.rotPosition = this.getAbsoluteRotPosition();
+		this.parent.destroyChild(this);
+		this.parent = null;
+		return this;
+	}
 
 	public void setRadius(double newRadius) {
 		this.radius = newRadius;
+		this.updateProperties();
 	}
 
 	public void setMass(double newMass) {
 		this.mass = newMass;
+		this.updateProperties();
 	}
 
 	public void setPosition(Vect3D newPosition) {
 		this.position = newPosition;
+		this.updateProperties();
 	}
 	
 	public void setRotPosition(Vect3D newRotPosition){
 		this.rotPosition = newRotPosition;
+		this.updateProperties();
 	}
 
 	public double getRadius() {
@@ -93,6 +114,9 @@ public class Body {
 
 	public void updateProperties() {
 		
+		if(propertiesLock){
+			return;
+		}
 
 		//Update mass
 		if(this.children.size()>0){
@@ -115,7 +139,7 @@ public class Body {
 			if(massSum!=0){
 				gravityCenterDelta = gravityCenterDelta.mult(1/massSum);
 			}
-			this.position = this.position.add(gravityCenterDelta); //Change position to have gravity center equal to 0
+			this.position = this.position.add(VectRotation.rotate(gravityCenterDelta,this.rotPosition)); //Change position to have gravity center equal to 0
 			if(gravityCenterDelta.size()!=0){
 				for (Body child : this.children) {
 					child.position = child.getPosition().minus(gravityCenterDelta);
@@ -168,25 +192,43 @@ public class Body {
 	 */
 	public void updateState(double deltaTime) {
 
-		//TODO Change deltaPosition calculation assuming that forces are LOCAL not GLOBAL
 		if (this.parent == null) { //Seulement le parent principal
  
-			Vect3D deltaPosition = this.speed.mult(deltaTime);
-			Vect3D deltaRotPosition = this.rotSpeed.mult(deltaTime);
+			Vect3D deltaPosition = this.absoluteSpeed.mult(deltaTime);
+			Vect3D deltaRotPosition = this.absoluteRotSpeed.mult(deltaTime);
 
-			Vect3D deltaSpeed = this.acceleration.mult(deltaTime);
-			Vect3D deltaRotSpeed = this.rotAcceleration.mult(deltaTime);
+			Vect3D deltaSpeed = this.absoluteAcceleration.mult(deltaTime);
+			Vect3D deltaRotSpeed = this.absoluteRotAcceleration.mult(deltaTime);
 
 			this.position = this.position.add(deltaPosition);
 			this.rotPosition = this.rotPosition.add(deltaRotPosition);
 
-			this.speed = this.speed.add(deltaSpeed);
-			this.rotSpeed = this.rotSpeed.add(deltaRotSpeed);
+			this.absoluteSpeed = this.absoluteSpeed.add(deltaSpeed);
+			this.absoluteRotSpeed = this.absoluteRotSpeed.add(deltaRotSpeed);
 
+			this.absoluteAcceleration = VectRotation.rotate(this.force.mult(1 / this.mass), this.getAbsoluteRotPosition());
+			this.absoluteRotAcceleration = this.moment.mult(1 / this.mass);
 
-			this.acceleration = VectRotation.rotate(this.force.mult(1 / this.mass), this.getAbsoluteRotPosition());
-			this.rotAcceleration = this.moment.mult(1 / this.mass);
+		}else{
+			//Children set current speed and acceleration
+			
+			//Absolute speed if parent exists =
+			// parentSpeed + ParentChildVector ^ parentRotSpeed
+			this.absoluteSpeed = parent.absoluteSpeed.add(
+					parent.absoluteRotSpeed.vectProd(VectRotation.rotate(this.position, this.getAbsoluteRotPosition()))
+					);
+			this.absoluteRotSpeed = parent.absoluteRotSpeed.clone();
 
+			this.absoluteAcceleration = parent.absoluteAcceleration.add(this.position.mult(
+						Math.pow(parent.absoluteRotSpeed.vectProd(this.position).size(),2)
+						/this.position.size()
+					));
+			this.absoluteRotAcceleration = parent.absoluteRotAcceleration.clone();
+			
+		}
+		
+		for(Body child: this.children){
+			child.updateState(deltaTime);
 		}
 
 	}
@@ -219,6 +261,7 @@ public class Body {
 
 	public void setForce(Vect3D force) {
 		this.force = force;
+		this.updateProperties();
 	}
 
 	public Vect3D getMoment() {
@@ -227,6 +270,7 @@ public class Body {
 
 	public void setMoment(Vect3D moment) {
 		this.moment = moment;
+		this.updateProperties();
 	}
 
 	/**
@@ -253,6 +297,16 @@ public class Body {
 		}
 		
 		return this.children;
+	}
+
+	/**
+	 * Disable auto properties set
+	 */
+	public void lockProperties() {
+		this.propertiesLock = true;
+	}
+	public void unlockProperties() {
+		this.propertiesLock = false;
 	}
 
 }

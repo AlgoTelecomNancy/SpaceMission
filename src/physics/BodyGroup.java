@@ -129,5 +129,28 @@ public class BodyGroup extends BodySuperClass {
 		}
 
 	}
+	
+	public void updateAfterDetach(Vect3D diff_barycenter, BodyGroup oldGroup){
+		
+		Vect3D new_absoluteSpeed = oldGroup.absoluteSpeed.add(
+				oldGroup.absoluteRotSpeed.vectProd(VectRotation.rotate(diff_barycenter, this.getAbsoluteRotPosition()))
+				);
+		Vect3D new_absoluteRotSpeed = oldGroup.absoluteRotSpeed.clone();
+
+		Vect3D new_absoluteAcceleration = oldGroup.absoluteAcceleration.clone();
+		if(this.position.size()>0){
+			new_absoluteAcceleration = oldGroup.absoluteAcceleration.add(diff_barycenter.mult(
+						Math.pow(oldGroup.absoluteRotSpeed.vectProd(diff_barycenter).size(),2)
+						/diff_barycenter.size()
+					));
+		}
+		Vect3D new_absoluteRotAcceleration = oldGroup.absoluteRotAcceleration.clone();
+
+		this.absoluteSpeed = new_absoluteSpeed;
+		this.absoluteRotSpeed = new_absoluteRotSpeed;
+		this.absoluteAcceleration = new_absoluteAcceleration;
+		this.absoluteRotAcceleration = new_absoluteRotAcceleration;
+		
+	}
 
 }

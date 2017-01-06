@@ -23,9 +23,13 @@ public class TestsCentripete {
 		test.addBody(sub1);
 		test.addBody(sub2);
 		test.addBody(sub3);
+
+		sub1.attachTo(sub2);
+		sub1.attachTo(sub3);
+		
 		
 		sub1.setRadius(0.5);
-		sub1.setMass(1);
+		sub1.setMass(10);
 
 		sub2.setRadius(0.2);
 		sub2.setMass(1);
@@ -93,19 +97,16 @@ public class TestsCentripete {
 
 			
 			if(j==240){
-				/*spaceship.getChildren().get(0).setForce(new Vect3D());
-				spaceship.getChildren().get(2).setForce(new Vect3D());*/
-/*
-				spaceship.getChildren().get(2).setForce(new Vect3D());
-				spaceship.getChildren().get(1).setForce(new Vect3D());
+				spaceship.getDescendants().get(2).setForce(new Vect3D());
+				spaceship.getDescendants().get(1).setForce(new Vect3D());
 				
-				Body part = spaceship.getChildren().get(2).detach();
-				spaceships.add(new DrawableSpaceship(part, window));
-				spaceshipsBody.add(part);
-				
-				Body part2 = spaceship.getChildren().get(1).detach();
-				spaceships.add(new DrawableSpaceship(part2, window));
-				spaceshipsBody.add(part2);*/
+				BodyGroup part = spaceship.getDescendants().get(1).detachFrom(
+							spaceship.getDescendants().get(0)
+						);
+				if(part!=null){
+					spaceships.add(new DrawableSpaceship(part, window));
+					spaceshipsBody.add(part);
+				}
 			}
 			
 		}

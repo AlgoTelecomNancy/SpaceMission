@@ -1,6 +1,7 @@
 package physics;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import maths.Matrix;
 import maths.Vect3D;
@@ -24,6 +25,7 @@ public class Body extends BodySuperClass {
 	//Tree representation
 	private Body parent;
 	private ArrayList<Body> children = new ArrayList<Body>();
+	private ArrayList<Body> attached = new ArrayList<Body>();
 	
 	//Position is local and global if no parent
 	private Vect3D position = new Vect3D(); //Position relative to the parent body	
@@ -46,6 +48,15 @@ public class Body extends BodySuperClass {
 		this.updateProperties();
 	}
 
+	public void attachTo(Body body){
+		body.attached.add(this);
+		this.attached.add(body);
+	}
+	
+	public void removeLink(Body body){
+		body.attached.remove(this);
+		this.attached.remove(body);
+	}
 
 	public void setPosition(Vect3D newPosition) {
 		this.position = newPosition;
@@ -73,6 +84,13 @@ public class Body extends BodySuperClass {
 	public Vect3D getAbsoluteRotPosition() {
 		BodyInterface globalContext = getParentBody();
 		return globalContext.getAbsoluteRotPosition().add(this.rotPosition);
+	}
+	
+	public BodyGroup getGroup(){
+		if(this.parent==null){
+			return group;
+		}
+		return this.parent.group;
 	}
 
 	/**
@@ -155,8 +173,79 @@ public class Body extends BodySuperClass {
 	
 	/*
 	 * Détacher le corps
+	 * Retourne un objet qui représente la partie éventuellement détachée
+	 * Peut retourner null !!!
 	 */
-	public Body detach(){
+	public BodyGroup detachFrom(Body brother){
+		
+		this.removeLink(brother);
+		
+		boolean not_really_detached = false;
+		ArrayList<Body> found = new ArrayList<Body>();
+		ArrayList<Body> nextBrothers = brother.attached;
+		ArrayList<Body> temp_nextBrothers = new ArrayList<Body>();
+		boolean end = false;
+		boolean hasNextBrothers = false;
+		while(!end){
+			hasNextBrothers = false;
+			temp_nextBrothers = new ArrayList<Body>();
+			for(Body b : nextBrothers){
+				if(!found.contains(b)){
+					found.add(b);
+					hasNextBrothers = true;
+					temp_nextBrothers.addAll(b.attached);
+				}
+			}
+			nextBrothers = temp_nextBrothers;
+			if(!hasNextBrothers){
+				end = true;
+			}
+		}
+		
+		if(found.contains(this)){ //Ce détachement n'a pas créé d'autre groupe
+			return null;
+		}else{
+			//Sinon on créé un nouveau groupe et on y met les nouveaux éléments
+			//On met aussi à jour toutes les variables
+			
+			//Séparer les deux groupes
+			BodyGroup new_group = new BodyGroup();
+			for(Body b: found){
+				new_group.addBody(b);
+				if(this.group==null){
+					this.parent.removeChild(b);
+				}else{
+					this.group.removeBody(b);
+				}
+			}
+			
+			BodyGroup my_group = this.getGroup();
+			
+			//Mettre à jour les calculs
+			Vect3D old_common_barycenter = getParentBody().getAbsolutePosition();
+
+			new_group.updateProperties();
+			my_group.updateProperties();
+
+			Vect3D diff_my_barycenter = my_group.getAbsolutePosition().minus(old_common_barycenter).mult(-1);
+			Vect3D diff_newgroup_barycenter = new_group.getAbsolutePosition().minus(old_common_barycenter).mult(-1);
+
+			new_group.updateAfterDetach(diff_newgroup_barycenter, my_group);
+			my_group.updateAfterDetach(diff_my_barycenter, my_group);
+
+			return new_group;
+			
+		}
+	}
+	
+	/*
+	 * Détacher un corps de toutes ses attaches
+	 * Retourne la liste des nouveaux corps (dont l'objet lui même, mais sans l'objet considéré comme parent)
+	 * Retourne obligatoirement l'élément détaché de tout le reste
+	 */
+	public ArrayList<BodyGroup> detach(){
+		
+		
 		
 		return null;
 		

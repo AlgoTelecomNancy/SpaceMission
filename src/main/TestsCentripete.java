@@ -17,22 +17,29 @@ public class TestsCentripete {
 
 		Body sub1 = new Body();
 		Body sub2 = new Body();
+		Body sub3 = new Body();
 		
 		test.addChild(sub1);
 		test.addChild(sub2);
+		test.addChild(sub3);
 		
 		sub1.setRadius(0.5);
-		sub1.setMass(1);
+		sub1.setMass(3000);
 
-		sub2.setRadius(0.5);
+		sub2.setRadius(0.2);
 		sub2.setMass(1);
+		
+		sub3.setRadius(0.2);
+		sub3.setMass(1);
 
 		sub1.setPosition(new Vect3D(0, 0, 0));
-		sub2.setPosition(new Vect3D(0, 0, 2));
-		
-		sub1.setForce(new Vect3D(0,10,0));
-		sub2.setForce(new Vect3D(0,-10,0));
+		sub2.setPosition(new Vect3D(0, 0, -2));
+		sub3.setPosition(new Vect3D(0, 0, 2));
 
+		//sub1.setForce(new Vect3D(0,10,0));
+		sub2.setForce(new Vect3D(0,1000,0));
+		sub3.setForce(new Vect3D(0,1000,0));
+		
 		test.unlockProperties();
 		test.updateProperties();
 		
@@ -41,8 +48,8 @@ public class TestsCentripete {
 			test.updateState(1./60);
 		}
 		
-		test.getChildren().get(0).setForce(new Vect3D());
-		test.getChildren().get(1).setForce(new Vect3D());
+		//test.getChildren().get(0).setForce(new Vect3D());
+		//test.getChildren().get(1).setForce(new Vect3D());
 
 		return test;
 	}
@@ -66,14 +73,13 @@ public class TestsCentripete {
 			j++;
 			
 			for(Body sp: spaceshipsBody){
-				sp.updateState(1. / 60);
+				sp.updateState(1. / 160);
+				System.out.println(sp.getAbsolutePosition());
 			}
 			for(DrawableSpaceship sp: spaceships){
 				sp.updateSpaceship();
 			}
 			
-			//window.getCamera().setFocusedPoint(spaceship.getPosition());
-
 			
 			try {
 				Thread.sleep(1000 / 60);
@@ -85,8 +91,12 @@ public class TestsCentripete {
 					
 
 			
-			if(j==120){
-				Body part = spaceship.getChildren().get(0).detach();
+			if(j==240){
+				spaceship.getChildren().get(0).setForce(new Vect3D());
+				spaceship.getChildren().get(1).setForce(new Vect3D());
+				spaceship.getChildren().get(2).setForce(new Vect3D());
+
+				Body part = spaceship.getChildren().get(1).detach();
 				spaceships.add(new DrawableSpaceship(part, window));
 				spaceshipsBody.add(part);
 			}

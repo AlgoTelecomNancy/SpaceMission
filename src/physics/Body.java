@@ -23,8 +23,8 @@ public class Body {
 	private ArrayList<Body> children = new ArrayList<Body>();
 	private boolean propertiesLock = false;
 
-	private double radius = 0;
-	private double mass = 0;
+	private double radius = 1;
+	private double mass = 1;
 
 	//Position is local and global if no parent
 	private Vect3D position = new Vect3D(); //Position relative to the parent body	
@@ -55,23 +55,22 @@ public class Body {
 		this.children.remove(child);
 		this.updateProperties();
 	}
-
-	/*
-	 * Destruction du corps
-	 */
-	public void die() {
-		if (this.parent != null) {
-			this.parent.destroyChild(this);
-		}
-	}
 	
 	/*
 	 * Détacher le corps
 	 */
 	public Body detach(){
+		
 		this.position = this.getAbsolutePosition();
-		this.rotPosition = this.getAbsoluteRotPosition();
+		this.rotPosition = this.getAbsoluteRotPosition();		
 		this.parent.destroyChild(this);
+		
+
+		//Recalculer les données d'accélération et vitesse du corps parent
+		//this.parent.absoluteAcceleration = this.parent.absoluteAcceleration.minus(this.absoluteAcceleration);
+		//this.parent.absoluteSpeed = this.parent.absoluteSpeed.minus(this.absoluteSpeed);
+		
+
 		this.parent = null;
 		return this;
 	}
@@ -207,7 +206,7 @@ public class Body {
 			this.absoluteRotSpeed = this.absoluteRotSpeed.add(deltaRotSpeed);
 
 			this.absoluteAcceleration = VectRotation.rotate(this.force.mult(1 / this.mass), this.getAbsoluteRotPosition());
-			this.absoluteRotAcceleration = this.moment.mult(1 / this.mass);
+			this.absoluteRotAcceleration = this.moment.mult(-1 / this.mass);
 
 		}else{
 			//Children set current speed and acceleration
@@ -219,10 +218,12 @@ public class Body {
 					);
 			this.absoluteRotSpeed = parent.absoluteRotSpeed.clone();
 
+			if(this.position.size()>0){
 			this.absoluteAcceleration = parent.absoluteAcceleration.add(this.position.mult(
 						Math.pow(parent.absoluteRotSpeed.vectProd(this.position).size(),2)
 						/this.position.size()
 					));
+			}
 			this.absoluteRotAcceleration = parent.absoluteRotAcceleration.clone();
 			
 		}

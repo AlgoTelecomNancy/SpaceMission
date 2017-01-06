@@ -3,6 +3,7 @@ package display;
 import java.util.ArrayList;
 
 import maths.Vect3D;
+import maths.VectRotation;
 import physics.Body;
 
 public class DrawableSpaceship {
@@ -28,7 +29,7 @@ public class DrawableSpaceship {
 	
 	private Line getForceLine(Body body) {
 		Vect3D vertex1 = body.getAbsolutePosition();
-		Vect3D vertex2 = body.getAbsolutePosition().add(body.getForce().getNormalized().mult(-20));
+		Vect3D vertex2 = body.getAbsolutePosition().add(VectRotation.rotate(body.getForce().getNormalized().mult(-1), body.getAbsoluteRotPosition()));
 		
 		System.out.println(body.getForce());
 		

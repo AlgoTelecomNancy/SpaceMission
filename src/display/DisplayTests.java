@@ -20,16 +20,17 @@ public class DisplayTests {
 		test.addChild(sub2);
 		
 		sub1.setRadius(0.5);
-		sub1.setMass(1);
+		sub1.setMass(10);
 
-		sub2.setRadius(0.5);
-		sub2.setMass(1);
+		sub2.setRadius(0.1);
+		sub2.setMass(0.1);
 
 		sub1.setPosition(new Vect3D(0, 0, 0));
-		sub2.setPosition(new Vect3D(0, 0, 2));
+		sub2.setPosition(new Vect3D(0, 0, 5));
 		
 		sub1.setForce(new Vect3D(0,10,0));
-		sub2.setForce(new Vect3D(0,-10,0));
+		//sub2.setForce(new Vect3D(0,-10,0));
+
 
 		test.unlockProperties();
 		test.updateProperties();
@@ -38,7 +39,7 @@ public class DisplayTests {
 		for(i=0;i<10;i++){
 			test.updateState(1./60);
 		}
-		
+
 		test.getChildren().get(0).setForce(new Vect3D());
 		test.getChildren().get(1).setForce(new Vect3D());
 
@@ -81,11 +82,11 @@ public class DisplayTests {
 			}
 
 			
-			if(j==120){
+			/*if(j==120){
 				Body part = spaceship.getChildren().get(0).detach();
 				spaceships.add(new DrawableSpaceship(part, window));
 				spaceshipsBody.add(part);
-			}
+			}*/
 			
 		}
 	}

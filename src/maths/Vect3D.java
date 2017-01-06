@@ -69,6 +69,9 @@ public class Vect3D {
 	}
 	
 	public Vect3D getNormalized(){
+		if(size()==0){
+			return new Vect3D();
+		}
 		return this.mult(1 / size());
 	}
 

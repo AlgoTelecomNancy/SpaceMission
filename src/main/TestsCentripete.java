@@ -6,12 +6,13 @@ import display.DrawableSpaceship;
 import display.Window;
 import maths.Vect3D;
 import physics.Body;
+import physics.BodyGroup;
 
 
 public class TestsCentripete {
 
-	static private Body getSpaceShip() {
-		Body test = new Body();
+	static private BodyGroup getSpaceShip() {
+		BodyGroup test = new BodyGroup();
 		
 		test.lockProperties();
 
@@ -19,9 +20,9 @@ public class TestsCentripete {
 		Body sub2 = new Body();
 		Body sub3 = new Body();
 		
-		test.addChild(sub1);
-		test.addChild(sub2);
-		test.addChild(sub3);
+		test.addBody(sub1);
+		test.addBody(sub2);
+		test.addBody(sub3);
 		
 		sub1.setRadius(0.5);
 		sub1.setMass(1);
@@ -57,11 +58,11 @@ public class TestsCentripete {
 	public static void main(String[] args) {
 		Window window = new Window();
 
-		Body spaceship = getSpaceShip();
+		BodyGroup spaceship = getSpaceShip();
 		spaceship.setRotPosition(new Vect3D(0,0,0));
 		
 		ArrayList<DrawableSpaceship> spaceships = new ArrayList<DrawableSpaceship>();
-		ArrayList<Body> spaceshipsBody = new ArrayList<Body>();
+		ArrayList<BodyGroup> spaceshipsBody = new ArrayList<BodyGroup>();
 
 		spaceships.add(new DrawableSpaceship(spaceship, window));
 		spaceshipsBody.add(spaceship);
@@ -72,7 +73,7 @@ public class TestsCentripete {
 		while (true) {
 			j++;
 			
-			for(Body sp: spaceshipsBody){
+			for(BodyGroup sp: spaceshipsBody){
 				sp.updateState(1. / 160);
 				System.out.println(sp.getAbsolutePosition());
 			}
@@ -94,7 +95,7 @@ public class TestsCentripete {
 			if(j==240){
 				/*spaceship.getChildren().get(0).setForce(new Vect3D());
 				spaceship.getChildren().get(2).setForce(new Vect3D());*/
-
+/*
 				spaceship.getChildren().get(2).setForce(new Vect3D());
 				spaceship.getChildren().get(1).setForce(new Vect3D());
 				
@@ -104,7 +105,7 @@ public class TestsCentripete {
 				
 				Body part2 = spaceship.getChildren().get(1).detach();
 				spaceships.add(new DrawableSpaceship(part2, window));
-				spaceshipsBody.add(part2);
+				spaceshipsBody.add(part2);*/
 			}
 			
 		}

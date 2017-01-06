@@ -6,18 +6,19 @@ import java.util.ArrayList;
 import maths.Vect3D;
 import maths.VectRotation;
 import physics.Body;
+import physics.BodySuperClass;
 
 
 public class DrawableSpaceship {
 
-	private Body spaceship;
+	private BodySuperClass spaceship;
 	private ArrayList<Body> addedChildBodies;
 	private ArrayList<Cube> addedChildBodiesCubes;
 	private ArrayList<Line> addedChildBodiesForceLine;
 	private Window window;
 
 
-	public DrawableSpaceship(Body spaceship, Window window) {
+	public DrawableSpaceship(BodySuperClass spaceship, Window window) {
 
 		this.spaceship = spaceship;
 		this.addedChildBodies = new ArrayList<Body>();
@@ -26,7 +27,7 @@ public class DrawableSpaceship {
 		this.window = window;
 	}
 
-	public Body getSpaceship() {
+	public BodySuperClass getSpaceship() {
 		return spaceship;
 	}
 

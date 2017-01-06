@@ -33,7 +33,7 @@ public class Tests {
 		test.updateProperties();
 		
 		
-		window.getDisplay().attach(test);
+		//window.getDisplay().attach(test);
 
 	
 	}

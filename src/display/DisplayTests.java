@@ -38,16 +38,14 @@ public class DisplayTests {
 
 		Body spaceship = getSpaceShip();
 		spaceship.setRotPosition(new Vect3D(0,0,0));
-		
-		window.getDisplay().attach(spaceship);
+		DrawableSpaceship drawableSpaceship = new DrawableSpaceship(spaceship, window);
 
 		while (true) {
 			
 			spaceship.updateState(1. / 60);
-
+			drawableSpaceship.updateSpaceship();
+			
 			window.getCamera().setFocusedPoint(spaceship.getPosition());
-
-			window.getDisplay().update();
 
 			
 			try {

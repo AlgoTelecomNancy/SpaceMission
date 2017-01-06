@@ -1,12 +1,14 @@
-package display;
+package main;
 
 import java.util.ArrayList;
 
+import display.DrawableSpaceship;
+import display.Window;
 import maths.Vect3D;
 import physics.Body;
 
 
-public class DisplayTests {
+public class TestsCentripete {
 
 	static private Body getSpaceShip() {
 		Body test = new Body();
@@ -56,9 +58,10 @@ public class DisplayTests {
 
 		spaceships.add(new DrawableSpaceship(spaceship, window));
 		spaceshipsBody.add(spaceship);
+		
+		window.getCamera().setPosition(new Vect3D(-10,0,0));;
 
 		int j =0;
-
 		while (true) {
 			j++;
 			
@@ -79,6 +82,7 @@ public class DisplayTests {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+					
 
 			
 			if(j==120){

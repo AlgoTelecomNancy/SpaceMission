@@ -24,7 +24,7 @@ public class TestsCentripete {
 		test.addChild(sub3);
 		
 		sub1.setRadius(0.5);
-		sub1.setMass(3000);
+		sub1.setMass(1);
 
 		sub2.setRadius(0.2);
 		sub2.setMass(1);
@@ -37,8 +37,8 @@ public class TestsCentripete {
 		sub3.setPosition(new Vect3D(0, 0, 2));
 
 		//sub1.setForce(new Vect3D(0,10,0));
-		sub2.setForce(new Vect3D(0,1000,0));
-		sub3.setForce(new Vect3D(0,1000,0));
+		sub2.setForce(new Vect3D(0,4,0));
+		sub3.setForce(new Vect3D(0,3,0));
 		
 		test.unlockProperties();
 		test.updateProperties();
@@ -66,7 +66,7 @@ public class TestsCentripete {
 		spaceships.add(new DrawableSpaceship(spaceship, window));
 		spaceshipsBody.add(spaceship);
 		
-		window.getCamera().setPosition(new Vect3D(-10,0,0));;
+		window.getCamera().setPosition(new Vect3D(-20,0,0));;
 
 		int j =0;
 		while (true) {
@@ -92,13 +92,19 @@ public class TestsCentripete {
 
 			
 			if(j==240){
-				spaceship.getChildren().get(0).setForce(new Vect3D());
-				spaceship.getChildren().get(1).setForce(new Vect3D());
-				spaceship.getChildren().get(2).setForce(new Vect3D());
+				/*spaceship.getChildren().get(0).setForce(new Vect3D());
+				spaceship.getChildren().get(2).setForce(new Vect3D());*/
 
-				Body part = spaceship.getChildren().get(1).detach();
+				spaceship.getChildren().get(2).setForce(new Vect3D());
+				spaceship.getChildren().get(1).setForce(new Vect3D());
+				
+				Body part = spaceship.getChildren().get(2).detach();
 				spaceships.add(new DrawableSpaceship(part, window));
 				spaceshipsBody.add(part);
+				
+				Body part2 = spaceship.getChildren().get(1).detach();
+				spaceships.add(new DrawableSpaceship(part2, window));
+				spaceshipsBody.add(part2);
 			}
 			
 		}

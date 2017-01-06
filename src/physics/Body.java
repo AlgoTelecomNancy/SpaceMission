@@ -62,14 +62,36 @@ public class Body {
 	public Body detach(){
 		
 		this.position = this.getAbsolutePosition();
-		this.rotPosition = this.getAbsoluteRotPosition();		
+		this.rotPosition = this.getAbsoluteRotPosition();
+		
+		Vect3D old_barycenter = this.parent.getAbsolutePosition();
+		
 		this.parent.destroyChild(this);
 		
+		Vect3D new_barycenter = this.parent.getAbsolutePosition().minus(old_barycenter).mult(-1);
 
-		//Recalculer les données d'accélération et vitesse du corps parent
-		//this.parent.absoluteAcceleration = this.parent.absoluteAcceleration.minus(this.absoluteAcceleration);
-		//this.parent.absoluteSpeed = this.parent.absoluteSpeed.minus(this.absoluteSpeed);
 		
+		
+		//Recalculer les données d'accélération et vitesse du corps parent
+
+		Vect3D new_absoluteSpeed = this.parent.absoluteSpeed.add(
+				this.parent.absoluteRotSpeed.vectProd(VectRotation.rotate(new_barycenter, this.getAbsoluteRotPosition()))
+				);
+		Vect3D new_absoluteRotSpeed = this.parent.absoluteRotSpeed.clone();
+
+		Vect3D new_absoluteAcceleration = this.parent.absoluteAcceleration.clone();
+		if(this.position.size()>0){
+			new_absoluteAcceleration = this.parent.absoluteAcceleration.add(new_barycenter.mult(
+						Math.pow(this.parent.absoluteRotSpeed.vectProd(new_barycenter).size(),2)
+						/new_barycenter.size()
+					));
+		}
+		Vect3D new_absoluteRotAcceleration = this.parent.absoluteRotAcceleration.clone();
+
+		this.parent.absoluteSpeed = new_absoluteSpeed;
+		this.parent.absoluteRotSpeed = new_absoluteRotSpeed;
+		this.parent.absoluteAcceleration = new_absoluteAcceleration;
+		this.parent.absoluteRotAcceleration = new_absoluteRotAcceleration;
 
 		this.parent = null;
 		return this;

@@ -10,6 +10,7 @@ public class DrawableSpaceship {
 	private Body spaceship;
 	private ArrayList<Body> addedChildBodies;
 	private ArrayList<Cube> addedChildBodiesCubes;
+	private ArrayList<Line> addedChildBodiesForceLine;
 	private Window window;
 	
 	public DrawableSpaceship(Body spaceship, Window window) {
@@ -17,11 +18,21 @@ public class DrawableSpaceship {
 		this.spaceship = spaceship;
 		this.addedChildBodies = new ArrayList<Body>();
 		this.addedChildBodiesCubes = new ArrayList<Cube>();
+		this.addedChildBodiesForceLine = new ArrayList<Line>();
 		this.window = window;
 	}
 	
 	public Body getSpaceship() {
 		return spaceship;
+	}
+	
+	private Line getForceLine(Body body) {
+		Vect3D vertex1 = body.getAbsolutePosition();
+		Vect3D vertex2 = body.getAbsolutePosition().add(body.getForce().getNormalized().mult(-20));
+		
+		System.out.println(body.getForce());
+		
+		return new Line(vertex1, vertex2);
 	}
 	
 	public void updateSpaceship() {
@@ -33,6 +44,8 @@ public class DrawableSpaceship {
 				addedChildBodiesCubes.get(i).setPosition(child.getAbsolutePosition());
 				addedChildBodiesCubes.get(i).setAngles(child.getAbsoluteRotPosition());
 				addedChildBodiesCubes.get(i).setSize((new Vect3D(1, 1, 1)).mult(child.getRadius() * 2));
+				addedChildBodiesForceLine.get(i).setVertex1(getForceLine(child).getVertex1());
+				addedChildBodiesForceLine.get(i).setVertex2(getForceLine(child).getVertex2());
 			}
 			else {
 				Cube cube = new Cube(child.getAbsolutePosition(),
@@ -41,6 +54,10 @@ public class DrawableSpaceship {
 				addedChildBodies.add(child);
 				addedChildBodiesCubes.add(cube);
 				window.getDisplay().addDrawableObject(cube);
+				
+				Line force = getForceLine(child);
+				addedChildBodiesForceLine.add(force);
+				window.getDisplay().addDrawableObject(force);
 			}
 		}
 		

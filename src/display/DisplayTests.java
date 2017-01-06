@@ -56,8 +56,8 @@ public class DisplayTests {
 				e.printStackTrace();
 			}
 			
-			spaceship.getChildren().get(0).setForce(new Vect3D());
-			spaceship.getChildren().get(1).setForce(new Vect3D());
+			//spaceship.getChildren().get(0).setForce(new Vect3D());
+			//spaceship.getChildren().get(1).setForce(new Vect3D());
 
 		}
 	}

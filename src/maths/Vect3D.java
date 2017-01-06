@@ -67,6 +67,10 @@ public class Vect3D {
 						Math.pow(this.y, 2) +
 						Math.pow(this.z, 2));
 	}
+	
+	public Vect3D getNormalized(){
+		return this.mult(1 / size());
+	}
 
 	public String toString() {
 		return "(" + x + "; " + y + "; " + z + ")";

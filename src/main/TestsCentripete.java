@@ -82,7 +82,6 @@ public class TestsCentripete {
 		
 		//test.getChildren().get(0).setForce(new Vect3D());
 		//test.getChildren().get(1).setForce(new Vect3D());
-		
 
 		return test;
 	}
@@ -105,12 +104,14 @@ public class TestsCentripete {
 		
 		window.getCamera().setPosition(new Vect3D(-20,0,0));
 
+		double mod_deltaTime = 1. / 160;
+		
 		int j =0;
 		while (true) {
 			j++;
 			
 			for(BodyGroup sp: spaceshipsBody){
-				sp.updateState(1. / 160);
+				sp.updateState(mod_deltaTime);
 			}
 			for(DrawableSpaceship sp: spaceships){
 				sp.updateSpaceship();
@@ -145,8 +146,12 @@ public class TestsCentripete {
 				
 			}
 			
+			if(j==130){
+				mod_deltaTime = mod_deltaTime/10;
+			}
+			
 			if(j==140){
-				
+								
 				ArrayList<BodyGroup> parts = spaceship.getDescendants().get(0).detach();
 				
 				spaceships.remove(spaceship);

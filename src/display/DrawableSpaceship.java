@@ -44,7 +44,7 @@ public class DrawableSpaceship {
 
 	private Line getForceLine(Body body) {
 		Vect3D vertex1 = body.getAbsolutePosition();
-		Vect3D vertex2 = body.getAbsolutePosition().add(VectRotation.rotate(body.getSpeed().mult(-0.3), body.getAbsoluteRotPosition()));
+		Vect3D vertex2 = body.getAbsolutePosition().add(VectRotation.rotate(body.getSpeed().mult(-0.3), body.getGroup().getAbsoluteRotPosition().mult(0)));
 
 		//System.out.println(body.getForce());
 

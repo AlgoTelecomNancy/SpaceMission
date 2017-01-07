@@ -17,11 +17,17 @@ public class TestsCentripete {
 		test.lockProperties();
 
 		Body sub1 = new Body();
+		sub1.debugString = "hi, I'm number 1 bigone";
 		Body sub2 = new Body();
+		sub2.debugString = "hi, I'm number 2";
 		Body sub3 = new Body();
+		sub3.debugString = "hi, I'm number 3";
 		Body sub4 = new Body();
+		sub4.debugString = "hi, I'm number 4";
 		Body sub5 = new Body();
+		sub5.debugString = "hi, I'm number 5";
 		Body sub6 = new Body();
+		sub6.debugString = "hi, I'm number 6";
 
 		test.addBody(sub1);
 		test.addBody(sub2);
@@ -62,7 +68,10 @@ public class TestsCentripete {
 		sub6.setPosition(new Vect3D(0, 2, 0));
 		sub4.setPosition(new Vect3D(0, 0, -3));
 
-		sub1.setForce(new Vect3D(0,0,0)); sub2.setForce(new Vect3D(10,15,0)); sub3.setForce(new Vect3D(-10,-15,0));
+
+		sub1.setForce(new Vect3D(0,0,0));
+		sub2.setForce(new Vect3D(10,15,0));
+		sub3.setForce(new Vect3D(-10,-10,0));
 		
 		test.unlockProperties();
 		test.updateProperties();
@@ -74,7 +83,6 @@ public class TestsCentripete {
 		
 		//test.getChildren().get(0).setForce(new Vect3D());
 		//test.getChildren().get(1).setForce(new Vect3D());
-		
 
 		return test;
 	}
@@ -97,12 +105,14 @@ public class TestsCentripete {
 		
 		window.getCamera().setPosition(new Vect3D(-20,0,0));
 
+		double mod_deltaTime = 1. / 160;
+		
 		int j =0;
 		while (true) {
 			j++;
 			
 			for(BodyGroup sp: spaceshipsBody){
-				sp.updateState(1. / 160);
+				sp.updateState(mod_deltaTime);
 			}
 			for(DrawableSpaceship sp: spaceships){
 				sp.updateSpaceship();
@@ -137,13 +147,22 @@ public class TestsCentripete {
 				
 			}
 			
+			if(j==130){
+				mod_deltaTime = mod_deltaTime/10;
+			}
+			
 			if(j==140){
-				
+								
 				ArrayList<BodyGroup> parts = spaceship.getDescendants().get(0).detach();
-
+				
 				spaceships.remove(spaceship);
 				spaceshipsBody.remove(spaceship);
 				for(BodyGroup part: parts){
+					System.out.println(part.getForce());
+					System.out.println(part.absoluteSpeed);
+					for (Body test : part.getDescendants()){
+						System.out.println(test.debugString);
+					}
 					spaceships.add(new DrawableSpaceship(part, window));
 					spaceshipsBody.add(part);
 					

@@ -2,7 +2,6 @@ package physics;
 
 import java.util.ArrayList;
 
-import maths.Matrix;
 import maths.Vect3D;
 import maths.VectRotation;
 
@@ -128,6 +127,19 @@ public class BodyGroup extends BodySuperClass {
 			child.updateState(deltaTime);
 		}
 
+	}
+	
+	public boolean contains(Body tofind){
+		System.out.println(tofind.debugString);
+
+		for(Body el: this.getDescendants()){
+			System.out.println(el.debugString);
+			if(el.equals(tofind)){
+				System.out.println("FOUND !");
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	/**

@@ -22,6 +22,10 @@ public abstract class BodySuperClass implements BodyInterface {
 	public Vect3D absoluteRotSpeed = new Vect3D();
 	public Vect3D absoluteRotAcceleration = new Vect3D();
 	
+	public Vect3D getSpeed(){
+		return absoluteSpeed;
+	}
+	
 	
 	public void setRadius(double newRadius) {
 		this.radius = newRadius;

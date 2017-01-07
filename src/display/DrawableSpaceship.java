@@ -16,6 +16,9 @@ public class DrawableSpaceship {
 	private ArrayList<Cube> addedChildBodiesCubes;
 	private ArrayList<Line> addedChildBodiesForceLine;
 	private ArrayList<ArrayList<Line>> addedChildBodiesLinks;
+	private Line spaceshipXAxis;
+	private Line spaceshipYAxis;
+	private Line spaceshipZAxis;
 	private Window window;
 
 
@@ -26,6 +29,12 @@ public class DrawableSpaceship {
 		this.addedChildBodiesCubes = new ArrayList<Cube>();
 		this.addedChildBodiesForceLine = new ArrayList<Line>();
 		this.addedChildBodiesLinks = new ArrayList<ArrayList<Line>>();
+		this.spaceshipXAxis = new Line(new Vect3D(0, 0, 0), new Vect3D(0, 0, 0), new Vect3D(0, 1, 0));
+		this.spaceshipYAxis = new Line(new Vect3D(0, 0, 0), new Vect3D(0, 0, 0), new Vect3D(0, 1, 0));
+		this.spaceshipZAxis = new Line(new Vect3D(0, 0, 0), new Vect3D(0, 0, 0), new Vect3D(0, 1, 0));
+		window.getDisplay().addDrawableObject(spaceshipXAxis);
+		window.getDisplay().addDrawableObject(spaceshipYAxis);
+		window.getDisplay().addDrawableObject(spaceshipZAxis);
 		this.window = window;
 	}
 
@@ -35,7 +44,7 @@ public class DrawableSpaceship {
 
 	private Line getForceLine(Body body) {
 		Vect3D vertex1 = body.getAbsolutePosition();
-		Vect3D vertex2 = body.getAbsolutePosition().add(VectRotation.rotate(body.getForce().getNormalized().mult(-1), body.getAbsoluteRotPosition()));
+		Vect3D vertex2 = body.getAbsolutePosition().add(VectRotation.rotate(body.getSpeed().mult(-0.3), body.getGroup().getAbsoluteRotPosition().mult(0)));
 
 		//System.out.println(body.getForce());
 
@@ -43,7 +52,21 @@ public class DrawableSpaceship {
 	}
 
 	public void updateSpaceship() {
+		
+		// Axis update
+		double axisSize = 1;
+		Vect3D xAxis = VectRotation.rotate(new Vect3D(axisSize, 0, 0), spaceship.getAbsoluteRotPosition());
+		Vect3D yAxis = VectRotation.rotate(new Vect3D(0, axisSize, 0), spaceship.getAbsoluteRotPosition());
+		Vect3D zAxis = VectRotation.rotate(new Vect3D(0, 0, axisSize), spaceship.getAbsoluteRotPosition());
+		
+		spaceshipXAxis.setVertex1(spaceship.getAbsolutePosition());
+		spaceshipXAxis.setVertex2(spaceship.getAbsolutePosition().add(xAxis));
+		spaceshipYAxis.setVertex1(spaceship.getAbsolutePosition());
+		spaceshipYAxis.setVertex2(spaceship.getAbsolutePosition().add(yAxis));
+		spaceshipZAxis.setVertex1(spaceship.getAbsolutePosition());
+		spaceshipZAxis.setVertex2(spaceship.getAbsolutePosition().add(zAxis));
 
+		// Update of the sapceship display
 		for (int i = 0; i < spaceship.getAllTerminalBodies().size(); ++i) {
 			Body child = spaceship.getAllTerminalBodies().get(i);
 
@@ -82,6 +105,7 @@ public class DrawableSpaceship {
 			}
 		}
 
+		// Check if a sub-body have been removed
 		for (int i = addedChildBodies.size() - 1; i >= 0; --i) {
 			Body child = addedChildBodies.get(i);
 

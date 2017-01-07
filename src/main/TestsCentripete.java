@@ -17,11 +17,17 @@ public class TestsCentripete {
 		test.lockProperties();
 
 		Body sub1 = new Body();
+		sub1.debugString = "hi, I'm number 1";
 		Body sub2 = new Body();
+		sub2.debugString = "hi, I'm number 2";
 		Body sub3 = new Body();
+		sub3.debugString = "hi, I'm number 3";
 		Body sub4 = new Body();
+		sub4.debugString = "hi, I'm number 4";
 		Body sub5 = new Body();
+		sub5.debugString = "hi, I'm number 5";
 		Body sub6 = new Body();
+		sub6.debugString = "hi, I'm number 6";
 
 		test.addBody(sub1);
 		test.addBody(sub2);
@@ -63,8 +69,8 @@ public class TestsCentripete {
 		sub4.setPosition(new Vect3D(0, 0, -3));
 
 		sub1.setForce(new Vect3D(0,0,0));
-		sub2.setForce(new Vect3D(0,15,0));
-		sub3.setForce(new Vect3D(0,-15,0));
+		sub2.setForce(new Vect3D(0,0,0));
+		sub3.setForce(new Vect3D(-10,-10,0));
 		
 		test.unlockProperties();
 		test.updateProperties();
@@ -142,10 +148,15 @@ public class TestsCentripete {
 			if(j==140){
 				
 				ArrayList<BodyGroup> parts = spaceship.getDescendants().get(0).detach();
-
+				
 				spaceships.remove(spaceship);
 				spaceshipsBody.remove(spaceship);
 				for(BodyGroup part: parts){
+					System.out.println(part.getForce());
+					System.out.println(part.absoluteSpeed);
+					for (Body test : part.getDescendants()){
+						System.out.println(test.debugString);
+					}
 					spaceships.add(new DrawableSpaceship(part, window));
 					spaceshipsBody.add(part);
 					

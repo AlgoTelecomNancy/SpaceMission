@@ -29,7 +29,8 @@ public class Body extends BodySuperClass {
 	private Vect3D position = new Vect3D(); //Position relative to the parent body	
 	private Vect3D rotPosition = new Vect3D(); //RotPosition relative to the parent body
 
-
+	//Debug
+	public String debugString;
 	public Body() {	}
 	
 	public void setGroup(BodyGroup group){

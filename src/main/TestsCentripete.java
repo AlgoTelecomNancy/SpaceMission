@@ -62,9 +62,7 @@ public class TestsCentripete {
 		sub6.setPosition(new Vect3D(0, 2, 0));
 		sub4.setPosition(new Vect3D(0, 0, -3));
 
-		sub1.setForce(new Vect3D(0,0,0));
-		sub2.setForce(new Vect3D(0,15,0));
-		sub3.setForce(new Vect3D(0,-15,0));
+		sub1.setForce(new Vect3D(0,0,0)); sub2.setForce(new Vect3D(10,15,0)); sub3.setForce(new Vect3D(-10,-15,0));
 		
 		test.unlockProperties();
 		test.updateProperties();

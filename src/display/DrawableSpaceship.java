@@ -15,6 +15,7 @@ public class DrawableSpaceship {
 	private ArrayList<Body> addedChildBodies;
 	private ArrayList<Cube> addedChildBodiesCubes;
 	private ArrayList<Line> addedChildBodiesForceLine;
+	private ArrayList<ArrayList<Line>> addedChildBodiesLinks;
 	private Window window;
 
 
@@ -24,6 +25,7 @@ public class DrawableSpaceship {
 		this.addedChildBodies = new ArrayList<Body>();
 		this.addedChildBodiesCubes = new ArrayList<Cube>();
 		this.addedChildBodiesForceLine = new ArrayList<Line>();
+		this.addedChildBodiesLinks = new ArrayList<ArrayList<Line>>();
 		this.window = window;
 	}
 
@@ -37,7 +39,7 @@ public class DrawableSpaceship {
 
 		//System.out.println(body.getForce());
 
-		return new Line(vertex1, vertex2);
+		return new Line(vertex1, vertex2, new Vect3D(1, 1, 1));
 	}
 
 	public void updateSpaceship() {
@@ -51,6 +53,14 @@ public class DrawableSpaceship {
 				addedChildBodiesCubes.get(i).setSize((new Vect3D(1, 1, 1)).mult(child.getRadius() * 2));
 				addedChildBodiesForceLine.get(i).setVertex1(getForceLine(child).getVertex1());
 				addedChildBodiesForceLine.get(i).setVertex2(getForceLine(child).getVertex2());
+				
+				for (Line line : addedChildBodiesLinks.get(i)) {
+					window.getDisplay().removeDrawableObject(line);
+				}
+				for (Body attachedBody : child.getAttachedBodies()) {
+					addedChildBodiesLinks.get(i).add(new Line(child.getAbsolutePosition(), attachedBody.getAbsolutePosition(), new Vect3D(0, 1, 1)));
+					window.getDisplay().addDrawableObject(addedChildBodiesLinks.get(i).get(addedChildBodiesLinks.get(i).size() - 1));
+				}
 			}
 			else {
 				Cube cube = new Cube(child.getAbsolutePosition(),
@@ -63,6 +73,12 @@ public class DrawableSpaceship {
 				Line force = getForceLine(child);
 				addedChildBodiesForceLine.add(force);
 				window.getDisplay().addDrawableObject(force);
+
+				addedChildBodiesLinks.add(new ArrayList<Line>());
+				for (Body attachedBody : child.getAttachedBodies()) {
+					addedChildBodiesLinks.get(addedChildBodiesLinks.size() - 1).add(new Line(child.getAbsolutePosition(), attachedBody.getAbsolutePosition(), new Vect3D(0, 1, 1)));
+					window.getDisplay().addDrawableObject(addedChildBodiesLinks.get(addedChildBodiesLinks.size() - 1).get(addedChildBodiesLinks.get(addedChildBodiesLinks.size() - 1).size() - 1));
+				}
 			}
 		}
 
@@ -75,7 +91,13 @@ public class DrawableSpaceship {
 				addedChildBodiesCubes.remove(i);
 				window.getDisplay().removeDrawableObject(addedChildBodiesForceLine.get(i));
 				addedChildBodiesForceLine.remove(i);
+				
+				for (Line line : addedChildBodiesLinks.get(i)) {
+					window.getDisplay().removeDrawableObject(line);
+				}
+				addedChildBodiesLinks.remove(i);
 			}
 		}
 	}
 }
+

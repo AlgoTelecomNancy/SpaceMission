@@ -10,11 +10,13 @@ public class Line implements DrawableObject {
 
 	private Vect3D vertex1;
 	private Vect3D vertex2;
+	private Vect3D color;
 	private GLU glu = new GLU();
 	
-	public Line(Vect3D vertex1, Vect3D vertex2){
+	public Line(Vect3D vertex1, Vect3D vertex2, Vect3D color){
 		this.vertex1 = vertex1;
 		this.vertex2 = vertex2;
+		this.color = color;
 	}
 	
 	public Vect3D getVertex1() {
@@ -45,7 +47,7 @@ public class Line implements DrawableObject {
 				camera.focusedPoint.y, camera.focusedPoint.z, 0, 0, 1);
 		
 		gl.glBegin(GL2.GL_LINES);
-		gl.glColor3f(1f, 1f, 1f);
+		gl.glColor3d(color.x, color.y, color.z);
 		gl.glVertex3d(vertex1.x, vertex1.y, vertex1.z);
 		gl.glVertex3d(vertex2.x, vertex2.y, vertex2.z);
 		gl.glEnd();

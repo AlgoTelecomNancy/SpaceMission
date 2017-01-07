@@ -1,9 +1,7 @@
 package physics;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
-import maths.Matrix;
 import maths.Vect3D;
 import maths.VectRotation;
 
@@ -66,6 +64,10 @@ public class Body extends BodySuperClass {
 	public void setRotPosition(Vect3D newRotPosition){
 		this.rotPosition = newRotPosition;
 		this.updateProperties();
+	}
+	
+	public ArrayList<Body> getAttachedBodies() {
+		return attached;
 	}
 
 	public Vect3D getPosition() {

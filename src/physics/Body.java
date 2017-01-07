@@ -293,43 +293,21 @@ public class Body extends BodySuperClass {
 	 */
 	public ArrayList<BodyGroup> detach(){
 		
-		//TODO utiliser detachFrom pour détacher de tout le monde
-		
-		return null;
-		
-		/*this.position = this.getAbsolutePosition();
-		this.rotPosition = this.getAbsoluteRotPosition();
-		
-		Vect3D old_barycenter = getParentBody().getAbsolutePosition();
-		
-		getParentBody().removeChild(this);
-		
-		Vect3D new_barycenter = this.parent.getAbsolutePosition().minus(old_barycenter).mult(-1);
+		ArrayList<BodyGroup> array = new ArrayList<BodyGroup>();
 
+		ArrayList<Body> attached_temp = (ArrayList<Body>) this.attached.clone();
 		
-		
-		//Recalculer les données d'accélération et vitesse du corps parent
-
-		Vect3D new_absoluteSpeed = this.parent.absoluteSpeed.add(
-				this.parent.absoluteRotSpeed.vectProd(VectRotation.rotate(new_barycenter, this.getAbsoluteRotPosition()))
-				);
-		Vect3D new_absoluteRotSpeed = this.parent.absoluteRotSpeed.clone();
-
-		Vect3D new_absoluteAcceleration = this.parent.absoluteAcceleration.clone();
-		if(this.position.size()>0){
-			new_absoluteAcceleration = this.parent.absoluteAcceleration.add(new_barycenter.mult(
-						Math.pow(this.parent.absoluteRotSpeed.vectProd(new_barycenter).size(),2)
-						/new_barycenter.size()
-					));
+		for(Body b: attached_temp){
+			for(BodyGroup b2: this.detachFrom(b)){
+				if(!b2.getDescendants().contains(this)){
+					array.add(b2);
+				}else{
+					this.group = b2;
+				}
+			}
 		}
-		Vect3D new_absoluteRotAcceleration = this.parent.absoluteRotAcceleration.clone();
-
-		this.parent.absoluteSpeed = new_absoluteSpeed;
-		this.parent.absoluteRotSpeed = new_absoluteRotSpeed;
-		this.parent.absoluteAcceleration = new_absoluteAcceleration;
-		this.parent.absoluteRotAcceleration = new_absoluteRotAcceleration;
-
-		this.parent = null;
-		return this;*/
+		
+		return array;
+		
 	}
 }

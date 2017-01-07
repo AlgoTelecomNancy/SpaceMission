@@ -20,15 +20,21 @@ public class TestsCentripete {
 		Body sub2 = new Body();
 		Body sub3 = new Body();
 		Body sub4 = new Body();
+		Body sub5 = new Body();
+		Body sub6 = new Body();
 
 		test.addBody(sub1);
 		test.addBody(sub2);
 		test.addBody(sub3);
 		test.addBody(sub4);
+		test.addBody(sub5);
+		test.addBody(sub6);
 
 		sub1.attachTo(sub2);
 		sub1.attachTo(sub3);
 		sub2.attachTo(sub4);
+		sub1.attachTo(sub5);
+		sub1.attachTo(sub6);
 		
 		
 		sub1.setRadius(0.5);
@@ -42,15 +48,23 @@ public class TestsCentripete {
 		
 		sub4.setRadius(0.2);
 		sub4.setMass(1);
+		
+		sub5.setRadius(0.2);
+		sub5.setMass(1);
+		
+		sub6.setRadius(0.2);
+		sub6.setMass(1);
 
 		sub1.setPosition(new Vect3D(0, 0, 0));
 		sub2.setPosition(new Vect3D(0, 0, -2));
 		sub3.setPosition(new Vect3D(0, 0, 2));
+		sub5.setPosition(new Vect3D(0, -2, 0));
+		sub6.setPosition(new Vect3D(0, 2, 0));
 		sub4.setPosition(new Vect3D(0, 0, -3));
 
 		sub1.setForce(new Vect3D(0,0,0));
-		sub2.setForce(new Vect3D(0,6,0));
-		sub3.setForce(new Vect3D(0,-3,0));
+		sub2.setForce(new Vect3D(0,15,0));
+		sub3.setForce(new Vect3D(0,-15,0));
 		
 		test.unlockProperties();
 		test.updateProperties();
@@ -91,7 +105,6 @@ public class TestsCentripete {
 			
 			for(BodyGroup sp: spaceshipsBody){
 				sp.updateState(1. / 160);
-				System.out.println(sp.getAbsolutePosition());
 			}
 			for(DrawableSpaceship sp: spaceships){
 				sp.updateSpaceship();
@@ -107,7 +120,7 @@ public class TestsCentripete {
 			}
 					
 
-			if(j==240){
+			if(j==1000240){
 				
 				ArrayList<BodyGroup> parts = spaceship.getDescendants().get(2).detachFrom(
 							spaceship.getDescendants().get(0)
@@ -126,11 +139,9 @@ public class TestsCentripete {
 				
 			}
 			
-			if(j==340){
+			if(j==140){
 				
-				ArrayList<BodyGroup> parts = spaceship.getDescendants().get(1).detachFrom(
-							spaceship.getDescendants().get(0)
-						);
+				ArrayList<BodyGroup> parts = spaceship.getDescendants().get(0).detach();
 
 				spaceships.remove(spaceship);
 				spaceshipsBody.remove(spaceship);
@@ -141,21 +152,6 @@ public class TestsCentripete {
 					if(part.getDescendants().size()==2){
 						spaceship = part;
 					}
-				}
-				
-			}
-			
-			if(j==440){
-				
-				ArrayList<BodyGroup> parts = spaceship.getDescendants().get(1).detachFrom(
-							spaceship.getDescendants().get(0)
-						);
-
-				spaceships.remove(spaceship);
-				spaceshipsBody.remove(spaceship);
-				for(BodyGroup part: parts){
-					spaceships.add(new DrawableSpaceship(part, window));
-					spaceshipsBody.add(part);
 				}
 				
 			}

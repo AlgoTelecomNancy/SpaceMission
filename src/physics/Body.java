@@ -173,16 +173,19 @@ public class Body extends BodySuperClass {
 	
 	/**
 	 * Détacher le corps
-	 * Retourne un objet qui représente la partie éventuellement détachée
-	 * Peut retourner null si reste attaché finalement !!!
+	 * Retourne deux objet qui représente les deux parties éventuellement détachées
+	 * Peut retourner une liste d'un seul objet si reste attaché finalement !!!
 	 */
-	public BodyGroup detachFrom(Body brother){
+	public ArrayList<BodyGroup> detachFrom(Body brother){
+		
+		ArrayList<BodyGroup> array = new ArrayList<BodyGroup>();
 		
 		this.removeLink(brother);
 		
 		boolean not_really_detached = false;
 		ArrayList<Body> found = new ArrayList<Body>();
 		ArrayList<Body> nextBrothers = brother.attached;
+		found.add(brother);
 		ArrayList<Body> temp_nextBrothers = new ArrayList<Body>();
 		boolean end = false;
 		boolean hasNextBrothers = false;
@@ -203,12 +206,14 @@ public class Body extends BodySuperClass {
 		}
 		
 		if(found.contains(this)){ //Ce détachement n'a pas créé d'autre groupe
-			return null;
+			array.add(this.getGroup());
+			return array;
 		}else{
 			//Sinon on créé un nouveau groupe et on y met les nouveaux éléments
 			//On met aussi à jour toutes les variables
 			
 			BodyGroup my_group = this.getGroup();
+			my_group.lockProperties();
 
 			//Récupérer le centre commun du groupe uni
 			Vect3D old_common_barycenter = my_group.getAbsolutePosition().clone();
@@ -220,13 +225,16 @@ public class Body extends BodySuperClass {
 			old_group_phantom.absoluteRotAcceleration = my_group.absoluteRotAcceleration.clone();
 			
 			//Séparer les deux groupes
-			BodyGroup new_group = new BodyGroup();
-			
-			new_group.lockProperties();
-			this.getParentBody().lockProperties();
+			BodyGroup new_group1 = new BodyGroup();
+			BodyGroup new_group2 = new BodyGroup();
 
-			new_group.setPosition(this.getGroup().getAbsolutePosition());
-			new_group.setRotPosition(this.getGroup().getAbsoluteRotPosition());
+			new_group1.lockProperties();
+			new_group2.lockProperties();
+
+			new_group1.setPosition(this.getGroup().getAbsolutePosition());
+			new_group1.setRotPosition(this.getGroup().getAbsoluteRotPosition());
+			new_group2.setPosition(this.getGroup().getAbsolutePosition());
+			new_group2.setRotPosition(this.getGroup().getAbsoluteRotPosition());
 			
 			for(Body b: found){
 				if(this.group==null){
@@ -234,12 +242,14 @@ public class Body extends BodySuperClass {
 				}else{
 					this.group.removeBody(b);
 				}
-				new_group.addBody(b);
+				new_group1.addBody(b);
+			}
+			for(Body b: this.getParentBody().getDescendants()){
+				new_group2.addBody(b);
 			}
 			
-			new_group.unlockProperties();
-			this.getParentBody().unlockProperties();
-
+			new_group1.unlockProperties();
+			new_group2.unlockProperties();
 			
 
 			/*
@@ -252,21 +262,24 @@ public class Body extends BodySuperClass {
 			
 			//Mettre à jour les calculs
 
-			new_group.updateProperties();
-			my_group.updateProperties();
+			new_group1.updateProperties();
+			new_group2.updateProperties();
 
-			System.out.println("old=>"+old_common_barycenter);
-			System.out.println("1=>"+my_group.getPosition());
-			System.out.println("2=>"+new_group.getPosition());
 
-			Vect3D diff_my_barycenter = my_group.getAbsolutePosition().minus(old_common_barycenter).mult(-1);
-			Vect3D diff_newgroup_barycenter = new_group.getAbsolutePosition().minus(old_common_barycenter).mult(-1);
+			Vect3D diff_1_barycenter = new_group1.getAbsolutePosition().minus(old_common_barycenter).mult(-1);
+			Vect3D diff_2_barycenter = new_group2.getAbsolutePosition().minus(old_common_barycenter).mult(-1);
 
-			new_group.updateAfterDetach(diff_newgroup_barycenter, old_group_phantom);
-			my_group.updateAfterDetach(diff_my_barycenter, old_group_phantom);
+			new_group1.updateAfterDetach(diff_1_barycenter, old_group_phantom);
+			new_group2.updateAfterDetach(diff_2_barycenter, old_group_phantom);
 			
 
-			return new_group;
+			array.add(new_group1);
+			array.add(new_group2);
+			
+			//Remove all links with old parent (be freeee !)
+			this.getParentBody().getDescendants().clear();
+
+			return array;
 			
 		}
 	}

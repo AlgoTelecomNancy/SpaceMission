@@ -19,13 +19,16 @@ public class TestsCentripete {
 		Body sub1 = new Body();
 		Body sub2 = new Body();
 		Body sub3 = new Body();
-		
+		Body sub4 = new Body();
+
 		test.addBody(sub1);
 		test.addBody(sub2);
 		test.addBody(sub3);
+		test.addBody(sub4);
 
 		sub1.attachTo(sub2);
 		sub1.attachTo(sub3);
+		sub2.attachTo(sub4);
 		
 		
 		sub1.setRadius(0.5);
@@ -36,14 +39,18 @@ public class TestsCentripete {
 		
 		sub3.setRadius(0.2);
 		sub3.setMass(1);
+		
+		sub4.setRadius(0.2);
+		sub4.setMass(1);
 
 		sub1.setPosition(new Vect3D(0, 0, 0));
 		sub2.setPosition(new Vect3D(0, 0, -2));
 		sub3.setPosition(new Vect3D(0, 0, 2));
+		sub4.setPosition(new Vect3D(0, 0, -3));
 
 		sub1.setForce(new Vect3D(0,0,0));
-		sub2.setForce(new Vect3D(6,0,0));
-		sub3.setForce(new Vect3D(0,3,0));
+		sub2.setForce(new Vect3D(0,6,0));
+		sub3.setForce(new Vect3D(0,-3,0));
 		
 		test.unlockProperties();
 		test.updateProperties();
@@ -99,16 +106,58 @@ public class TestsCentripete {
 				e.printStackTrace();
 			}
 					
-			
+
 			if(j==240){
 				
-				BodyGroup part = spaceship.getDescendants().get(2).detachFrom(
+				ArrayList<BodyGroup> parts = spaceship.getDescendants().get(2).detachFrom(
 							spaceship.getDescendants().get(0)
 						);
-				if(part!=null){
+
+				spaceships.remove(spaceship);
+				spaceshipsBody.remove(spaceship);
+				for(BodyGroup part: parts){
+					spaceships.add(new DrawableSpaceship(part, window));
+					spaceshipsBody.add(part);
+					
+					if(part.getDescendants().size()==3){
+						spaceship = part;
+					}
+				}
+				
+			}
+			
+			if(j==340){
+				
+				ArrayList<BodyGroup> parts = spaceship.getDescendants().get(1).detachFrom(
+							spaceship.getDescendants().get(0)
+						);
+
+				spaceships.remove(spaceship);
+				spaceshipsBody.remove(spaceship);
+				for(BodyGroup part: parts){
+					spaceships.add(new DrawableSpaceship(part, window));
+					spaceshipsBody.add(part);
+					
+					if(part.getDescendants().size()==2){
+						spaceship = part;
+					}
+				}
+				
+			}
+			
+			if(j==440){
+				
+				ArrayList<BodyGroup> parts = spaceship.getDescendants().get(1).detachFrom(
+							spaceship.getDescendants().get(0)
+						);
+
+				spaceships.remove(spaceship);
+				spaceshipsBody.remove(spaceship);
+				for(BodyGroup part: parts){
 					spaceships.add(new DrawableSpaceship(part, window));
 					spaceshipsBody.add(part);
 				}
+				
 			}
 			
 		}

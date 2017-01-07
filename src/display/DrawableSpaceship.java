@@ -35,7 +35,7 @@ public class DrawableSpaceship {
 		Vect3D vertex1 = body.getAbsolutePosition();
 		Vect3D vertex2 = body.getAbsolutePosition().add(VectRotation.rotate(body.getForce().getNormalized().mult(-1), body.getAbsoluteRotPosition()));
 
-		System.out.println(body.getForce());
+		//System.out.println(body.getForce());
 
 		return new Line(vertex1, vertex2);
 	}

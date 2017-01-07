@@ -150,26 +150,44 @@ public class BodyGroup extends BodySuperClass {
 	 * @param diff_barycenter
 	 * @param oldGroup
 	 */
-	public void updateAfterDetach(Vect3D diff_barycenter, BodyGroup oldGroup){
+	public void updateAfterDetach(Vect3D diff_barycenter2, BodyGroup oldGroup){
+		
+		Vect3D diff_barycenter = diff_barycenter2;//VectRotation.rotate(diff_barycenter2, oldGroup.getAbsoluteRotPosition().mult(-1));
 		
 		Vect3D new_absoluteSpeed = oldGroup.absoluteSpeed.add(
-				oldGroup.absoluteRotSpeed.vectProd(diff_barycenter.mult(-1))
+				diff_barycenter.vectProd(oldGroup.absoluteRotSpeed)
 				);
-		Vect3D new_absoluteRotSpeed = oldGroup.absoluteRotSpeed.clone();
+		
+/*		Vect3D hypotetical_pos1 = (VectRotation.rotate(diff_barycenter,oldGroup.getAbsoluteRotPosition())).add(oldGroup.getAbsolutePosition());
+		
+		System.out.println("pos ="+this.getAbsolutePosition());
+		System.out.println("speed? ="+oldGroup.getRotSpeed());
+		
+		Vect3D hypotetical_pos2 = (
+				VectRotation.rotate(
+						diff_barycenter,
+						oldGroup.getAbsoluteRotPosition()//.add(oldGroup.getRotSpeed().mult(1./60))
+						)
+				)
+				.add(oldGroup.getAbsolutePosition().add(oldGroup.getSpeed()));
+		
 
-		Vect3D new_absoluteAcceleration = oldGroup.absoluteAcceleration.clone();
-		if(this.position.size()>0){
-			new_absoluteAcceleration = oldGroup.absoluteAcceleration.add(diff_barycenter.mult(
-						Math.pow(oldGroup.absoluteRotSpeed.vectProd(diff_barycenter).size(),2)
-						/diff_barycenter.size()
-					));
-		}
-		Vect3D new_absoluteRotAcceleration = oldGroup.absoluteRotAcceleration.clone();
+		System.out.println("pos?2 ="+hypotetical_pos2);
+*/
+		/*
+		Vect3D hypotetical_pos2 = (
+				VectRotation.rotate(
+						diff_barycenter,oldGroup.getAbsoluteRotPosition().add(oldGroup.getRotSpeed())
+				)
+				).add(oldGroup.getAbsolutePosition().add(oldGroup.getSpeed()));
+		*/
+		
+		//new_absoluteSpeed = hypotetical_pos2.minus(hypotetical_pos1);
+		
+		Vect3D new_absoluteRotSpeed = oldGroup.absoluteRotSpeed.clone();
 
 		this.absoluteSpeed = new_absoluteSpeed;
 		this.absoluteRotSpeed = new_absoluteRotSpeed;
-		this.absoluteAcceleration = new_absoluteAcceleration;
-		this.absoluteRotAcceleration = new_absoluteRotAcceleration;
 		
 	}
 

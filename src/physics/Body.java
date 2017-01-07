@@ -128,8 +128,9 @@ public class Body extends BodySuperClass {
 		BodySuperClass parent = getParentBody();
 
 		this.absoluteSpeed = parent.absoluteSpeed.add(
-				parent.absoluteRotSpeed.vectProd(VectRotation.rotate(this.position, this.getAbsoluteRotPosition()))
+				parent.absoluteRotSpeed.vectProd(VectRotation.rotate(this.position, this.getParentBody().getAbsoluteRotPosition()))
 				);
+		
 		this.absoluteRotSpeed = parent.absoluteRotSpeed.clone();
 
 		if(this.position.size()>0){
@@ -221,6 +222,7 @@ public class Body extends BodySuperClass {
 			//Récupérer le centre commun du groupe uni
 			Vect3D old_common_barycenter = my_group.getAbsolutePosition().clone();
 			BodyGroup old_group_phantom = new BodyGroup();
+			old_group_phantom.setPosition(old_common_barycenter);
 			old_group_phantom.setRotPosition(my_group.getAbsoluteRotPosition().clone());
 			old_group_phantom.absoluteSpeed = my_group.absoluteSpeed.clone();
 			old_group_phantom.absoluteRotSpeed = my_group.absoluteRotSpeed.clone();

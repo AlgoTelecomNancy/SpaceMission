@@ -32,13 +32,11 @@ public class TestsCentripete {
 		test.addBody(sub1);
 		test.addBody(sub2);
 		test.addBody(sub3);
-		test.addBody(sub4);
 		test.addBody(sub5);
 		test.addBody(sub6);
 
 		sub1.attachTo(sub2);
 		sub1.attachTo(sub3);
-		sub2.attachTo(sub4);
 		sub1.attachTo(sub5);
 		sub1.attachTo(sub6);
 		
@@ -52,9 +50,6 @@ public class TestsCentripete {
 		sub3.setRadius(0.2);
 		sub3.setMass(1);
 		
-		sub4.setRadius(0.2);
-		sub4.setMass(1);
-		
 		sub5.setRadius(0.2);
 		sub5.setMass(1);
 		
@@ -66,15 +61,16 @@ public class TestsCentripete {
 		sub3.setPosition(new Vect3D(0, 0, 2));
 		sub5.setPosition(new Vect3D(0, -2, 0));
 		sub6.setPosition(new Vect3D(0, 2, 0));
-		sub4.setPosition(new Vect3D(0, 0, -3));
 
 
 		sub1.setForce(new Vect3D(0,0,0));
-		sub2.setForce(new Vect3D(10,15,0));
-		sub3.setForce(new Vect3D(-10,-10,0));
+		sub2.setForce(new Vect3D(10,0,0));
+		sub3.setForce(new Vect3D(-10,0,0));
 		
 		test.unlockProperties();
 		test.updateProperties();
+		
+
 		
 		int i=0;
 		for(i=0;i<10;i++){
@@ -91,7 +87,8 @@ public class TestsCentripete {
 		Window window = new Window();
 
 		BodyGroup spaceship = getSpaceShip();
-		spaceship.setRotPosition(new Vect3D(0,0,0));
+		spaceship.setRotPosition(new Vect3D(Math.PI/4,Math.PI/4,Math.PI/4));
+		
 		
 		if(false){
 			return;
@@ -148,7 +145,7 @@ public class TestsCentripete {
 			}
 			
 			if(j==130){
-				mod_deltaTime = mod_deltaTime/10;
+				//mod_deltaTime = mod_deltaTime/10;
 			}
 			
 			if(j==140){

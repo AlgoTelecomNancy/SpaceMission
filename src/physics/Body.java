@@ -264,10 +264,8 @@ public class Body extends BodySuperClass {
 			*/
 			
 			//Mettre à jour les calculs
-
 			new_group1.updateProperties();
 			new_group2.updateProperties();
-
 
 			Vect3D diff_1_barycenter = new_group1.getAbsolutePosition().minus(old_common_barycenter).mult(-1);
 			Vect3D diff_2_barycenter = new_group2.getAbsolutePosition().minus(old_common_barycenter).mult(-1);
@@ -279,9 +277,7 @@ public class Body extends BodySuperClass {
 			array.add(new_group1);
 			array.add(new_group2);
 			
-			//Remove all links with old parent (be freeee !)
-			this.getParentBody().getDescendants().clear();
-
+			
 			return array;
 			
 		}
@@ -300,10 +296,15 @@ public class Body extends BodySuperClass {
 		
 		for(Body b: attached_temp){
 			for(BodyGroup b2: this.detachFrom(b)){
-				if(!b2.getDescendants().contains(this)){
-					array.add(b2);
-				}else{
-					this.group = b2;
+				if(b2.getDescendants().size()>0){
+					if(!b2.contains(this)){
+						array.add(b2);
+					}else{
+						if(b2.getDescendants().size()==1){
+							array.add(b2);
+						}
+						this.group = b2;
+					}
 				}
 			}
 		}

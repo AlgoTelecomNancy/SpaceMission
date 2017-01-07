@@ -17,7 +17,7 @@ public class TestsCentripete {
 		test.lockProperties();
 
 		Body sub1 = new Body();
-		sub1.debugString = "hi, I'm number 1";
+		sub1.debugString = "hi, I'm number 1 bigone";
 		Body sub2 = new Body();
 		sub2.debugString = "hi, I'm number 2";
 		Body sub3 = new Body();
@@ -69,7 +69,7 @@ public class TestsCentripete {
 		sub4.setPosition(new Vect3D(0, 0, -3));
 
 		sub1.setForce(new Vect3D(0,0,0));
-		sub2.setForce(new Vect3D(0,0,0));
+		sub2.setForce(new Vect3D(10,15,0));
 		sub3.setForce(new Vect3D(-10,-10,0));
 		
 		test.unlockProperties();

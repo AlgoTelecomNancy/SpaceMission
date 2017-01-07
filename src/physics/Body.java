@@ -171,10 +171,10 @@ public class Body extends BodySuperClass {
 	}
 
 	
-	/*
+	/**
 	 * Détacher le corps
 	 * Retourne un objet qui représente la partie éventuellement détachée
-	 * Peut retourner null !!!
+	 * Peut retourner null si reste attaché finalement !!!
 	 */
 	public BodyGroup detachFrom(Body brother){
 		
@@ -208,44 +208,77 @@ public class Body extends BodySuperClass {
 			//Sinon on créé un nouveau groupe et on y met les nouveaux éléments
 			//On met aussi à jour toutes les variables
 			
+			BodyGroup my_group = this.getGroup();
+
+			//Récupérer le centre commun du groupe uni
+			Vect3D old_common_barycenter = my_group.getAbsolutePosition().clone();
+			BodyGroup old_group_phantom = new BodyGroup();
+			old_group_phantom.setRotPosition(my_group.getAbsoluteRotPosition().clone());
+			old_group_phantom.absoluteSpeed = my_group.absoluteSpeed.clone();
+			old_group_phantom.absoluteRotSpeed = my_group.absoluteRotSpeed.clone();
+			old_group_phantom.absoluteAcceleration = my_group.absoluteAcceleration.clone();
+			old_group_phantom.absoluteRotAcceleration = my_group.absoluteRotAcceleration.clone();
+			
 			//Séparer les deux groupes
 			BodyGroup new_group = new BodyGroup();
+			
+			new_group.lockProperties();
+			this.getParentBody().lockProperties();
+
+			new_group.setPosition(this.getGroup().getAbsolutePosition());
+			new_group.setRotPosition(this.getGroup().getAbsoluteRotPosition());
+			
 			for(Body b: found){
-				new_group.addBody(b);
 				if(this.group==null){
 					this.parent.removeChild(b);
 				}else{
 					this.group.removeBody(b);
 				}
+				new_group.addBody(b);
 			}
 			
-			BodyGroup my_group = this.getGroup();
+			new_group.unlockProperties();
+			this.getParentBody().unlockProperties();
+
+			
+
+			/*
+			 * On se retrouve alors avec deux groupes, un nouveau groupe qui ne possède pas de
+			 * données utiles
+			 * Et le groupe initial qui possède les anciennent vitesses et accélération des deux groupes réunis
+			 * Ce dernier va nous servir pour recalculer les valeurs d'accélération et de vitesses
+			 * des deux nouveaux sous groupes.
+			*/
 			
 			//Mettre à jour les calculs
-			Vect3D old_common_barycenter = getParentBody().getAbsolutePosition();
 
 			new_group.updateProperties();
 			my_group.updateProperties();
 
+			System.out.println("old=>"+old_common_barycenter);
+			System.out.println("1=>"+my_group.getPosition());
+			System.out.println("2=>"+new_group.getPosition());
+
 			Vect3D diff_my_barycenter = my_group.getAbsolutePosition().minus(old_common_barycenter).mult(-1);
 			Vect3D diff_newgroup_barycenter = new_group.getAbsolutePosition().minus(old_common_barycenter).mult(-1);
 
-			new_group.updateAfterDetach(diff_newgroup_barycenter, my_group);
-			my_group.updateAfterDetach(diff_my_barycenter, my_group);
+			new_group.updateAfterDetach(diff_newgroup_barycenter, old_group_phantom);
+			my_group.updateAfterDetach(diff_my_barycenter, old_group_phantom);
+			
 
 			return new_group;
 			
 		}
 	}
 	
-	/*
+	/**
 	 * Détacher un corps de toutes ses attaches
 	 * Retourne la liste des nouveaux corps (dont l'objet lui même, mais sans l'objet considéré comme parent)
 	 * Retourne obligatoirement l'élément détaché de tout le reste
 	 */
 	public ArrayList<BodyGroup> detach(){
 		
-		
+		//TODO utiliser detachFrom pour détacher de tout le monde
 		
 		return null;
 		

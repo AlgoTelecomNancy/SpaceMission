@@ -29,7 +29,7 @@ public class TestsCentripete {
 		
 		
 		sub1.setRadius(0.5);
-		sub1.setMass(10);
+		sub1.setMass(3);
 
 		sub2.setRadius(0.2);
 		sub2.setMass(1);
@@ -41,8 +41,8 @@ public class TestsCentripete {
 		sub2.setPosition(new Vect3D(0, 0, -2));
 		sub3.setPosition(new Vect3D(0, 0, 2));
 
-		//sub1.setForce(new Vect3D(0,10,0));
-		sub2.setForce(new Vect3D(0,4,0));
+		sub1.setForce(new Vect3D(0,0,0));
+		sub2.setForce(new Vect3D(6,0,0));
 		sub3.setForce(new Vect3D(0,3,0));
 		
 		test.unlockProperties();
@@ -55,6 +55,7 @@ public class TestsCentripete {
 		
 		//test.getChildren().get(0).setForce(new Vect3D());
 		//test.getChildren().get(1).setForce(new Vect3D());
+		
 
 		return test;
 	}
@@ -65,13 +66,17 @@ public class TestsCentripete {
 		BodyGroup spaceship = getSpaceShip();
 		spaceship.setRotPosition(new Vect3D(0,0,0));
 		
+		if(false){
+			return;
+		}
+		
 		ArrayList<DrawableSpaceship> spaceships = new ArrayList<DrawableSpaceship>();
 		ArrayList<BodyGroup> spaceshipsBody = new ArrayList<BodyGroup>();
 
 		spaceships.add(new DrawableSpaceship(spaceship, window));
 		spaceshipsBody.add(spaceship);
 		
-		window.getCamera().setPosition(new Vect3D(-20,0,0));;
+		window.getCamera().setPosition(new Vect3D(-20,0,0));
 
 		int j =0;
 		while (true) {
@@ -94,13 +99,10 @@ public class TestsCentripete {
 				e.printStackTrace();
 			}
 					
-
 			
 			if(j==240){
-				spaceship.getDescendants().get(2).setForce(new Vect3D());
-				spaceship.getDescendants().get(1).setForce(new Vect3D());
 				
-				BodyGroup part = spaceship.getDescendants().get(1).detachFrom(
+				BodyGroup part = spaceship.getDescendants().get(2).detachFrom(
 							spaceship.getDescendants().get(0)
 						);
 				if(part!=null){

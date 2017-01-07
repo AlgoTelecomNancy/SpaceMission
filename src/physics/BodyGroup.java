@@ -72,11 +72,11 @@ public class BodyGroup extends BodySuperClass {
 	}
 	
 	public Vect3D getAbsolutePosition() {
-		return this.position;
+		return this.position.clone();
 	}
 
 	public Vect3D getAbsoluteRotPosition() {
-		return this.rotPosition;
+		return this.rotPosition.clone();
 	}
 
 	/**
@@ -130,10 +130,18 @@ public class BodyGroup extends BodySuperClass {
 
 	}
 	
+	/**
+	 * Cette fonction permet de calculer les données de vitesses et accelerations en un nouveau point
+	 * (défini par diff_barycenter, relativement au barycentre de oldGroup)
+	 * Pour celà, la fonction utilise les vitesses et accélération du corps complet oldGroup
+	 * (old car cette fonction est utilisé dans le cas d'un détachement)
+	 * @param diff_barycenter
+	 * @param oldGroup
+	 */
 	public void updateAfterDetach(Vect3D diff_barycenter, BodyGroup oldGroup){
 		
 		Vect3D new_absoluteSpeed = oldGroup.absoluteSpeed.add(
-				oldGroup.absoluteRotSpeed.vectProd(VectRotation.rotate(diff_barycenter, this.getAbsoluteRotPosition()))
+				oldGroup.absoluteRotSpeed.vectProd(diff_barycenter.mult(-1))
 				);
 		Vect3D new_absoluteRotSpeed = oldGroup.absoluteRotSpeed.clone();
 

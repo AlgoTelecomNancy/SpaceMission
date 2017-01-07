@@ -3,7 +3,6 @@ package physics;
 import java.util.ArrayList;
 
 import maths.Vect3D;
-import maths.VectRotation;
 
 
 /**
@@ -119,8 +118,8 @@ public class BodyGroup extends BodySuperClass {
 		this.absoluteSpeed = this.absoluteSpeed.add(deltaSpeed);
 		this.absoluteRotSpeed = this.absoluteRotSpeed.add(deltaRotSpeed);
 
-		this.absoluteAcceleration = VectRotation.rotate(this.force.mult(1 / this.mass), this.getAbsoluteRotPosition());
-		this.absoluteRotAcceleration = this.moment.mult(-1 / this.mass);
+		this.absoluteAcceleration = this.force.mult(1 / this.mass);
+		this.absoluteRotAcceleration = this.moment.mult(1 / this.mass);
 
 		
 		for(Body child: this.elements){

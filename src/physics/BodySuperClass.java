@@ -161,12 +161,17 @@ public abstract class BodySuperClass implements BodyInterface {
 				
 				
 				this.force = this.force.add(childRotatedForce); //Add forces
+				
+				//TODO Resolve error on THIS (problem relative / absolute rotation and moments)
 				this.moment = this.moment.add( //Add all moments
-						child.moment.add( //Moment on the child
+						//child.moment.add( //Moment on the child
 								childRotatedForce.vectProd( //Force on the child ^
 										child.getPosition() //Distance parent-child
-								)));
+								)//)
+						);
 			}
+			this.force = VectRotation.rotate(this.force, this.getAbsoluteRotPosition());
+			this.moment = VectRotation.rotate(this.moment, this.getAbsoluteRotPosition().mult(-1));
 			
 		}
 		

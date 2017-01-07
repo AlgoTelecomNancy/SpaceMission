@@ -65,17 +65,11 @@ public class TestsCentripete {
 
 		sub1.setForce(new Vect3D(0,0,0));
 		sub2.setForce(new Vect3D(10,0,0));
-		sub3.setForce(new Vect3D(-10,0,0));
+		//sub3.setForce(new Vect3D(-10,0,0));
 		
 		test.unlockProperties();
 		test.updateProperties();
 		
-
-		
-		int i=0;
-		for(i=0;i<10;i++){
-			test.updateState(1./60);
-		}
 		
 		//test.getChildren().get(0).setForce(new Vect3D());
 		//test.getChildren().get(1).setForce(new Vect3D());
@@ -87,12 +81,9 @@ public class TestsCentripete {
 		Window window = new Window();
 
 		BodyGroup spaceship = getSpaceShip();
-		spaceship.setRotPosition(new Vect3D(Math.PI/4,Math.PI/4,Math.PI/4));
+		spaceship.setRotPosition(new Vect3D(Math.PI/2,0,Math.PI/2));
 		
 		
-		if(false){
-			return;
-		}
 		
 		ArrayList<DrawableSpaceship> spaceships = new ArrayList<DrawableSpaceship>();
 		ArrayList<BodyGroup> spaceshipsBody = new ArrayList<BodyGroup>();
@@ -100,7 +91,7 @@ public class TestsCentripete {
 		spaceships.add(new DrawableSpaceship(spaceship, window));
 		spaceshipsBody.add(spaceship);
 		
-		window.getCamera().setPosition(new Vect3D(-20,0,0));
+		window.getCamera().setPosition(new Vect3D(0,-20,0));
 
 		double mod_deltaTime = 1. / 160;
 		
@@ -148,7 +139,7 @@ public class TestsCentripete {
 				//mod_deltaTime = mod_deltaTime/10;
 			}
 			
-			if(j==140){
+			if(j==10140){
 								
 				ArrayList<BodyGroup> parts = spaceship.getDescendants().get(0).detach();
 				

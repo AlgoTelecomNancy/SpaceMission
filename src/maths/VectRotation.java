@@ -6,6 +6,153 @@ public class VectRotation {
 		return rotMatrixModule_Space(angles).multiply(matrix);
 	}
 	
+	private static double protected_arcsin(double val){
+		
+		double value = (val)%1;
+
+		return Math.asin(value);
+	}
+	
+	public static Vect3D quaternionToIntrinsec(Vect3D quaternion){
+
+		double qr = quaternion.size();
+		
+		Vect3D n_quat = quaternion.getNormalized();
+		
+		double qi = n_quat.x;
+		double qj = n_quat.y;
+		double qk = n_quat.z;
+		
+		//qr = qr%Math.PI;
+		
+		System.out.println(n_quat + " a="+qr);
+		System.out.println(2*(qr*qj-qk*qi));
+		
+		return new Vect3D(
+				Math.atan2(2*(qr*qi+qj*qk), 1-2*(qi*qi+qj*qj)),
+				protected_arcsin(2*(qr*qj-qk*qi)),
+				Math.atan2(2*(qr*qk+qi*qj), 1-2*(qk*qk+qj*qj))
+				);
+		
+	}
+	
+	/**
+	 * Convert a quaternion axis to matrix of rotation (VERIFIED - OK)
+	 * @param quaternion
+	 * @return
+	 */
+	public static Matrix quaternionToMatrix(Vect3D quaternion){
+		
+		double theta = quaternion.size();
+		
+		double uUn = quaternion.x;
+		double vUn = quaternion.y;
+		double wUn = quaternion.z;
+		
+		//Normalisation
+        double u = uUn/theta;
+        double v = vUn/theta;
+        double w = wUn/theta;
+
+        double u2 = u*u;
+        double v2 = v*v;
+        double w2 = w*w;
+        double cosT = Math.cos(theta);
+        double oneMinusCosT = 1-cosT;
+        double sinT = Math.sin(theta);
+        
+        Matrix res = new Matrix();
+                
+        if(Math.abs(theta)<=1E-9){
+            res.setCoef(1, 1, 1);
+            res.setCoef(2, 2, 1);
+            res.setCoef(3, 3, 1);
+        	return res;
+        }
+
+        // Build the matrix entries element by element.
+        res.setCoef(1, 1, u2 + (v2 + w2) * cosT);
+        res.setCoef(1, 2, u*v*oneMinusCosT - w*sinT);
+        res.setCoef(1, 3, u*w*oneMinusCosT + v*sinT);
+
+        res.setCoef(2, 1, u*v * oneMinusCosT + w*sinT);
+        res.setCoef(2, 2, v2 + (u2 + w2) * cosT);
+        res.setCoef(2, 3, v*w * oneMinusCosT - u*sinT);
+
+        res.setCoef(3, 1, u*w * oneMinusCosT - v*sinT);
+        res.setCoef(3, 2, v*w * oneMinusCosT + u*sinT);
+        res.setCoef(3, 3, w2 + (u2 + v2) * cosT);
+
+		
+		return res;
+	}
+	
+	/**
+	 * Convert an intrinsec axis to matrix of rotation (VERIFIED - OK)
+	 * @param quaternion
+	 * @return
+	 */
+	public static Matrix intrinsecToMatrix(Vect3D intrinsec){
+		return rotMatrixModule_Space(intrinsec);
+	}
+	
+	/**
+	 * Convert a rotation matrix to quaternion (VERIFIED - OK) 
+	 * @param quaternion
+	 * @return
+	 */
+	public static Vect3D matrixToQuaternion(Matrix matrix){
+		
+		double qr = Math.acos(0.5 * (matrix.getCoef(1, 1)+matrix.getCoef(2, 2)+matrix.getCoef(3, 3)-1));
+		
+		double qi = (matrix.getCoef(3, 2)-matrix.getCoef(2, 3))/(4*qr);
+		double qj = (matrix.getCoef(1, 3)-matrix.getCoef(3, 1))/(4*qr);
+		double qk = (matrix.getCoef(2, 1)-matrix.getCoef(1, 2))/(4*qr);
+
+		double l = Math.sqrt(qi*qi + qj*qj + qk*qk);
+
+		if(l<=1E-9 || qr<=1E-9){
+			return new Vect3D();
+		}
+		
+		double x = qi * qr / l;
+		double y = qj * qr / l;
+		double z = qk * qr / l;
+		
+		return new Vect3D(x,y,z);
+	}
+	
+	/**
+	 * Convert a rotation matrix to intrinsec angles
+	 * @param quaternion
+	 * @return
+	 */
+	public static Vect3D matrixToIntrinsec(Matrix matrix){
+        
+        double z = Math.atan2(
+        		matrix.getCoef(2,1),
+        		matrix.getCoef(1,1)
+        		);
+        
+        double y = -Math.asin(
+        		matrix.getCoef(3,1)
+        		);
+        
+        double x = Math.atan2(
+        		matrix.getCoef(3,2),
+        		matrix.getCoef(3,3)
+        		);
+		
+        if(false){
+        	y = -y;
+        }
+        
+        
+        return new Vect3D(x,y,z);
+        
+	}
+	
+	
 	/**
 	 * Compute the rotation matrix between the spaceship and the space
 	 * 

@@ -49,5 +49,13 @@ public class Matrix {
             	result[i] += this.coef[i][j] * v.getCoef(j);
 		return new Vect3D(result[0], result[1], result[2]);
 	}
+	
+	@Override
+	public String toString(){
+		String res = this.getCoef(1,1)+", "+this.getCoef(1,2)+", "+this.getCoef(1,3)+"\n";
+		res += this.getCoef(2,1)+", "+this.getCoef(2,2)+", "+this.getCoef(2,3)+"\n";
+		res += this.getCoef(3,1)+", "+this.getCoef(3,2)+", "+this.getCoef(3,3);
+		return res;
+	}
 
 }

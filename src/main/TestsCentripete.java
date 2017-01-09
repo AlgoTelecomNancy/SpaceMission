@@ -62,10 +62,9 @@ public class TestsCentripete {
 		sub5.setPosition(new Vect3D(0, -2, 0));
 		sub6.setPosition(new Vect3D(0, 2, 0));
 
-
 		sub1.setForce(new Vect3D(0,0,0));
 		sub2.setForce(new Vect3D(10,0,0));
-		//sub3.setForce(new Vect3D(-10,0,0));
+		sub3.setForce(new Vect3D(-10,0,0));
 		
 		test.unlockProperties();
 		test.updateProperties();
@@ -81,7 +80,7 @@ public class TestsCentripete {
 		Window window = new Window();
 
 		BodyGroup spaceship = getSpaceShip();
-		spaceship.setRotPosition(new Vect3D(Math.PI/2,0,Math.PI/2));
+		spaceship.setRotPosition(new Vect3D(1,2,0));
 		
 		
 		

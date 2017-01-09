@@ -19,8 +19,8 @@ public abstract class BodySuperClass implements BodyInterface {
 	//Acceleration and speed are absolute (space axis)
 	public Vect3D absoluteSpeed = new Vect3D();
 	public Vect3D absoluteAcceleration = new Vect3D();
-	public Vect3D absoluteRotSpeed = new Vect3D();
-	public Vect3D absoluteRotAcceleration = new Vect3D();
+	public Vect3D absoluteRotSpeed = new Vect3D(); //Axis of acceleration ! (not euleur angles)
+	public Vect3D absoluteRotAcceleration = new Vect3D(); //Axis of acceleration ! (not euleur angles)
 	
 	public Vect3D getSpeed(){
 		return absoluteSpeed;
@@ -170,8 +170,6 @@ public abstract class BodySuperClass implements BodyInterface {
 								)//)
 						);
 			}
-			this.force = VectRotation.rotate(this.force, this.getAbsoluteRotPosition());
-			this.moment = VectRotation.rotate(this.moment, this.getAbsoluteRotPosition().mult(-1));
 			
 		}
 		

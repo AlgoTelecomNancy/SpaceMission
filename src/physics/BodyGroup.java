@@ -2,7 +2,9 @@ package physics;
 
 import java.util.ArrayList;
 
+import maths.Matrix;
 import maths.Vect3D;
+import maths.VectRotation;
 
 
 /**
@@ -19,7 +21,7 @@ public class BodyGroup extends BodySuperClass {
 
 	//Position is global if no parent
 	private Vect3D position = new Vect3D(); //Position relative to the parent body	
-	private Vect3D rotPosition = new Vect3D(); //RotPosition relative to the parent body
+	private Vect3D rotPosition = new Vect3D(); //RotPosition relative to the parent body eulers angles
 
 
 
@@ -107,20 +109,43 @@ public class BodyGroup extends BodySuperClass {
 
  
 		Vect3D deltaPosition = this.absoluteSpeed.mult(deltaTime);
-		Vect3D deltaRotPosition = this.absoluteRotSpeed.mult(deltaTime);
-
 		Vect3D deltaSpeed = this.absoluteAcceleration.mult(deltaTime);
-		Vect3D deltaRotSpeed = this.absoluteRotAcceleration.mult(deltaTime);
 
 		this.position = this.position.add(deltaPosition);
-		this.rotPosition = this.rotPosition.add(deltaRotPosition);
-
 		this.absoluteSpeed = this.absoluteSpeed.add(deltaSpeed);
-		this.absoluteRotSpeed = this.absoluteRotSpeed.add(deltaRotSpeed);
+		this.absoluteAcceleration = VectRotation.rotate(this.force.mult(1 / this.mass), this.getAbsoluteRotPosition());
+		
+				
+		//Here we have to convert the quaternion to a euler rotation vector
+		//1 convert quaternion delta rotspeed to rotation matrix
+		//2 convert current rotposition to rotation matrix
+		//3 multiply matrix
+		//4 convert result matrix to intrinsec rotation vector
+		Matrix quat_to_mat = VectRotation.quaternionToMatrix(this.absoluteRotSpeed.mult(deltaTime)); //1
+		Matrix rotpos_to_mat = VectRotation.intrinsecToMatrix(this.rotPosition); //2
+		Matrix new_rot = Matrix.multiply(quat_to_mat, rotpos_to_mat); //3
+		this.rotPosition = VectRotation.matrixToIntrinsec(new_rot); //4
+		
+		//Here we have to convert the quaternion to a euler rotation vector
+		//1 convert quaternion delta rotspeed to rotation matrix
+		//2 convert current rotposition to rotation matrix
+		//3 multiply matrix
+		//4 convert result matrix to intrinsec rotation vector
+		System.out.println("=---");
+		System.out.println("=>"+absoluteRotSpeed);
 
-		this.absoluteAcceleration = this.force.mult(1 / this.mass);
-		this.absoluteRotAcceleration = this.moment.mult(1 / this.mass);
+		quat_to_mat = VectRotation.quaternionToMatrix(absoluteRotAcceleration.mult(deltaTime)); //1
+		rotpos_to_mat = VectRotation.quaternionToMatrix(this.absoluteRotSpeed); //2
+		new_rot = Matrix.multiply(quat_to_mat, rotpos_to_mat); //3
+		this.absoluteRotSpeed = VectRotation.matrixToQuaternion(new_rot);
+		
+		System.out.println(quat_to_mat);
+		System.out.println(rotpos_to_mat);
+		System.out.println(new_rot);
+		System.out.println("=>"+absoluteRotSpeed);
 
+		this.absoluteRotAcceleration = VectRotation.rotate(this.moment.mult(-1 / this.mass), this.getAbsoluteRotPosition());
+		
 		
 		for(Body child: this.elements){
 			child.updateState(deltaTime);

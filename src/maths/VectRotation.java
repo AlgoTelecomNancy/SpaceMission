@@ -6,36 +6,6 @@ public class VectRotation {
 		return rotMatrixModule_Space(angles).multiply(matrix);
 	}
 	
-	private static double protected_arcsin(double val){
-		
-		double value = (val)%1;
-
-		return Math.asin(value);
-	}
-	
-	public static Vect3D quaternionToIntrinsec(Vect3D quaternion){
-
-		double qr = quaternion.size();
-		
-		Vect3D n_quat = quaternion.getNormalized();
-		
-		double qi = n_quat.x;
-		double qj = n_quat.y;
-		double qk = n_quat.z;
-		
-		//qr = qr%Math.PI;
-		
-		System.out.println(n_quat + " a="+qr);
-		System.out.println(2*(qr*qj-qk*qi));
-		
-		return new Vect3D(
-				Math.atan2(2*(qr*qi+qj*qk), 1-2*(qi*qi+qj*qj)),
-				protected_arcsin(2*(qr*qj-qk*qi)),
-				Math.atan2(2*(qr*qk+qi*qj), 1-2*(qk*qk+qj*qj))
-				);
-		
-	}
-	
 	/**
 	 * Convert a quaternion axis to matrix of rotation (VERIFIED - OK)
 	 * @param quaternion
@@ -44,7 +14,7 @@ public class VectRotation {
 	public static Matrix quaternionToMatrix(Vect3D quaternion){
 		
 		double theta = quaternion.size();
-		
+				
 		double uUn = quaternion.x;
 		double vUn = quaternion.y;
 		double wUn = quaternion.z;
@@ -143,10 +113,21 @@ public class VectRotation {
         		matrix.getCoef(3,3)
         		);
 		
-        if(false){
-        	y = -y;
+        if(y>=Math.PI/2-(1E-9)){
+        	z = 0;
+        	x = Math.atan2(
+            		matrix.getCoef(1,2),
+            		matrix.getCoef(1,3)
+            		);
         }
         
+        if(y<=-Math.PI/2+(1E-9)){
+        	z = 0;
+        	x = Math.atan2(
+            		-matrix.getCoef(1,2),
+            		-matrix.getCoef(1,3)
+            		);
+        }
         
         return new Vect3D(x,y,z);
         

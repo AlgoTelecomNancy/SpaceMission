@@ -131,19 +131,21 @@ public class BodyGroup extends BodySuperClass {
 		//2 convert current rotposition to rotation matrix
 		//3 multiply matrix
 		//4 convert result matrix to intrinsec rotation vector
-		System.out.println("=---");
-		System.out.println("=>"+absoluteRotSpeed);
-
-		quat_to_mat = VectRotation.quaternionToMatrix(absoluteRotAcceleration.mult(deltaTime)); //1
-		rotpos_to_mat = VectRotation.quaternionToMatrix(this.absoluteRotSpeed); //2
-		new_rot = Matrix.multiply(quat_to_mat, rotpos_to_mat); //3
-		this.absoluteRotSpeed = VectRotation.matrixToQuaternion(new_rot);
+		double anti_limit = absoluteRotAcceleration.size();
+		if(absoluteRotAcceleration.size() < absoluteRotSpeed.size()){
+			anti_limit = absoluteRotSpeed.size();
+		}
+		if(anti_limit<1){
+			anti_limit = 1;
+		}
 		
-		System.out.println(quat_to_mat);
-		System.out.println(rotpos_to_mat);
-		System.out.println(new_rot);
-		System.out.println("=>"+absoluteRotSpeed);
-
+		quat_to_mat = VectRotation.quaternionToMatrix(absoluteRotAcceleration.mult(deltaTime/anti_limit)); //1
+		rotpos_to_mat = VectRotation.quaternionToMatrix(this.absoluteRotSpeed.mult(1/anti_limit)); //2
+		new_rot = Matrix.multiply(quat_to_mat, rotpos_to_mat); //3
+		
+		//TODO Find how to remove this limitation !
+		this.absoluteRotSpeed = VectRotation.matrixToQuaternion(new_rot).mult(anti_limit);
+		
 		this.absoluteRotAcceleration = VectRotation.rotate(this.moment.mult(-1 / this.mass), this.getAbsoluteRotPosition());
 		
 		
@@ -174,39 +176,11 @@ public class BodyGroup extends BodySuperClass {
 	 * @param diff_barycenter
 	 * @param oldGroup
 	 */
-	public void updateAfterDetach(Vect3D diff_barycenter2, BodyGroup oldGroup){
-		
-		Vect3D diff_barycenter = diff_barycenter2;//VectRotation.rotate(diff_barycenter2, oldGroup.getAbsoluteRotPosition().mult(-1));
-		
+	public void updateAfterDetach(Vect3D diff_barycenter, BodyGroup oldGroup){
+				
 		Vect3D new_absoluteSpeed = oldGroup.absoluteSpeed.add(
 				diff_barycenter.vectProd(oldGroup.absoluteRotSpeed)
 				);
-		
-/*		Vect3D hypotetical_pos1 = (VectRotation.rotate(diff_barycenter,oldGroup.getAbsoluteRotPosition())).add(oldGroup.getAbsolutePosition());
-		
-		System.out.println("pos ="+this.getAbsolutePosition());
-		System.out.println("speed? ="+oldGroup.getRotSpeed());
-		
-		Vect3D hypotetical_pos2 = (
-				VectRotation.rotate(
-						diff_barycenter,
-						oldGroup.getAbsoluteRotPosition()//.add(oldGroup.getRotSpeed().mult(1./60))
-						)
-				)
-				.add(oldGroup.getAbsolutePosition().add(oldGroup.getSpeed()));
-		
-
-		System.out.println("pos?2 ="+hypotetical_pos2);
-*/
-		/*
-		Vect3D hypotetical_pos2 = (
-				VectRotation.rotate(
-						diff_barycenter,oldGroup.getAbsoluteRotPosition().add(oldGroup.getRotSpeed())
-				)
-				).add(oldGroup.getAbsolutePosition().add(oldGroup.getSpeed()));
-		*/
-		
-		//new_absoluteSpeed = hypotetical_pos2.minus(hypotetical_pos1);
 		
 		Vect3D new_absoluteRotSpeed = oldGroup.absoluteRotSpeed.clone();
 

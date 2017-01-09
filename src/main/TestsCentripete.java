@@ -63,8 +63,8 @@ public class TestsCentripete {
 		sub6.setPosition(new Vect3D(0, 2, 0));
 
 		sub1.setForce(new Vect3D(0,0,0));
-		sub2.setForce(new Vect3D(10,0,0));
-		sub3.setForce(new Vect3D(-10,0,0));
+		sub2.setForce(new Vect3D(10,-15,0));
+		sub3.setForce(new Vect3D(-10,15,0));
 		
 		test.unlockProperties();
 		test.updateProperties();
@@ -138,7 +138,7 @@ public class TestsCentripete {
 				//mod_deltaTime = mod_deltaTime/10;
 			}
 			
-			if(j==10140){
+			if(j==220){
 								
 				ArrayList<BodyGroup> parts = spaceship.getDescendants().get(0).detach();
 				

@@ -11,18 +11,21 @@ import com.jogamp.opengl.glu.GLU;
 public class Display3D implements GLEventListener {
 	private GLU glu = new GLU();
 	private Camera3D camera;
+	private Window window;
 	private Vector<DrawableObject> drawableObjects;
 	private int focusedObject;
 
 
-	Display3D(Camera3D camera) {
+	Display3D(Camera3D camera, Window window) {
 		this.camera = camera;
+		this.window = window;
 		this.drawableObjects = new Vector<>();
 		focusedObject = -1;
 	}
 
 	public void display(GLAutoDrawable drawable) {
 		final GL2 gl = drawable.getGL().getGL2();
+		window.updateDisplay();
 
 		if (focusedObject > -1)
 			camera.setFocusedPoint(getDrawableObject(focusedObject).getPosition());
@@ -44,9 +47,11 @@ public class Display3D implements GLEventListener {
 		gl.glEnable(GL2.GL_DEPTH_TEST);
 		gl.glDepthFunc(GL2.GL_LEQUAL);
 		gl.glHint(GL2.GL_PERSPECTIVE_CORRECTION_HINT, GL2.GL_NICEST);
+		
+		window.initDisplay();
 	}
 
-	public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
+	public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {		
 		if (height <= 0)
 			height = 1;
 

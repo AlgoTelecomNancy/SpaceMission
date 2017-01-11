@@ -67,25 +67,10 @@ public class DrawableSpaceship {
 		spaceshipZAxis.setVertex2(spaceship.getAbsolutePosition().add(zAxis));
 
 		// Update of the sapceship display
-		for (int i = 0; i < spaceship.getAllTerminalBodies().size(); ++i) {
+		for (int i = spaceship.getAllTerminalBodies().size() - 1; i >= 0; --i) {
 			Body child = spaceship.getAllTerminalBodies().get(i);
-
-			if (addedChildBodies.contains(child)) {
-				addedChildBodiesCubes.get(i).setPosition(child.getAbsolutePosition());
-				addedChildBodiesCubes.get(i).setAngles(child.getAbsoluteRotPosition());
-				addedChildBodiesCubes.get(i).setSize((new Vect3D(1, 1, 1)).mult(child.getRadius() * 2));
-				addedChildBodiesForceLine.get(i).setVertex1(getForceLine(child).getVertex1());
-				addedChildBodiesForceLine.get(i).setVertex2(getForceLine(child).getVertex2());
-				
-				for (Line line : addedChildBodiesLinks.get(i)) {
-					window.getDisplay().removeDrawableObject(line);
-				}
-				for (Body attachedBody : child.getAttachedBodies()) {
-					addedChildBodiesLinks.get(i).add(new Line(child.getAbsolutePosition(), attachedBody.getAbsolutePosition(), new Vect3D(0, 1, 1)));
-					window.getDisplay().addDrawableObject(addedChildBodiesLinks.get(i).get(addedChildBodiesLinks.get(i).size() - 1));
-				}
-			}
-			else {
+			
+			if (!addedChildBodies.contains(child)){
 				Cube cube = new Cube(child.getAbsolutePosition(),
 						child.getAbsoluteRotPosition(),
 						(new Vect3D(1, 1, 1)).mult(child.getRadius() * 2));
@@ -102,6 +87,25 @@ public class DrawableSpaceship {
 					addedChildBodiesLinks.get(addedChildBodiesLinks.size() - 1).add(new Line(child.getAbsolutePosition(), attachedBody.getAbsolutePosition(), new Vect3D(0, 1, 1)));
 					window.getDisplay().addDrawableObject(addedChildBodiesLinks.get(addedChildBodiesLinks.size() - 1).get(addedChildBodiesLinks.get(addedChildBodiesLinks.size() - 1).size() - 1));
 				}
+			}
+		}
+		
+		
+		for (int i = addedChildBodiesCubes.size() - 1; i >= 0; --i) {
+			Body child = addedChildBodies.get(i);
+
+			addedChildBodiesCubes.get(i).setPosition(child.getAbsolutePosition());
+			addedChildBodiesCubes.get(i).setAngles(child.getAbsoluteRotPosition());
+			addedChildBodiesCubes.get(i).setSize((new Vect3D(1, 1, 1)).mult(child.getRadius() * 2));
+			addedChildBodiesForceLine.get(i).setVertex1(getForceLine(child).getVertex1());
+			addedChildBodiesForceLine.get(i).setVertex2(getForceLine(child).getVertex2());
+			
+			for (Line line : addedChildBodiesLinks.get(i)) {
+				window.getDisplay().removeDrawableObject(line);
+			}
+			for (Body attachedBody : child.getAttachedBodies()) {
+				addedChildBodiesLinks.get(i).add(new Line(child.getAbsolutePosition(), attachedBody.getAbsolutePosition(), new Vect3D(0, 1, 1)));
+				window.getDisplay().addDrawableObject(addedChildBodiesLinks.get(i).get(addedChildBodiesLinks.get(i).size() - 1));
 			}
 		}
 

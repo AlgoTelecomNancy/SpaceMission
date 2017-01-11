@@ -10,4 +10,11 @@ public interface BodyInterface {
 	
 	public void updateProperties();
 	
+	public void setPosition(Vect3D position);
+	
+	public void setRotPosition(Vect3D rotPosition);
+
+	public Vect3D getPosition();
+
+	public Vect3D getRotPosition();
 }

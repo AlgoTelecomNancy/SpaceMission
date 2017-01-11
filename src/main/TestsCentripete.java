@@ -28,6 +28,9 @@ public class TestsCentripete {
 		sub5.debugString = "hi, I'm number 5";
 		Body sub6 = new Body();
 		sub6.debugString = "hi, I'm number 6";
+		
+		Body sub51 = new Body();
+		sub51.debugString = "hi, I'm number 51";
 
 		test.addBody(sub1);
 		test.addBody(sub2);
@@ -35,10 +38,13 @@ public class TestsCentripete {
 		test.addBody(sub5);
 		test.addBody(sub6);
 
+		sub5.addChild(sub51);
+
 		sub1.attachTo(sub2);
 		sub1.attachTo(sub3);
 		sub1.attachTo(sub5);
 		sub1.attachTo(sub6);
+		sub51.attachTo(sub5);
 		
 		
 		sub1.setRadius(0.5);
@@ -55,20 +61,27 @@ public class TestsCentripete {
 		
 		sub6.setRadius(0.2);
 		sub6.setMass(1);
+		
+		sub51.setRadius(0.1);
+		sub51.setMass(0.5);
 
 		sub1.setPosition(new Vect3D(0, 0, 0));
 		sub2.setPosition(new Vect3D(0, 0, -2));
 		sub3.setPosition(new Vect3D(0, 0, 2));
 		sub5.setPosition(new Vect3D(0, -2, 0));
 		sub6.setPosition(new Vect3D(0, 2, 0));
+		sub51.setPosition(new Vect3D(0, -1, 0));
 
-		sub1.setForce(new Vect3D(0,0,0));
-		sub2.setForce(new Vect3D(10,-15,0));
-		sub3.setForce(new Vect3D(-10,15,0));
-		
 		test.unlockProperties();
 		test.updateProperties();
 		
+		test.getAllTerminalBodies();
+
+		sub1.setForce(new Vect3D(0,0,0));
+		sub2.setForce(new Vect3D(0,-10,0));
+		sub3.setForce(new Vect3D(0,10,0));
+		sub5.setForce(new Vect3D(10,0,0));
+		sub6.setForce(new Vect3D(10,0,0));
 		
 		//test.getChildren().get(0).setForce(new Vect3D());
 		//test.getChildren().get(1).setForce(new Vect3D());
@@ -90,13 +103,22 @@ public class TestsCentripete {
 		spaceships.add(new DrawableSpaceship(spaceship, window));
 		spaceshipsBody.add(spaceship);
 		
-		window.getCamera().setPosition(new Vect3D(0,-20,0));
+		window.getCamera().setPosition(new Vect3D(20,20,20));
 
 		double mod_deltaTime = 1. / 160;
 		
 		int j =0;
 		while (true) {
 			j++;
+			
+			//Update camera
+			/*double CAM_DISTANCE = 10;
+			double CAM_VELOCITY = 0.5;
+			Vect3D new_camPos = spaceshipsBody.get(0).getAbsolutePosition().add(spaceshipsBody.get(0).getAbsolutePosition().minus(window.getCamera().position).getNormalized().mult(-CAM_DISTANCE));
+			new_camPos = window.getCamera().position.add(new_camPos.minus(window.getCamera().position).mult(CAM_VELOCITY*mod_deltaTime));
+			window.getCamera().setPosition(new_camPos);
+			window.getCamera().setFocusedPoint(spaceshipsBody.get(0).getAbsolutePosition());*/
+
 			
 			for(BodyGroup sp: spaceshipsBody){
 				sp.updateState(mod_deltaTime);
@@ -115,7 +137,7 @@ public class TestsCentripete {
 			}
 					
 
-			if(j==1000240){
+			if(j==240){
 				
 				ArrayList<BodyGroup> parts = spaceship.getDescendants().get(2).detachFrom(
 							spaceship.getDescendants().get(0)
@@ -127,7 +149,7 @@ public class TestsCentripete {
 					spaceships.add(new DrawableSpaceship(part, window));
 					spaceshipsBody.add(part);
 					
-					if(part.getDescendants().size()==3){
+					if(part.getDescendants().size()>=2){
 						spaceship = part;
 					}
 				}
@@ -138,7 +160,7 @@ public class TestsCentripete {
 				//mod_deltaTime = mod_deltaTime/10;
 			}
 			
-			if(j==220){
+			if(j==340){
 								
 				ArrayList<BodyGroup> parts = spaceship.getDescendants().get(0).detach();
 				

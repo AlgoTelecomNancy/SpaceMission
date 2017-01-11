@@ -31,6 +31,8 @@ public class Body extends BodySuperClass {
 
 	//Debug
 	public String debugString;
+	
+	
 	public Body() {	}
 	
 	public void setGroup(BodyGroup group){
@@ -66,10 +68,6 @@ public class Body extends BodySuperClass {
 		this.rotPosition = newRotPosition;
 		this.updateProperties();
 	}
-	
-	public ArrayList<Body> getAttachedBodies() {
-		return attached;
-	}
 
 	public Vect3D getPosition() {
 		return this.position;
@@ -87,6 +85,12 @@ public class Body extends BodySuperClass {
 	public Vect3D getAbsoluteRotPosition() {
 		BodyInterface globalContext = getParentBody();
 		return globalContext.getAbsoluteRotPosition().add(this.rotPosition);
+	}
+	
+	
+	
+	public ArrayList<Body> getAttachedBodies() {
+		return attached;
 	}
 	
 	public BodyGroup getGroup(){
@@ -108,7 +112,7 @@ public class Body extends BodySuperClass {
 	 * Find if the "parent" is actualy the group or an other parent body
 	 * @return
 	 */
-	private BodySuperClass getParentBody(){
+	protected BodySuperClass getParentBody(){
 		BodySuperClass globalContext = this.parent;
 		if(this.parent==null){
 			globalContext = this.group;
@@ -125,26 +129,6 @@ public class Body extends BodySuperClass {
 	 */
 	public void updateState(double deltaTime) {
 
-		BodySuperClass parent = getParentBody();
-
-		this.absoluteSpeed = parent.absoluteSpeed.add(
-				parent.absoluteRotSpeed.vectProd(VectRotation.rotate(this.position, this.getParentBody().getAbsoluteRotPosition()))
-				);
-		
-		this.absoluteRotSpeed = parent.absoluteRotSpeed.clone();
-
-		if(this.position.size()>0){
-		this.absoluteAcceleration = parent.absoluteAcceleration.add(this.position.mult(
-					Math.pow(parent.absoluteRotSpeed.vectProd(this.position).size(),2)
-					/this.position.size()
-				));
-		}
-		this.absoluteRotAcceleration = parent.absoluteRotAcceleration.clone();
-		
-		for(Body child: this.children){
-			child.updateState(deltaTime);
-		}
-
 	}
 
 
@@ -160,10 +144,7 @@ public class Body extends BodySuperClass {
 		
 		ArrayList<Body> res = new ArrayList<Body>();
 		
-		if(this.children.size()==0){
-			res.add(this);
-			return res;
-		}
+		res.add(this);
 		
 		for(Body child: this.children){
 			for(Body el: child.getAllTerminalBodies()){
@@ -313,5 +294,10 @@ public class Body extends BodySuperClass {
 		
 		return array;
 		
+	}
+
+	@Override
+	public void updateProperties() {
+		this.getParentBody().updateProperties();
 	}
 }

@@ -3,6 +3,7 @@ package physics;
 import java.util.ArrayList;
 
 import maths.Matrix;
+import maths.SuperVect3D;
 import maths.Vect3D;
 import maths.VectRotation;
 
@@ -20,7 +21,7 @@ public class BodyGroup extends BodySuperClass {
 	private ArrayList<Body> elements = new ArrayList<Body>();
 
 	//Position is global if no parent
-	private Vect3D position = new Vect3D(); //Position relative to the parent body	
+	private SuperVect3D position = new SuperVect3D(); //Position absolute in the universe	
 	private Vect3D rotPosition = new Vect3D(); //RotPosition relative to the parent body eulers angles
 
 
@@ -61,7 +62,7 @@ public class BodyGroup extends BodySuperClass {
 		return this.rotPosition;
 	}
 	
-	public void setPosition(Vect3D newPosition) {
+	public void setPosition(SuperVect3D newPosition) {
 		this.position = newPosition;
 		this.updateProperties();
 	}
